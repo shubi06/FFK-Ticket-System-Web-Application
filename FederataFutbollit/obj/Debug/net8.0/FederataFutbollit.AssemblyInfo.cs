@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FederataFutbollit")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fcaf2214d82839e8f1c709c6b5e8ff97daf39987")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6786d3c0bf9c71cd507eb90f192e634d2789d33")]
 [assembly: System.Reflection.AssemblyProductAttribute("FederataFutbollit")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FederataFutbollit")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
