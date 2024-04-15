@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6906E28B-F31B-4211-9D6B-888AB2B1879A}|FederataFutbollit\\FederataFutbollit.csproj|c:\\users\\shuajb bunjaku\\desktop\\lab1-final-\\federatafutbollit\\federatafutbollit\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6906E28B-F31B-4211-9D6B-888AB2B1879A}|FederataFutbollit\\FederataFutbollit.csproj|solutionrelative:federatafutbollit\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FederataFutbollit\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6906E28B-F31B-4211-9D6B-888AB2B1879A}|FederataFutbollit\\FederataFutbollit.csproj|c:\\users\\shuajb bunjaku\\desktop\\lab1-final-\\federatafutbollit\\federatafutbollit\\controllers\\superligacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6906E28B-F31B-4211-9D6B-888AB2B1879A}|FederataFutbollit\\FederataFutbollit.csproj|solutionrelative:federatafutbollit\\controllers\\superligacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\Controllers\\SuperligaController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FederataFutbollit\\Controllers\\SuperligaController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6906E28B-F31B-4211-9D6B-888AB2B1879A}|FederataFutbollit\\FederataFutbollit.csproj|c:\\users\\shuajb bunjaku\\desktop\\lab1-final-\\federatafutbollit\\federatafutbollit\\entities\\superliga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6906E28B-F31B-4211-9D6B-888AB2B1879A}|FederataFutbollit\\FederataFutbollit.csproj|solutionrelative:federatafutbollit\\entities\\superliga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\Entities\\Superliga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FederataFutbollit\\Entities\\Superliga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -32,10 +32,8 @@
               "RelativeDocumentMoniker": "FederataFutbollit\\Program.cs",
               "ToolTip": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\Program.cs",
               "RelativeToolTip": "FederataFutbollit\\Program.cs",
-              "ViewState": "AQIAABgAAAAAAAAAAAAAACAAAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-14T15:01:05.645Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-14T15:01:05.645Z"
             },
             {
               "$type": "Document",
@@ -47,8 +45,7 @@
               "RelativeToolTip": "FederataFutbollit\\Controllers\\SuperligaController.cs",
               "ViewState": "AQIAAEYAAAAAAAAAAAAAAFAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-14T14:00:23.897Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-14T14:00:23.897Z"
             },
             {
               "$type": "Document",
@@ -60,8 +57,7 @@
               "RelativeToolTip": "FederataFutbollit\\Entities\\Superliga.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-14T13:58:54.873Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-14T13:58:54.873Z"
             }
           ]
         }

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -15,7 +17,7 @@ function UserView() {
 
     let getUsers = async () => {
         try {
-            const user = await axios.get(`https://63a9bccb7d7edb3ae616b639.mockapi.io/users/${params.id}`);
+            const user = await axios.get(`http://localhost:5178/api/Superliga/${params.id}`);
             // console.log(user);
             setUserList(user.data);
             // console.log(userList);
@@ -41,32 +43,21 @@ function UserView() {
                                 <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
-                                            <th>Name</th>
-                                            <th>E-Mail</th>
-                                            <th>City</th>
-                                            <th>State</th>
-                                            <th>Country</th>
+                                        <th>Id</th>
+                                            <th>Emri</th>
+                                            <th>Sponzori</th>
+                                            <th>NrSkuadrave</th>
+                                  
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Name</th>
-                                            <th>E-mail</th>
-                                            <th>City</th>
-                                            <th>State</th>
-                                            <th>Country</th>
-                                        </tr>
-                                    </tfoot>
+                          
                                     <tbody>
                                         <tr>
                                             <td>{userList.id}</td>
-                                            <td> {userList.username} </td>
-                                            <td>{userList.email}</td>
-                                            <td>{userList.city}</td>
-                                            <td>{userList.state}</td>
-                                            <td>{userList.country}</td>
+                                            <td> {userList.emri} </td>
+                                            <td>{userList.sponzori}</td>
+                                            <td>{userList.numriSkuadrave}</td>
+                                      
                                         </tr>
                                     </tbody>
                                 </table>

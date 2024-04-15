@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj": {}
+    "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj": {
+    "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj",
+        "projectUniqueName": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
         "projectName": "FederataFutbollit",
-        "projectPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj",
+        "projectPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
         "packagesPath": "C:\\Users\\Shuajb Bunjaku\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\obj\\",
+        "outputPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Shuajb Bunjaku\\AppData\\Roaming\\NuGet\\NuGet.Config",

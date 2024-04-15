@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KmkfOiJO39QP6H74rkwp5aljXpyfUo4nZCYHari7rp173toieTHAoUVxeSC1g3MZ7f3zZ4t+rrxnrra6eJUA4g==",
+  "dgSpecHash": "X9CGxp1NHbhMI+gW0roY3XhRjvazM3ivA2IJjVCeq8qnUL6U2RuXKdkEtemUnbW8EzEJgZITeCHO0F6bNPyo5w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj",
+  "projectFilePath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Shuajb Bunjaku\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Shuajb Bunjaku\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
