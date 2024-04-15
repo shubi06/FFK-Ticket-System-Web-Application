@@ -27,14 +27,23 @@ function Sidebar() {
             </li>
             {/* <!-- Divider --> */}
             <hr className="sidebar-divider my-0" />
+ {/* <!-- Nav Item - Users --> */}
+ <li className="nav-item active">
+                <Link className="nav-link" to="/portal/selektor-list">
+                 
+                    <span>SELEKTORT</span>
+                </Link>
+            </li>
 
-            {/* <!-- Nav Item - Users --> */}
+            {/* <!-- Nav Item - Selektort --> */}
             <li className="nav-item active">
                 <Link className="nav-link" to="/portal/user-list">
                  
                     <span>SUPERLIGA</span>
                 </Link>
             </li>
+
+            
 
         </ul>
     )

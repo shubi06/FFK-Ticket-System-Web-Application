@@ -11,6 +11,10 @@ import Portal from './Portal';
 import UserCreate from './UserCreate';
 import UserView from './UserView';
 import UserEdit from './UserEdit';
+import Selektorlist from './Selektort/SelektorList';
+import SelektorCreate from './Selektort/SelektorCreate';
+import SelektorEdit from './Selektort/SelektorEdit';
+import SelektorDelete from './Selektort/SelektorDelete';
 
 function App() {
   return (
@@ -24,6 +28,12 @@ function App() {
           <Route path='create-user' element={<UserCreate />} />
           <Route path='user-view/:id' element={<UserView />} />
           <Route path='user-edit/:id' element={<UserEdit />} />
+          <Route path='selektor-list' element={<Selektorlist/>}/>
+          <Route path='selektor-create' element={<SelektorCreate/>}/>
+          <Route path='selektor-edit/:id' element={<SelektorEdit/>}/>
+          <Route path='selektor-delete/:id' element={<SelektorDelete/>}/>
+
+
         </Route>
       </Routes>
     </BrowserRouter>

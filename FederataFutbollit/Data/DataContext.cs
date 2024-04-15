@@ -12,6 +12,7 @@ namespace FederataFutbollit.Data
         }
 
         public DbSet<Superliga> Superligat { get; set; }
+        public DbSet<Selektori>Selektort{get;set;}
     }
 
 

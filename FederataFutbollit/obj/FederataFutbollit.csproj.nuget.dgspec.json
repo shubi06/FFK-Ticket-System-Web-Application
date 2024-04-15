@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj": {}
+    "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj": {
+    "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj",
+        "projectUniqueName": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
         "projectName": "FederataFutbollit",
-        "projectPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\FederataFutbollit.csproj",
-        "packagesPath": "C:\\Users\\Shuajb Bunjaku\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit\\obj\\",
+        "projectPath": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
+        "packagesPath": "C:\\Users\\gentr\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Shuajb Bunjaku\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\gentr\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -49,6 +49,12 @@
               "target": "Package",
               "version": "[8.0.4, )"
             },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.4, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.4, )"
@@ -62,6 +68,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "System.Diagnostics.Tools": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [
@@ -83,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
