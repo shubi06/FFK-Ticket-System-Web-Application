@@ -47,7 +47,7 @@ namespace FederataFutbollit.Controllers
 
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
 
         public async Task<ActionResult<List<Superliga>>> UpdateSuperliga(Superliga super)
         {
@@ -65,7 +65,7 @@ namespace FederataFutbollit.Controllers
 
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
 
         public async Task<ActionResult<List<Superliga>>> DeleteSuperliga(int id)
         {

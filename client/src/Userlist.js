@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+/* eslint-disable jsx-a11y/alt-text */
+>>>>>>> 2a9cf226d288622bef1e90b53937418ac343b301
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
@@ -27,7 +31,11 @@ function Userlist() {
 
   let handleDelete = async (id) => {
     try {
+<<<<<<< HEAD
       const confirmDelete = window.confirm("Are you sure do you want to delete the data?");
+=======
+      const confirmDelete = window.confirm("Deshironi me fshi Superligen?");
+>>>>>>> 2a9cf226d288622bef1e90b53937418ac343b301
       if (confirmDelete) {
         await axios.delete(`http://localhost:5178/api/Superliga/${id}`);
         getUsers();
@@ -40,7 +48,11 @@ function Userlist() {
   return (
     <>
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
+<<<<<<< HEAD
         <h1 className="h3 mb-0 text-gray-800">User-List</h1>
+=======
+        <h1 className="h3 mb-0 text-gray-800">SUPERLIGA</h1>
+>>>>>>> 2a9cf226d288622bef1e90b53937418ac343b301
         <Link to="/portal/create-user" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
           <FontAwesomeIcon icon={faUser} className="creatinguser mr-2" />
           Krijo Ligen
@@ -62,6 +74,10 @@ function Userlist() {
                       <th>Emri</th>
                       <th>Sponzori</th>
                       <th>NrSkuadrave</th>
+<<<<<<< HEAD
+=======
+                       <th>Veprimet</th>
+>>>>>>> 2a9cf226d288622bef1e90b53937418ac343b301
                     </tr>
                   </thead>
                   <tfoot>
@@ -75,7 +91,11 @@ function Userlist() {
                   <tbody>
                     {userList.map((user) => {
                       return (
+<<<<<<< HEAD
                         <tr>
+=======
+                        <tr key={user.id}>
+>>>>>>> 2a9cf226d288622bef1e90b53937418ac343b301
                           <td>{user.id}</td>
                           <td>{user.emri}</td>
                           <td>{user.sponzori}</td>
