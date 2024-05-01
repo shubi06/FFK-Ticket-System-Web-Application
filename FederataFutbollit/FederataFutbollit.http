@@ -4,3 +4,7 @@ GET {{FederataFutbollit_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+GET {{FederataFutbollit_HostAddress}}/api/selektori
+
+###
