@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Navigate } from 'react-router-dom';
 
-
 // Regjistrimi i elementeve të ChartJS
 ChartJS.register(
     ArcElement, Tooltip, Legend, CategoryScale, 
@@ -20,7 +19,7 @@ function Dashboard() {
     const user = userData ? JSON.parse(userData) : null;
 
     if (!user || user.role !== 'Admin') {
-        return <Navigate to="/portal/not-found" replace />;
+        return <Navigate to="/not-found" replace />;
     }
 
     return (
