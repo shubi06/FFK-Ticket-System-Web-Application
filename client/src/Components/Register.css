@@ -1,0 +1,100 @@
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Professional and readable */
+}
+
+body {
+    background-color: #eef0f3; /* Light grey background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 20px;
+}
+
+.container {
+    background: white;
+    width: 100%;
+    max-width: 400px; /* Suitable width for forms */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Soft shadow for depth */
+}
+
+/* Form Header */
+.header {
+    text-align: center;
+    padding: 15px 0;
+    background-color: #00458b; /* Primary blue color */
+    color: white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.header img {
+    width: 70px; /* Adjust based on the actual logo size */
+    height: auto;
+}
+
+/* Form Fields */
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9; /* Slightly off-white background for inputs */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #00458b; /* Highlight focus with federation primary color */
+    outline: none;
+}
+
+/* Submit Button */
+button {
+    width: 100%;
+    padding: 10px 0;
+    background-color: #0073e6; /* A bright, engaging blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background-color: #0056b3; /* A darker blue for interaction */
+    transform: scale(1.02); /* Slight scale up for tactile feedback */
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .container {
+        margin: 0 10px;
+        width: auto;
+    }
+
+    .header {
+        padding: 10px 0;
+    }
+
+    input, button {
+        padding: 12px;
+    }
+}

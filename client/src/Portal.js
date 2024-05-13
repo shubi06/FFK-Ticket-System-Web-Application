@@ -7,6 +7,7 @@ import Selektorlist from './Selektort/SelektorList'
 import SelektorCreate from './Selektort/SelektorCreate'
 import SelektorEdit from './Selektort/SelektorEdit'
 import SelektorDelete from './Selektort/SelektorDelete'
+import Dashboard from "./Components/Dashboard";
 
 function Portal() {
   return (

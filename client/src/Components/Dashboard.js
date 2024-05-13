@@ -1,17 +1,33 @@
-import React from 'react'
-import { Doughnut, Line } from 'react-chartjs-2'
-import Card from './Card'
+import React from 'react';
+import { Doughnut, Line } from 'react-chartjs-2';
+import Card from '../Card';
 import {
-    Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title, Colors
+    Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title
 } from 'chart.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { Navigate } from 'react-router-dom';
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title);
+
+// Regjistrimi i elementeve të ChartJS
+ChartJS.register(
+    ArcElement, Tooltip, Legend, CategoryScale, 
+    LinearScale, PointElement, LineElement, Title
+);
 
 function Dashboard() {
+    const userData = localStorage.getItem('user');
+    const user = userData ? JSON.parse(userData) : null;
+
+    if (!user || user.role !== 'Admin') {
+        return <Navigate to="/portal/not-found" replace />;
+    }
+
     return (
         <>
+       
+        
+            <h1>Welcome, {user.name}</h1>
             <div className="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 className="h3 mb-0 text-gray-800">Dashboard</h1>
                 <a href="#" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
@@ -58,12 +74,10 @@ function Dashboard() {
                     <Line options={{
                         responsive: true,
                         plugins: {
-                            legend:
-                            {
+                            legend: {
                                 position: 'top',
                             },
-                            title:
-                            {
+                            title: {
                                 display: true,
                                 text: 'Earnings Overview',
                             },
@@ -79,11 +93,11 @@ function Dashboard() {
                                 tension: 0.1
                             }]
                         }}
-                    />;
+                    />
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default Dashboard
+export default Dashboard;
