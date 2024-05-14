@@ -12,5 +12,10 @@ obj/
 .vs/
 *.vspscc
 .env
+
+.FederataFutbollit/bin/Debug/net8.0/
+
   
-  
+
+.FederataFutbollit/
+
