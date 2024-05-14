@@ -22,7 +22,7 @@ const Login = () => {
               role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
           };
           localStorage.setItem('user', JSON.stringify(userData));
-  
+          login(userData);
           
           if (userData.role === 'Admin') {
               navigate('/portal/dashboard');

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
 import Card from '../Card';
 import {
@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Navigate } from 'react-router-dom';
-
+import { AuthContext } from '../Services/AuthContext';
 // Regjistrimi i elementeve të ChartJS
 ChartJS.register(
     ArcElement, Tooltip, Legend, CategoryScale, 
@@ -15,10 +15,9 @@ ChartJS.register(
 );
 
 function Dashboard() {
-    const userData = localStorage.getItem('user');
-    const user = userData ? JSON.parse(userData) : null;
+    const { authData } = useContext(AuthContext);
 
-    if (!user || user.role !== 'Admin') {
+    if (!authData || authData.role !== 'Admin') {
         return <Navigate to="/not-found" replace />;
     }
 
@@ -26,7 +25,7 @@ function Dashboard() {
         <>
        
         
-            <h1>Welcome, {user.name}</h1>
+            <h1>Welcome,</h1>
             <div className="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 className="h3 mb-0 text-gray-800">Dashboard</h1>
                 <a href="#" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">

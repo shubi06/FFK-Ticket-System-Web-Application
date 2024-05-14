@@ -16,26 +16,28 @@ import Portal from "./Portal";
 const App = () => {
   return (
     <AuthProvider>
-      <UserProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            {/* Protected routes within Portal */}
-            <Route path="/portal/*" element={<PrivateRoute allowedRoles={['admin']}><Portal /></PrivateRoute>} />
-          </Routes>
-        </BrowserRouter>
-      </UserProvider>
-    </AuthProvider>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/portal/*" element={<PrivateRoute allowedRoles={['Admin']}><Portal /></PrivateRoute>} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
+  </AuthProvider>
   );
 };
 
 
 const PrivateRoute = ({ children, allowedRoles }) => {
   const { authData } = useContext(AuthContext);
+  console.log("Auth Data:", authData); // Check what's being read
   return authData && allowedRoles.includes(authData.role) ? children : <Navigate to="/login" />;
 };
+
+
 
 
 export default App;

@@ -4,3 +4,13 @@
 
 /.vs/FederataFutbollit/FileContentIndex
 /.vs/FederataFutbollit/v17
+.FederataFutbollit/appsettings.json
+bin/
+obj/
+
+.vscode/
+.vs/
+*.vspscc
+.env
+  
+  
