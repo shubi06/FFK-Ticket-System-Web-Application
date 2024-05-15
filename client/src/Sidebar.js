@@ -19,6 +19,7 @@ function Sidebar() {
       >
         <div className="sidebar-brand-icon rotate-n-15"></div>
         <div className="sidebar-brand-text mx-3">FFK</div>
+      
       </a>
 
       {/* <!-- Divider --> */}
@@ -53,6 +54,24 @@ function Sidebar() {
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/stafi-list">
           <span>STAFI</span>
+        </Link>
+      </li>
+
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/shteti-list">
+          <span>SHTETI</span>
+        </Link>
+      </li>
+
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/kombetarja-list">
+          <span>KOMBETARJA</span>
+        </Link>
+      </li>
+
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/lojtaret-list">
+          <span>LOJTARET E KOMBETARES</span>
         </Link>
       </li>
     </ul>
