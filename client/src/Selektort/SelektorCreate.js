@@ -1,17 +1,35 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function SelektorCreate(){
     const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [kombetarjaList, setKombetarjaList] = useState([]);
+
+
+    useEffect(() => {
+                 const fetchKombetarja = async () => {
+                    try {
+                        const response = await axios.get('http://localhost:5178/api/Kombetarja');
+                        setKombetarjaList(response.data);
+                     } catch (error) {
+                         console.error('Failed to fetch kombetarja', error);
+                     }
+                 };
+                 fetchKombetarja();
+             }, []);
     const myFormik = useFormik(
         {
           initialValues: {
             emri: "",
             mbiemri: "",
             mosha: "",
+            nacionaliteti:"",
+            vitetEKontrates:"",
+            kombetarjaID:""
+
           },
 
           // Validating Forms while entering the data
@@ -41,7 +59,18 @@ function SelektorCreate(){
           } else if (parseInt(values.mosha) < 18) {
             errors.mosha = "Ju duhet të jeni mbi 18 vjeç për të regjistruar";
           }
-     
+
+          if (!values.vitetEKontrates) {
+            errors.vitetEKontrates = "Ju lutem vendosni moshën";
+          }
+          
+          if (!values.nacionaliteti) {
+            errors.nacionaliteti = "Please enter surname";
+          } else if (values.nacionaliteti.length < 2) {
+            errors.nacionaliteti = "Name shouldn't be less than 3 letters";
+          } else if (values.nacionaliteti.length > 20) {
+            errors.nacionaliteti = "Name shouldn't be more than 20 letters";
+          }
 
      
 
@@ -91,6 +120,41 @@ function SelektorCreate(){
               className={`form-control ${myFormik.errors.mosha ? "is-invalid" : ""} `} />
             <span style={{ color: "red" }}>{myFormik.errors.mosha}</span>
           </div>
+
+          <div className="col-lg-6">
+            <label>Nacionaiteti</label>
+            <input name='nacionaliteti' value={myFormik.values.nacionaliteti} onChange={myFormik.handleChange} type={"text"}
+              className={`form-control ${myFormik.errors.nacionaliteti ? "is-invalid" : ""} `} />
+            <span style={{ color: "red" }}>{myFormik.errors.nacionaliteti}</span>
+          </div>
+
+          <div className="col-lg-6">
+            <label>Vitet e Kontrates</label>
+            <input name='vitetEKontrates' value={myFormik.values.vitetEKontrates} onChange={myFormik.handleChange} type={"number"}
+              className={`form-control ${myFormik.errors.vitetEKontrates ? "is-invalid" : ""} `} />
+            <span style={{ color: "red" }}>{myFormik.errors.vitetEKontrates}</span>
+          </div>
+
+          
+          <div className='form-group'>
+                     <label htmlFor='kombetarjaID'>Kombetarja</label>
+                     <select
+                         id='kombetarjaID'
+                         name='kombetarjaID'
+                         onChange={myFormik.handleChange}
+                         value={myFormik.values.kombetarjaID}
+                         className={`form-control ${myFormik.errors.kombetarjaID ? 'is-invalid' : ''}`}
+                     >
+                         <option value="">Select Kombetarja</option>
+                         {kombetarjaList.map(kombetarja => (
+                             <option key={kombetarja.id} value={kombetarja.id}>
+                                 {kombetarja.emri}
+                             </option>
+                         ))}
+                     </select>
+                     {myFormik.errors.kombetarjaID ? <div className='invalid-feedback'>{myFormik.errors.kombetarjaID}</div> : null}
+                 </div>
+          
 
           <div className='col-lg-4 mt-3'>
             <input disabled={isLoading} type="submit" value={isLoading ? "Submitting..." : "Create"} className=' btn btn-primary' />

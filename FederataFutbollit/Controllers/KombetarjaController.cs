@@ -20,12 +20,21 @@ namespace FederataFutbollit.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Kombetarja>>> GetAllKombetarja()
         {
-            return await _context.Kombetarja.Include(k => k.Shteti).ToListAsync();
+            return await _context.Kombetarja.
+                Include(k => k.Shteti)
+                .Include(k => k.Selektori)
+                .Include(k=>k.Lojtaret)
+                
+                .ToListAsync();
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Kombetarja>> GetKombetarjaById(int id)
         {
-            var kombetarja = await _context.Kombetarja.Include(k => k.Shteti).FirstOrDefaultAsync(k => k.Id == id);
+            var kombetarja = await _context.Kombetarja
+                .Include(k => k.Shteti)
+                .Include(k => k.Selektori)
+                .Include(k => k.Lojtaret)
+                .FirstOrDefaultAsync(k => k.Id == id);
             if (kombetarja == null)
             {
                 return NotFound();

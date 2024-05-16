@@ -1,8 +1,6 @@
-using System.Text.Json.Serialization;
-
-namespace FederataFutbollit.Entities
+﻿namespace FederataFutbollit.DTOs
 {
-    public class Selektori
+    public class SelektoriCreateDto
     {
         public int Id { get; set; }
         public required string Emri { get; set; }
@@ -11,10 +9,6 @@ namespace FederataFutbollit.Entities
         public required string Nacionaliteti { get; set; }
         public int VitetEKontrates { get; set; }
 
-
-        [JsonIgnore]
-        public Kombetarja Kombetarja { get; set; }
         public int KombetarjaID { get; set; }
-
     }
 }

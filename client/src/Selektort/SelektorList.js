@@ -75,18 +75,12 @@ function Selektorlist() {
                     <th>Emri</th>
                     <th>Mbiemri</th>
                     <th>Mosha</th>
+                    <th>Nacionaliteti</th>
+                    <th>Vitet e Kontrates</th>
                     <th>Veprimet</th>
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>Id</th>
-                    <th>Emri</th>
-                    <th>Mbiemri</th>
-                    <th>Mosha</th>
-                    <th>Veprimet</th>
-                  </tr>
-                </tfoot>
+        
                 <tbody>
                   {selektorList.map((selektor) => {
                     return (
@@ -95,6 +89,8 @@ function Selektorlist() {
                         <td>{selektor.emri}</td>
                         <td>{selektor.mbiemri}</td>
                         <td>{selektor.mosha}</td>
+                        <td>{selektor.nacionaliteti}</td>
+                        <td>{selektor.vitetEKontrates}</td>
                         <td>
                           <Link
                             to={`/portal/selektor-view/${selektor.id}`}

@@ -9,7 +9,10 @@ namespace FederataFutbollit.Entities
         [JsonIgnore]
         public Shteti Shteti { get; set; }
         public int ShtetiID { get; set; }
-
         public List<Lojtaret> Lojtaret { get; set; }
+
+        public Selektori Selektori { get; set; }
+
+
     }
 }
