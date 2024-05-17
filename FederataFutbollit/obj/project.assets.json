@@ -4742,19 +4742,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\gentr\\.nuget\\packages\\": {}
+    "C:\\Users\\Shuajb Bunjaku\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
+      "projectUniqueName": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
       "projectName": "FederataFutbollit",
-      "projectPath": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
-      "packagesPath": "C:\\Users\\gentr\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\obj\\",
+      "projectPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\FederataFutbollit.csproj",
+      "packagesPath": "C:\\Users\\Shuajb Bunjaku\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\gentr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Shuajb Bunjaku\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4853,7 +4853,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

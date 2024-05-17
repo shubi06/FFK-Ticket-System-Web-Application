@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240515160237_Lojtaret")]
+    partial class Lojtaret
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +170,6 @@ namespace FederataFutbollit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("KombetarjaID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Mbiemri")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -177,17 +177,7 @@ namespace FederataFutbollit.Migrations
                     b.Property<int>("Mosha")
                         .HasColumnType("int");
 
-                    b.Property<string>("Nacionaliteti")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("VitetEKontrates")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("KombetarjaID")
-                        .IsUnique();
 
                     b.ToTable("Selektort");
                 });
@@ -423,17 +413,6 @@ namespace FederataFutbollit.Migrations
                     b.Navigation("Kombetarja");
                 });
 
-            modelBuilder.Entity("FederataFutbollit.Entities.Selektori", b =>
-                {
-                    b.HasOne("FederataFutbollit.Entities.Kombetarja", "Kombetarja")
-                        .WithOne("Selektori")
-                        .HasForeignKey("FederataFutbollit.Entities.Selektori", "KombetarjaID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Kombetarja");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -488,9 +467,6 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Entities.Kombetarja", b =>
                 {
                     b.Navigation("Lojtaret");
-
-                    b.Navigation("Selektori")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Shteti", b =>

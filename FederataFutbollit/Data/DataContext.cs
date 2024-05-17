@@ -13,7 +13,16 @@ namespace FederataFutbollit.Data
         public DbSet<Selektori>Selektort{get;set;}
         public DbSet<Stafi> Stafi { get; set; }
 
+<<<<<<< HEAD
          
+=======
+        public DbSet<Shteti> Shteti { get; set; }
+
+        public DbSet<Kombetarja> Kombetarja { get; set; }
+
+        public DbSet<Lojtaret> Lojtaret { get; set; }
+
+>>>>>>> d3f25df74f18502bf39415111902c9e358b4b582
     }
 
 
