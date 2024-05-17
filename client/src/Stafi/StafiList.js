@@ -78,6 +78,7 @@ function Stafilist() {
                     <th>Paga</th>
                     <th>Email</th>
                     <th>Telefon</th>
+                    <th>Veprimet</th>
                   </tr>
                 </thead>
                 <tfoot>

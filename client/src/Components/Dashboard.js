@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
 import Card from '../Card';
 import {
@@ -6,20 +6,32 @@ import {
 } from 'chart.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import { Navigate } from 'react-router-dom';
+import { useNavigate,Navigate } from 'react-router-dom';
 import { AuthContext } from '../Services/AuthContext';
-// Regjistrimi i elementeve të ChartJS
+
+
 ChartJS.register(
     ArcElement, Tooltip, Legend, CategoryScale, 
     LinearScale, PointElement, LineElement, Title
 );
 
 function Dashboard() {
-    const { authData } = useContext(AuthContext);
+    const { authData} = useContext(AuthContext);
+
+   
+
+   
+    const navigate = useNavigate();
+   
+   
+    
+    /**/
 
     if (!authData || authData.role !== 'Admin') {
         return <Navigate to="/not-found" replace />;
     }
+
+ 
 
     return (
         <>
@@ -32,6 +44,10 @@ function Dashboard() {
                     <FontAwesomeIcon icon={faDownload} style={{ marginRight: "0.25rem", color: "white" }} />
                     Generate Report
                 </a>
+                
+                
+              
+                
             </div>
             <div className="row">
                 <Card title="Earnings(Monthly)" value="$40,000" color="primary" />

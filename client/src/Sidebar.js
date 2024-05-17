@@ -55,6 +55,17 @@ function Sidebar() {
           <span>STAFI</span>
         </Link>
       </li>
+
+   {/* <!-- Nav Item - Users --> */}
+   <li className="nav-item active">
+        <Link className="nav-link" to="/portal/list-users">
+          <span>USERS</span>
+        </Link>
+      </li>
+
+
+
+
     </ul>
   );
 }

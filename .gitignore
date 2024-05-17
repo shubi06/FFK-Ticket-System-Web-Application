@@ -10,7 +10,8 @@ obj/
 
 .vscode/
 .vs/
+.vs
 *.vspscc
-.env
+
   
   

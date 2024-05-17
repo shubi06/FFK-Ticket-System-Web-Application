@@ -1,7 +1,9 @@
 using System.Text;
 using FederataFutbollit.Contracts;
 using FederataFutbollit.Data;
+using FederataFutbollit.Models;
 using FederataFutbollit.Repositories;
+using FederataFutbollit.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +71,10 @@ builder.Services.AddSwaggerGen(Options =>
     Options.OperationFilter<SecurityRequirementsOperationFilter>();
 
 });
+    builder.Services.AddScoped<IUserService, UserService>();
+
+   builder.Services.AddControllers();
+
  builder.Services.AddScoped<IUserAccount, AccountRepository>();
 builder.Services.AddAuthorization(options =>
 {

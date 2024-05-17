@@ -15,6 +15,11 @@ import Stafilist from "./Stafi/StafiList";
 import StafiCreate from "./Stafi/StafiCreate";
 import StafiEdit from "./Stafi/StafiEdit";
 import StafiDelete from "./Stafi/StafiDelete";
+// Users components
+import AddUser from './Users/AddUser';
+import DeleteUser from './Users/DeleteUser';
+import ListUsers from './Users/ListUsers';
+import UpdateUser from './Users/UpdateUser';
 
 function Portal() {
   return (
@@ -38,6 +43,10 @@ function Portal() {
               <Route path="stafi-create" element={<StafiCreate />} />
               <Route path="stafi-edit/:id" element={<StafiEdit />} />
               <Route path="stafi-delete/:id" element={<StafiDelete />} />
+              <Route path="list-users" element={<ListUsers />} />
+              <Route path="add-user" element={<AddUser />} />
+              <Route path="update-user/:id" element={<UpdateUser />} />
+              <Route path="delete-user/:id" element={<DeleteUser />} />
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
           </div>
@@ -48,5 +57,6 @@ function Portal() {
 }
 
 export default Portal;
+
 
 

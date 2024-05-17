@@ -71,6 +71,7 @@ function Userlist() {
                       <th>Emri</th>
                       <th>Sponzori</th>
                       <th>NrSkuadrave</th>
+                      <th>Veprimet</th>
                     </tr>
                   </tfoot>
                   <tbody>

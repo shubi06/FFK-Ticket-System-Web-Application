@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FederataFutbollit.Contracts;
 using FederataFutbollit.Data;
 using FederataFutbollit.DTOs;
+using FederataFutbollit.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -47,7 +48,7 @@ if (!createUser.Succeeded)
     return new ServiceResponses.GeneralResponse(false, errorMessage);
 }
 
-            //Assign Default Role : Admin to first registrar; rest is user
+            
             var checkAdmin = await roleManager.FindByNameAsync("Admin");
             if (checkAdmin is null)
             {
