@@ -21,7 +21,6 @@ function Topbar() {
                 <FontAwesomeIcon icon={faBars} />
             </button>
 
-<<<<<<< HEAD
             {/* Topbar Search */}
             <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                 <div className="input-group">
@@ -34,10 +33,8 @@ function Topbar() {
                     </div>
                 </div>
             </form>
-=======
             {/* <!-- Topbar Search --> */}
 
->>>>>>> d3f25df74f18502bf39415111902c9e358b4b582
 
             {/* Topbar Navbar */}
             <ul className="navbar-nav ml-auto">

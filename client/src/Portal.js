@@ -15,13 +15,11 @@ import Stafilist from "./Stafi/StafiList";
 import StafiCreate from "./Stafi/StafiCreate";
 import StafiEdit from "./Stafi/StafiEdit";
 import StafiDelete from "./Stafi/StafiDelete";
-<<<<<<< HEAD
 // Users components
 import AddUser from './Users/AddUser';
 import DeleteUser from './Users/DeleteUser';
 import ListUsers from './Users/ListUsers';
 import UpdateUser from './Users/UpdateUser';
-=======
 import ShtetiList from './Shteti/ShtetiList';
 import ShtetiView from './Shteti/ShtetiView';
 import KombetarjaList from './Kombetarja/KombetarjaList';
@@ -32,7 +30,6 @@ import LojtaretList from './Lojtaret/LojtaretList';
 import LojtaretCreate from './Lojtaret/LojtaretCreate';
 import LojtaretEdit from './Lojtaret/LojtaretEdit';
 import LojtaretView from './Lojtaret/LojtaretView';
->>>>>>> d3f25df74f18502bf39415111902c9e358b4b582
 
 function Portal() {
   return (
@@ -56,12 +53,10 @@ function Portal() {
               <Route path="stafi-create" element={<StafiCreate />} />
               <Route path="stafi-edit/:id" element={<StafiEdit />} />
               <Route path="stafi-delete/:id" element={<StafiDelete />} />
-<<<<<<< HEAD
               <Route path="list-users" element={<ListUsers />} />
               <Route path="add-user" element={<AddUser />} />
               <Route path="update-user/:id" element={<UpdateUser />} />
               <Route path="delete-user/:id" element={<DeleteUser />} />
-=======
 
               <Route path="shteti-list" element={<ShtetiList />} />
            
@@ -77,7 +72,6 @@ function Portal() {
        
 
               
->>>>>>> d3f25df74f18502bf39415111902c9e358b4b582
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
           </div>

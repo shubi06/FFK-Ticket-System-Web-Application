@@ -57,7 +57,6 @@ function Sidebar() {
         </Link>
       </li>
 
-<<<<<<< HEAD
    {/* <!-- Nav Item - Users --> */}
    <li className="nav-item active">
         <Link className="nav-link" to="/portal/list-users">
@@ -68,7 +67,6 @@ function Sidebar() {
 
 
 
-=======
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/shteti-list">
           <span>SHTETI</span>
@@ -86,7 +84,6 @@ function Sidebar() {
           <span>LOJTARET E KOMBETARES</span>
         </Link>
       </li>
->>>>>>> d3f25df74f18502bf39415111902c9e358b4b582
     </ul>
   );
 }
