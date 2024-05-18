@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using FederataFutbollit.Contracts;
-using FederataFutbollit.Models;
 using FederataFutbollit.DTOs;
+using FederataFutbollit.Models;
 
 namespace FederataFutbollit.Controllers
 {
@@ -16,7 +16,7 @@ namespace FederataFutbollit.Controllers
         {
             _userService = userService;
         }
-
+   
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -71,6 +71,19 @@ namespace FederataFutbollit.Controllers
                 return BadRequest("Role cannot be null or empty.");
             }
 
+            // Kontrollo numrin e administratorëve
+            var adminCount = await _userService.GetAdminCountAsync();
+            var user = await _userService.GetUserByIdAsync(id);
+
+            // Kontrollo nëse përdoruesi është administrator
+            var isAdmin = await _userService.IsUserInRoleAsync(user, "Admin");
+
+            // Nëse është vetëm një admin dhe po ndryshohet roli, ndalo veprimin
+            if (adminCount == 1 && isAdmin && model.Role != "Admin")
+            {
+                return BadRequest("Cannot change the role of the only remaining admin.GO BACK");
+            }
+
             var result = await _userService.UpdateUserRoleAsync(id, model.Role);
             if (!result.Succeeded)
             {
@@ -82,6 +95,19 @@ namespace FederataFutbollit.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
+            // Kontrollo numrin e administratorëve
+            var adminCount = await _userService.GetAdminCountAsync();
+            var user = await _userService.GetUserByIdAsync(id);
+
+            // Kontrollo nëse përdoruesi është administrator
+            var isAdmin = await _userService.IsUserInRoleAsync(user, "Admin");
+
+            // Nëse është vetëm një admin, ndalo veprimin
+            if (adminCount == 1 && isAdmin)
+            {
+                return BadRequest("Cannot delete the only remaining admin.GO BACK");
+            }
+
             var result = await _userService.DeleteUserAsync(id);
             if (!result.Succeeded)
             {
@@ -100,5 +126,12 @@ namespace FederataFutbollit.Controllers
             }
             return NoContent();
         }
+
+        [HttpGet("admincount")]
+public async Task<IActionResult> GetAdminCount()
+{
+    var adminCount = await _userService.GetAdminCountAsync();
+    return Ok(adminCount);
+}
     }
 }

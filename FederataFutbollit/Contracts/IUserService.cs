@@ -16,6 +16,8 @@ namespace FederataFutbollit.Contracts
         Task<IdentityResult> DeleteUserAsync(string userId);
         Task<IdentityResult> ToggleUserRoleAsync(string userId, string role1, string role2);
         Task<ServiceResponse<UserWithRolesDTO>> CreateUserAsync(UserCreateModel model);
+         Task<int> GetAdminCountAsync();
+         Task<bool> IsUserInRoleAsync(ApplicationUser user, string role);
     }
 }
 

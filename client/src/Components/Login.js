@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../Services/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +7,17 @@ import {jwtDecode} from 'jwt-decode';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useContext(AuthContext);
+    const { login ,logout,authData} = useContext(AuthContext);
     const navigate = useNavigate(); 
+
+    useEffect(() => {
+        const checkAndLogout = () => {
+            if (authData) {
+                logout();
+            }
+        };
+        checkAndLogout();
+    }, [authData, logout]);
 
     
     const handleLogin = async () => {
@@ -22,6 +31,7 @@ const Login = () => {
               role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
           };
           localStorage.setItem('user', JSON.stringify(userData));
+          localStorage.setItem('token', response.data.token);
           login(userData);
           
           if (userData.role === 'Admin') {

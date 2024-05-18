@@ -2,6 +2,10 @@ using System.Threading.Tasks;
 using FederataFutbollit.Contracts;
 using FederataFutbollit.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization; // Shtoni këtë linjë
+using Microsoft.AspNetCore.Identity; // Shtoni këtë linjë
+using Microsoft.Extensions.Logging; // Shtoni këtë linjë
+using FederataFutbollit.Models; // Shtoni këtë linjë
 
 namespace FederataFutbollit.Controllers
 {
@@ -60,5 +64,6 @@ public async Task<IActionResult> Register(UserDTO userDTO)
 
             return Ok(response);
         }
+     
     }
 }

@@ -1,23 +1,37 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { updateUserRole } from '../Services/UserService';
+import { getUserById, updateUser, updateUserRole } from '../Services/UserService';
+import axios from 'axios';
 
 function UpdateUser() {
     const { id } = useParams();
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [initialRole, setInitialRole] = useState('');
+    const [adminCount, setAdminCount] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         getUserData();
+        getAdminCount();
     }, []);
+
+    const getAdminCount = async () => {
+        try {
+            const response = await axios.get('http://localhost:5178/api/Users/admincount');
+            setAdminCount(response.data);
+        } catch (error) {
+            console.error("Error fetching admin count:", error);
+        }
+    };
 
     const getUserData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5178/api/Users/${id}`);
+            const response = await getUserById(id);
             const userData = response.data;
             const role = Array.isArray(userData.roles) && userData.roles.length > 0 ? userData.roles[0] : '';
+            setInitialRole(role);
             myFormik.setValues({
                 name: userData.name ?? '',
                 email: userData.email ?? '',
@@ -51,7 +65,7 @@ function UpdateUser() {
 
             if (!values.email) {
                 errors.email = "Please enter email";
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z.-]+\.[A-Z]{2,}$/i.test(values.email)) {
                 errors.email = "Invalid email address";
             }
 
@@ -64,24 +78,30 @@ function UpdateUser() {
         onSubmit: async (values) => {
             try {
                 setLoading(true);
+                setErrorMessage(''); // Clear any previous error message
                 const updatedValues = { 
                     name: values.name, 
                     email: values.email, 
-                    roles: [values.roles],  // Ensure roles is an array
                 };
                 if (values.password) {
                     updatedValues.password = values.password;
                 }
+
+                // Kontrollo nëse përdoruesi është i vetmi administrator
+                if (initialRole === 'Admin' && values.roles !== 'Admin' && adminCount === 1) {
+                    setErrorMessage("Cannot change the role of the only remaining admin. GO BACK");
+                    setLoading(false);
+                    return;
+                }
+
                 console.log('Updating user with values:', updatedValues);
-                const response = await axios.put(`http://localhost:5178/api/Users/${id}`, updatedValues, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const response = await updateUser(id, updatedValues);
                 console.log('Update response:', response);
                 if (response.status === 200 || response.status === 204) {
+                    if (initialRole !== values.roles) {  // Only update role if it changed
+                        await updateUserRole(id, values.roles);  // Update role separately
+                    }
                     alert('User updated successfully');
-                    await updateUserRole(id, values.roles);  // Update role separately
                     navigate("/portal/list-users");
                 } else {
                     console.error('Unexpected response status:', response.status);
@@ -91,6 +111,7 @@ function UpdateUser() {
                 console.error("Error updating user:", error);
                 if (error.response && error.response.data) {
                     console.error('Error details:', error.response.data);
+                    setErrorMessage(error.response.data); // Show error message from response
                 }
                 setLoading(false);
             }
@@ -101,6 +122,11 @@ function UpdateUser() {
         <>
             <h3>Update User - Id: {id}</h3>
             <div className='container'>
+                {errorMessage && (
+                    <div className="alert alert-danger" role="alert">
+                        {errorMessage}
+                    </div>
+                )}
                 <form onSubmit={myFormik.handleSubmit}>
                     <div className='row'>
                         <div className="col-lg-6">

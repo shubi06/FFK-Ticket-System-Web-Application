@@ -19,7 +19,16 @@ namespace FederataFutbollit.Services
         {
             _userManager = userManager;
         }
+  public async Task<int> GetAdminCountAsync()
+    {
+        var admins = await _userManager.GetUsersInRoleAsync("Admin");
+        return admins.Count;
+    }
 
+      public async Task<bool> IsUserInRoleAsync(ApplicationUser user, string role)
+    {
+        return await _userManager.IsInRoleAsync(user, role);
+    }
         public async Task<IEnumerable<UserWithRolesDTO>> GetAllUsersWithRolesAsync()
         {
             var users = await _userManager.Users.ToListAsync();
