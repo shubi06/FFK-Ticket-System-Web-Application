@@ -1,4 +1,6 @@
 ﻿
+
+
 using System.Text.Json.Serialization;
 
 namespace FederataFutbollit.Entities
