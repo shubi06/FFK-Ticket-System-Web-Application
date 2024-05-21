@@ -1,11 +1,38 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function StafiCreate() {
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const [kombetarjaList, setKombetarjaList] = useState([]);
+  const [roliList, setRoliList] = useState([]);
+ 
+
+  useEffect(() => {
+               const fetchKombetarja = async () => {
+                  try {
+                      const response = await axios.get('http://localhost:5178/api/Kombetarja');
+                      setKombetarjaList(response.data);
+                   } catch (error) {
+                       console.error('Failed to fetch kombetarja', error);
+                   }
+               };
+               fetchKombetarja();
+           }, []);
+           useEffect(() => {
+            const fetchRoli = async () => {
+               try {
+                   const response = await axios.get('http://localhost:5178/api/Roli');
+                   setRoliList(response.data);
+                } catch (error) {
+                    console.error('Failed to fetch roli', error);
+                }
+            };
+            fetchRoli();
+        }, []);
   const myFormik = useFormik({
     initialValues: {
       emri: "",
@@ -14,6 +41,9 @@ function StafiCreate() {
       paga: "",
       email: "",
       telefoni: "",
+      kombetarjaID: "",
+      roliID:""
+
     },
 
     // Validating Forms while entering the data
@@ -36,9 +66,6 @@ function StafiCreate() {
         errors.mbiemri = "Mbiemri nuk mund të jetë më shumë se 20 shkronja";
       }
 
-      if (!values.pozita) {
-        errors.pozita = "Ju lutem zgjidhni pozitën";
-      }
 
       if (!values.paga) {
         errors.paga = "Ju lutem vendosni pagën";
@@ -56,26 +83,26 @@ function StafiCreate() {
 
       if (!values.telefoni) {
         errors.telefoni = "Ju lutem vendosni numrin e telefonit";
-      } else if (!/^[0-9]{10}$/.test(values.telefoni)) {
-        errors.telefoni = "Numri i telefonit duhet të jetë 10 shifra";
       }
 
       return errors;
     },
 
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
-        setLoading(true);
-        await axios.post("http://localhost:5178/api/Stafi", values);
-        navigate("/portal/stafi-list");
+          setLoading(true);
+          const payload = {
+              ...values,
+              kombetarjaID: parseInt(values.kombetarjaID) // Ensure kombetarjaID is sent as an integer
+          };
+          await axios.post("http://localhost:5178/api/Stafi", payload);
+          navigate("/portal/stafi-list");
       } catch (error) {
-        console.log(error);
-        alert("Validation failed");
-        setLoading(false);
+          console.error("Error during form submission:", error);
+          alert("Failed to create Kombetarja: " + error.message);
+          setLoading(false);
       }
-
-      console.log(values);
-    },
+  }
   });
 
   return (
@@ -110,19 +137,6 @@ function StafiCreate() {
             <span style={{ color: "red" }}>{myFormik.errors.mbiemri}</span>
           </div>
 
-          <div className="col-lg-6">
-            <label>Pozita</label>
-            <input
-              name="pozita"
-              value={myFormik.values.pozita}
-              onChange={myFormik.handleChange}
-              type={"text"}
-              className={`form-control ${
-                myFormik.errors.pozita ? "is-invalid" : ""
-              } `}
-            />
-            <span style={{ color: "red" }}>{myFormik.errors.pozita}</span>
-          </div>
 
           <div className="col-lg-6">
             <label>Paga</label>
@@ -165,6 +179,44 @@ function StafiCreate() {
             />
             <span style={{ color: "red" }}>{myFormik.errors.telefoni}</span>
           </div>
+
+          <div className='form-group'>
+                     <label htmlFor='roliID'>Pozita</label>
+                     <select
+                         id='roliID'
+                         name='roliID'
+                         onChange={myFormik.handleChange}
+                         value={myFormik.values.roliID}
+                         className={`form-control ${myFormik.errors.roliID ? 'is-invalid' : ''}`}
+                     >
+                         <option value="">Select Pozita</option>
+                         {roliList.map(roli => (
+                             <option key={roli.id} value={roli.id}>
+                                 {roli.emri}
+                             </option>
+                         ))}
+                     </select>
+                     {myFormik.errors.kombetarjaID ? <div className='invalid-feedback'>{myFormik.errors.kombetarjaID}</div> : null}
+                 </div>
+
+          <div className='form-group'>
+                     <label htmlFor='kombetarjaID'>Kombetarja</label>
+                     <select
+                         id='kombetarjaID'
+                         name='kombetarjaID'
+                         onChange={myFormik.handleChange}
+                         value={myFormik.values.kombetarjaID}
+                         className={`form-control ${myFormik.errors.kombetarjaID ? 'is-invalid' : ''}`}
+                     >
+                         <option value="">Select Kombetarja</option>
+                         {kombetarjaList.map(kombetarja => (
+                             <option key={kombetarja.id} value={kombetarja.id}>
+                                 {kombetarja.emri}
+                             </option>
+                         ))}
+                     </select>
+                     {myFormik.errors.kombetarjaID ? <div className='invalid-feedback'>{myFormik.errors.kombetarjaID}</div> : null}
+                 </div>
 
           <div className="col-lg-4 mt-3">
             <input

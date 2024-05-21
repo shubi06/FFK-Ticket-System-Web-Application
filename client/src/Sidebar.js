@@ -38,33 +38,7 @@ function Sidebar() {
       {/* <!-- Divider --> */}
       <hr className="sidebar-divider my-0" />
       {/* <!-- Nav Item - Users --> */}
-      <li className="nav-item active">
-        <Link className="nav-link" to="/portal/selektor-list">
-          <span>SELEKTORT</span>
-        </Link>
-      </li>
-
-      {/* <!-- Nav Item - Selektort --> */}
-      <li className="nav-item active">
-        <Link className="nav-link" to="/portal/user-list">
-          <span>SUPERLIGA</span>
-        </Link>
-      </li>
-      {/* <!-- Nav Item - Stafin --> */}
-      <li className="nav-item active">
-        <Link className="nav-link" to="/portal/stafi-list">
-          <span>STAFI</span>
-        </Link>
-      </li>
-
-   {/* <!-- Nav Item - Users --> */}
-   <li className="nav-item active">
-        <Link className="nav-link" to="/portal/list-users">
-          <span>USERS</span>
-        </Link>
-      </li>
-
-
+    
 
 
       <li className="nav-item active">
@@ -79,9 +53,37 @@ function Sidebar() {
         </Link>
       </li>
 
+
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/selektor-list">
+          <span>SELEKTORI</span>
+        </Link>
+      </li>
+
+      {/* <!-- Nav Item - Stafin --> */}
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/stafi-list">
+          <span>STAFI</span>
+        </Link>
+      </li>
+
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/lojtaret-list">
           <span>LOJTARET E KOMBETARES</span>
+        </Link>
+      </li>
+
+        {/* <!-- Nav Item - Selektort --> */}
+        <li className="nav-item active">
+        <Link className="nav-link" to="/portal/user-list">
+          <span>SUPERLIGA</span>
+        </Link>
+      </li>
+
+   {/* <!-- Nav Item - Users --> */}
+   <li className="nav-item active">
+        <Link className="nav-link" to="/portal/list-users">
+          <span>USERS</span>
         </Link>
       </li>
     </ul>

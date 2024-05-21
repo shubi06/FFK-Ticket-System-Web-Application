@@ -13,6 +13,8 @@ namespace FederataFutbollit.Entities
 
         public Selektori Selektori { get; set; }
 
+        public List<Stafi> Stafi { get; set; }
+
 
     }
 }

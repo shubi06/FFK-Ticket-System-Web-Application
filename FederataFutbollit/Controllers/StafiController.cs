@@ -1,8 +1,11 @@
-﻿using FederataFutbollit.Data;
-using FederataFutbollit.Entities;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using FederataFutbollit.Data;
+using FederataFutbollit.Entities;
 using Microsoft.EntityFrameworkCore;
+using FederataFutbollit.DTOs;
+using System.Security.Claims;
 
 namespace FederataFutbollit.Controllers
 {
@@ -11,84 +14,91 @@ namespace FederataFutbollit.Controllers
     public class StafiController : ControllerBase
     {
         private readonly DataContext _context;
+
         public StafiController(DataContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-
-        public async Task<ActionResult<List<Stafi>>> GetAllStafi()
+        public async Task<ActionResult<List<Stafi>>> Get()
         {
-            var stafi = await _context.Stafi.ToListAsync();
 
-            return Ok(stafi);
 
+            return await _context.Stafi.ToListAsync();
         }
-
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Stafi>> GetStafi(int id)
+        public async Task<ActionResult<Stafi>> GetStafiById(int id)
         {
             var stafi = await _context.Stafi.FindAsync(id);
-            if (stafi is null)
-                return NotFound("Stafi nuk u gjet");
-
-            return Ok(stafi);
-
+            if (stafi == null)
+            {
+                return NotFound();
+            }
+            return stafi;
         }
 
-
-            [HttpPost]
-            public async Task<ActionResult<List<Stafi>>> AddStafi(Stafi stafi)
-            { 
-               _context.Stafi.Add(stafi);
-                await _context.SaveChangesAsync();
-               return Ok(await _context.Stafi.ToListAsync());
-
-            }
+        [HttpPost]
+        public async Task<ActionResult<List<Stafi>>> Create(StafiCreateDto request)
+        {
+            var kombetarja = await _context.Kombetarja.FindAsync(request.KombetarjaID);
+            if (kombetarja == null)
+                return NotFound();
 
 
-         [HttpPut("{id}")]
 
-        public async Task<ActionResult<List<Stafi>>> UpdateStafi(Stafi updatedStafi)
+            var newStafi = new Stafi
             {
-                var dbStafi = await _context.Stafi.FindAsync(updatedStafi.Id);
-                if (dbStafi is null)
-                    return NotFound("Stafi nuk u gjet");
+                Emri = request.Emri,
+                Mbiemri = request.Mbiemri,
+                Paga = request.Paga,
+                Email = request.Email,
+                Telefoni = request.Telefoni,
+                RoliID = request.RoliID,
+                KombetarjaID = request.KombetarjaID
+                
+            };
 
-               dbStafi.Emri = updatedStafi.Emri;
-                dbStafi.Mbiemri = updatedStafi.Mbiemri;
-                dbStafi.Pozita = updatedStafi.Pozita;
-                dbStafi.Paga = updatedStafi.Paga;
-               dbStafi.Email = updatedStafi.Email;
-                dbStafi.Telefoni = updatedStafi.Telefoni;
+            _context.Stafi.Add(newStafi);
+            await _context.SaveChangesAsync();
 
-                await _context.SaveChangesAsync();
+            return await Get();
 
-
-
-                return Ok(await _context.Stafi.ToListAsync());
-
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateStafi(StafiCreateDto request)
+        {
+            // Gjej lojtarin që duhet përditësuar dhe merr kombëtaren e lidhur
+            var stafi = await _context.Stafi.Include(k => k.Kombetarja).FirstOrDefaultAsync(k => k.Id == request.Id);
+            if (stafi == null)
+            {
+                return NotFound(); // Nëse lojtari nuk gjendet, kthe një përgjigje 404 Not Found
             }
 
+            // Përditëso vetitë e lojtarit nga kërkesa
+            _context.Entry(stafi).CurrentValues.SetValues(request);
+
+            // Ruaj ndryshimet në bazën e të dhënave
+            await _context.SaveChangesAsync();
+
+            // Kthe një përgjigje 204 No Content si konfirmim se përditësimi u bë me sukses
+            return NoContent();
+        }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Stafi>>> DeleteStafi(int id)
+        public async Task<IActionResult> DeleteStafi(int id)
+        {
+            var stafi = await _context.Stafi.FindAsync(id);
+            if (stafi == null)
             {
-               var dbStafi = await _context.Stafi.FindAsync(id);
-                if (dbStafi is null)
-                    return NotFound("Stafi nuk u gjet");
+                return NotFound();
+            }
 
-               _context.Stafi.Remove(dbStafi);
-                await _context.SaveChangesAsync();
+            _context.Stafi.Remove(stafi);
+            await _context.SaveChangesAsync();
 
-
-
-                return Ok(await _context.Stafi.ToListAsync());
-
-             }
-
+            return NoContent();
         }
     }
-
+}

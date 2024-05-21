@@ -19,6 +19,7 @@ namespace FederataFutbollit.Data
         public DbSet<Kombetarja> Kombetarja { get; set; }
 
         public DbSet<Lojtaret> Lojtaret { get; set; }
+        public DbSet<Roli> Roli { get; set; }
 
 
     }

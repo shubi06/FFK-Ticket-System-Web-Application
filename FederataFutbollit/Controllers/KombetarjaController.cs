@@ -24,7 +24,8 @@ namespace FederataFutbollit.Controllers
                 Include(k => k.Shteti)
                 .Include(k => k.Selektori)
                 .Include(k=>k.Lojtaret)
-                
+                .Include(k => k.Stafi)
+
                 .ToListAsync();
         }
         [HttpGet("{id}")]
@@ -34,6 +35,7 @@ namespace FederataFutbollit.Controllers
                 .Include(k => k.Shteti)
                 .Include(k => k.Selektori)
                 .Include(k => k.Lojtaret)
+                .Include(k => k.Stafi)
                 .FirstOrDefaultAsync(k => k.Id == id);
             if (kombetarja == null)
             {

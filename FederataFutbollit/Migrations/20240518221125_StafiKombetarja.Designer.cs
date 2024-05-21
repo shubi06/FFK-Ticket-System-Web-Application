@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240518221125_StafiKombetarja")]
+    partial class StafiKombetarja
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,23 +158,6 @@ namespace FederataFutbollit.Migrations
                     b.ToTable("Lojtaret");
                 });
 
-            modelBuilder.Entity("FederataFutbollit.Entities.Roli", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Emri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roli");
-                });
-
             modelBuilder.Entity("FederataFutbollit.Entities.Selektori", b =>
                 {
                     b.Property<int>("Id")
@@ -252,17 +238,12 @@ namespace FederataFutbollit.Migrations
                     b.Property<int>("Paga")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoliID")
-                        .HasColumnType("int");
-
                     b.Property<int>("Telefoni")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("KombetarjaID");
-
-                    b.HasIndex("RoliID");
 
                     b.ToTable("Stafi");
                 });
@@ -465,15 +446,7 @@ namespace FederataFutbollit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FederataFutbollit.Entities.Roli", "Roli")
-                        .WithMany("Stafi")
-                        .HasForeignKey("RoliID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Kombetarja");
-
-                    b.Navigation("Roli");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -534,11 +507,6 @@ namespace FederataFutbollit.Migrations
                     b.Navigation("Selektori")
                         .IsRequired();
 
-                    b.Navigation("Stafi");
-                });
-
-            modelBuilder.Entity("FederataFutbollit.Entities.Roli", b =>
-                {
                     b.Navigation("Stafi");
                 });
 

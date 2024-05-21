@@ -74,25 +74,13 @@ function Stafilist() {
                     <th>Id</th>
                     <th>Emri</th>
                     <th>Mbiemri</th>
-                    <th>Pozita</th>
                     <th>Paga</th>
                     <th>Email</th>
                     <th>Telefon</th>
                     <th>Veprimet</th>
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>Id</th>
-                    <th>Emri</th>
-                    <th>Mbiemri</th>
-                    <th>Pozita</th>
-                    <th>Paga</th>
-                    <th>Email</th>
-                    <th>Telefon</th>
-                    <th>Veprimet</th>
-                  </tr>
-                </tfoot>
+              
                 <tbody>
                   {stafiList.map((stafi) => {
                     return (
@@ -100,7 +88,7 @@ function Stafilist() {
                         <td>{stafi.id}</td>
                         <td>{stafi.emri}</td>
                         <td>{stafi.mbiemri}</td>
-                        <td>{stafi.pozita}</td>
+                     
                         <td>{stafi.paga}</td>
                         <td>{stafi.email}</td>
                         <td>{stafi.telefoni}</td>
