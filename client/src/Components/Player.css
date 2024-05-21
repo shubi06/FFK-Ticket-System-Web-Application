@@ -1,0 +1,38 @@
+/* Player.css */
+.player-container {
+    margin-top: 50px;
+  }
+  
+  .player-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  .player-card {
+    margin-bottom: 20px;
+  }
+  
+  .player-card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .player-card-text {
+    text-align: center;
+    font-size: 1rem;
+  }
+  
+  .player-card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .player-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  

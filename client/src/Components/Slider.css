@@ -1,0 +1,117 @@
+/* src/components/Slider.css */
+
+.slider-container {
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.custom-slide {
+  height: 500px;
+  object-fit: cover;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-fade .carousel-item {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-fade .carousel-item.active,
+.carousel-fade .carousel-item-next.carousel-item-start,
+.carousel-fade .carousel-item-prev.carousel-item-end {
+  opacity: 1;
+}
+
+.carousel-fade .carousel-item-start.active,
+.carousel-fade .carousel-item-end.active {
+  opacity: 0;
+}
+
+.static-button {
+  position: absolute;
+  bottom: 50px; /* Adjusted to be above the dots */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.75rem 2rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 25px; /* Butoni me cepa të rrumbullakosur */
+  background: linear-gradient(45deg, #ff5722, #e64a19); /* Gradient sfondi */
+  border: none;
+  color: #ffffff;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  z-index: 10; /* Ensure button is above everything else */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow for elevation */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  text-transform: uppercase; /* Shkronjat e mëdha */
+  letter-spacing: 1px; /* Hapësira ndërmjet shkronjave */
+}
+
+/* Efektet gjatë hover */
+.static-button:hover {
+  background: linear-gradient(45deg, #e64a19, #ff5722); /* Ndryshimi i gradientit gjatë hover */
+  transform: translateX(-50%) translateY(-5px); /* Butoni ngrihet pak */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+}
+
+/* Efektet gjatë click */
+.static-button:active {
+  background: linear-gradient(45deg, #d84315, #ff5722); /* Ngjyra më e errët gjatë klikimit */
+  transform: translateX(-50%) translateY(-2px); /* Butoni lëviz pak poshtë */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Lessen shadow on click */
+}
+
+/* Për pamje të bukur të butonit */
+.static-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 25px; /* Border-radius përshtatur butonit */
+  
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.static-button:hover::before {
+  opacity: 1;
+}
+.carousel-indicators {
+  bottom: 10px; /* Adjusted to position the dots correctly */
+  z-index: 10; /* Ensure dots are below the button */
+}
+
+.carousel-indicators li {
+  background-color: #fff; /* White dots */
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+}
+
+.carousel-indicators .active {
+  background-color: #ff5722; /* Active dot color */
+}
+
+@media (max-width: 768px) {
+  .custom-slide {
+    height: 300px;
+  }
+
+  .static-button {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    bottom: 55px; /* Adjusted to be above the dots on smaller screens */
+  }
+
+  .carousel-indicators {
+    bottom: 10px; /* Ensure dots are visible on smaller screens */
+  }
+}

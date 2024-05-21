@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
 function Topbar() {
-    const { logout } = useContext(AuthContext);
+    const { logout,authData } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -46,7 +46,8 @@ function Topbar() {
                         <span className="badge badge-danger badge-counter">3+</span>
                     </a>
                 </li>
-
+         
+         
                 {/* Nav Item - Messages */}
                 <li className="nav-item dropdown no-arrow mx-1">
                     <a className="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
@@ -55,12 +56,17 @@ function Topbar() {
                         <span className="badge badge-danger badge-counter">7</span>
                     </a>
                 </li>
+                <li className="nav-item ">
+        <Link className="nav-link" to="/home">
+          <span>WEB-Home</span>
+        </Link>
+      </li>
 
                 {/* Nav Item - User Information */}
                 <li className="nav-item dropdown no-arrow">
                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span className="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                        <span className="mr-2 d-none d-lg-inline text-gray-600 small"> {authData ? authData.name : 'Guest'}</span>
                         <FontAwesomeIcon icon={faCircleUser} />
                     </a>
                 </li>
@@ -71,6 +77,8 @@ function Topbar() {
                         <FontAwesomeIcon icon={faSignOutAlt} /> Logout
                     </button>
                 </li>
+
+            
             </ul>
         </nav>
     );

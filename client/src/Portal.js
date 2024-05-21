@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import Userlist from './Userlist';
@@ -31,6 +31,8 @@ import LojtaretCreate from './Lojtaret/LojtaretCreate';
 import LojtaretEdit from './Lojtaret/LojtaretEdit';
 import LojtaretView from './Lojtaret/LojtaretView';
 
+
+
 function Portal() {
   return (
     <>
@@ -38,6 +40,7 @@ function Portal() {
         <Sidebar />
         <div id="content-wrapper" className="d-flex flex-column">
           <Topbar />
+          
           <div className='container-fluid'>
             <Routes>
               <Route path="dashboard" element={<Dashboard />} />
@@ -73,6 +76,12 @@ function Portal() {
 
               
               <Route path="*" element={<div>Page Not Found</div>} />
+
+
+              
+           
+            
+
             </Routes>
           </div>
         </div>
