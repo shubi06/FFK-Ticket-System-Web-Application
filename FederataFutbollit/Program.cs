@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,25 +36,37 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 .AddRoles<IdentityRole>();
 
 //JWT
-builder.Services.AddAuthentication(Options => 
+builder.Services.AddAuthentication(options =>
 {
-Options.DefaultAuthenticateScheme =JwtBearerDefaults.AuthenticationScheme;
-Options.DefaultChallengeScheme =JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer( options =>
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
 {
-options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
-
-
-                };
-
-
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+         ClockSkew = TimeSpan.Zero
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"Token failed: {context.Exception.Message}");
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            var token = context.SecurityToken as JwtSecurityToken;
+            Console.WriteLine($"Token validated. Expiry: {token?.ValidTo}");
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddSwaggerGen(Options =>

@@ -2,10 +2,10 @@ using System.Threading.Tasks;
 using FederataFutbollit.Contracts;
 using FederataFutbollit.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization; // Shtoni këtë linjë
-using Microsoft.AspNetCore.Identity; // Shtoni këtë linjë
-using Microsoft.Extensions.Logging; // Shtoni këtë linjë
-using FederataFutbollit.Models; // Shtoni këtë linjë
+using Microsoft.AspNetCore.Authorization; 
+using Microsoft.AspNetCore.Identity; 
+using Microsoft.Extensions.Logging; 
+using FederataFutbollit.Models; 
 
 namespace FederataFutbollit.Controllers
 {
@@ -64,6 +64,16 @@ public async Task<IActionResult> Register(UserDTO userDTO)
 
             return Ok(response);
         }
+          [HttpGet("protected")]
+    public IActionResult GetProtected()
+    {
+        return Ok("You are authenticated!");
+    }
+      [HttpGet("current-utc-time")]
+    public IActionResult GetCurrentUtcTime()
+    {
+        return Ok(DateTime.UtcNow);
+    }
      
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt; // Added missing using directive
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -11,10 +11,11 @@ using FederataFutbollit.DTOs;
 using FederataFutbollit.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 
 namespace FederataFutbollit.Repositories
 {
-     public class AccountRepository : IUserAccount
+    public class AccountRepository : IUserAccount
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
@@ -26,10 +27,9 @@ namespace FederataFutbollit.Repositories
             this.roleManager = roleManager;
             this.config = config;
         }
-       
 
         public async Task<ServiceResponses.GeneralResponse> CreateAccount(UserDTO userDTO)
-       {
+        {
             if (userDTO is null) return new ServiceResponses.GeneralResponse(false, "Model is empty");
             var newUser = new ApplicationUser()
             {
@@ -42,13 +42,12 @@ namespace FederataFutbollit.Repositories
             if (user is not null) return new ServiceResponses.GeneralResponse(false, "User registered already");
 
             var createUser = await userManager.CreateAsync(newUser, userDTO.Password);
-if (!createUser.Succeeded)
-{
-    var errorMessage = string.Join(", ", createUser.Errors.Select(e => e.Description));
-    return new ServiceResponses.GeneralResponse(false, errorMessage);
-}
+            if (!createUser.Succeeded)
+            {
+                var errorMessage = string.Join(", ", createUser.Errors.Select(e => e.Description));
+                return new ServiceResponses.GeneralResponse(false, errorMessage);
+            }
 
-            
             var checkAdmin = await roleManager.FindByNameAsync("Admin");
             if (checkAdmin is null)
             {
@@ -68,7 +67,7 @@ if (!createUser.Succeeded)
         }
 
         public async Task<ServiceResponses.LoginResponse> LoginAccount(LoginDTO loginDTO)
-       {
+        {
             if (loginDTO == null)
                 return new ServiceResponses.LoginResponse(false, null!, "Login container is empty");
 
@@ -85,7 +84,8 @@ if (!createUser.Succeeded)
             string token = GenerateToken(userSession);
             return new ServiceResponses.LoginResponse(true, token!, "Login completed");
         }
-         private string GenerateToken(UserSession user)
+
+        private string GenerateToken(UserSession user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -100,10 +100,14 @@ if (!createUser.Succeeded)
                 issuer: config["Jwt:Issuer"],
                 audience: config["Jwt:Audience"],
                 claims: userClaims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.UtcNow.AddMinutes(120), 
                 signingCredentials: credentials
-                );
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            );
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+          
+            Console.WriteLine($"Generated Token: {tokenString}");
+             Console.WriteLine($"Token Expiry (UTC): {token.ValidTo.ToUniversalTime()}");
+            return tokenString;
         }
     }
 }

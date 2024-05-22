@@ -32,7 +32,7 @@ const Login = () => {
           };
           localStorage.setItem('user', JSON.stringify(userData));
           localStorage.setItem('token', response.data.token);
-          login(userData);
+          login(userData, response.data.token);
           
           if (userData.role === 'Admin') {
               navigate('/portal/dashboard');
