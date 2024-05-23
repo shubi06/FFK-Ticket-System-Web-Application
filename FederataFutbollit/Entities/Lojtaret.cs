@@ -20,6 +20,7 @@ namespace FederataFutbollit.Entities
             [JsonIgnore]
             public Kombetarja Kombetarja { get; set; }
             public int KombetarjaID { get; set; }
+            public string FotoPath { get; set; }
 
 
         }

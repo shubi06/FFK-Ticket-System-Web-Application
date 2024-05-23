@@ -11,6 +11,7 @@
         public int Asiste { get; set; }
         public int NrFaneles { get; set; }
         public int KombetarjaID { get; set; }
+         public string FotoPath { get; set; } = string.Empty;
 
     }
 }

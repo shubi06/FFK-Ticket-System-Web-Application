@@ -33,15 +33,22 @@ function LojtaretView() {
                     <p className='card-text'>Emri: {lojtaret.emri}</p>
                     <p className='card-text'>Mbiemri: {lojtaret.mbiemri}</p>
                     <p className='card-text'>Mosha: {lojtaret.mosha}</p>
-                    <p className='card-text'>Pozicioni: {lojtaret.poziconi}</p>
+                    <p className='card-text'>Pozicioni: {lojtaret.pozicioni}</p>
                     <p className='card-text'>Gola: {lojtaret.gola}</p>
                     <p className='card-text'>Asiste: {lojtaret.asiste}</p>
                     <p className='card-text'>NrFaneles: {lojtaret.nrFaneles}</p>
-
+                    {lojtaret.fotoPath && (
+                        <div className='card-img'>
+                            <p className='card-text'>Foto:</p>
+                            <img src={`http://localhost:5178${lojtaret.fotoPath}`} alt={`${lojtaret.emri} ${lojtaret.mbiemri}`} className='img-fluid' />
+                        </div>
+                    )}
                 </div>
+                
             </div>
         </div>
     );
 }
 
 export default LojtaretView;
+
