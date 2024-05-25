@@ -31,6 +31,9 @@ import LojtaretCreate from './Lojtaret/LojtaretCreate';
 import LojtaretEdit from './Lojtaret/LojtaretEdit';
 import LojtaretView from './Lojtaret/LojtaretView';
 
+import NdeshjaList from './Ndeshja/NdeshjaList';
+import CreateNdeshja from './Ndeshja/CreateNdeshja';
+
 
 
 function Portal() {
@@ -73,7 +76,8 @@ function Portal() {
               <Route path="lojtaret-edit/:id" element={<LojtaretEdit />} />
               <Route path="lojtaret-view/:id" element={<LojtaretView />} />
        
-
+              <Route path='ndeshja-list' element={<NdeshjaList/>}/>
+              <Route path='create-ndeshja' element={<CreateNdeshja/>}/>
               
               <Route path="*" element={<div>Page Not Found</div>} />
 

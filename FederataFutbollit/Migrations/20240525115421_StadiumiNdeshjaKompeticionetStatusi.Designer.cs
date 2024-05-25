@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240525115421_StadiumiNdeshjaKompeticionetStatusi")]
+    partial class StadiumiNdeshjaKompeticionetStatusi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,23 +190,7 @@ namespace FederataFutbollit.Migrations
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EkipiKundershtar")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("GolaEkipiJone")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GolaEkipiKundershtar")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KombetarjaId")
-                        .HasColumnType("int");
-
                     b.Property<int>("KompeticioniId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("NdeshjaId")
                         .HasColumnType("int");
 
                     b.Property<int>("StadiumiId")
@@ -214,11 +201,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KombetarjaId");
-
                     b.HasIndex("KompeticioniId");
-
-                    b.HasIndex("NdeshjaId");
 
                     b.HasIndex("StadiumiId");
 
@@ -565,21 +548,11 @@ namespace FederataFutbollit.Migrations
 
             modelBuilder.Entity("FederataFutbollit.Entities.Ndeshja", b =>
                 {
-                    b.HasOne("FederataFutbollit.Entities.Kombetarja", "Kombetarja")
-                        .WithMany("Ndeshjet")
-                        .HasForeignKey("KombetarjaId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("FederataFutbollit.Entities.Kompeticionet", "Kompeticioni")
                         .WithMany("Ndeshja")
                         .HasForeignKey("KompeticioniId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("FederataFutbollit.Entities.Ndeshja", null)
-                        .WithMany("Ndeshjet")
-                        .HasForeignKey("NdeshjaId");
 
                     b.HasOne("FederataFutbollit.Entities.Stadiumi", "Stadiumi")
                         .WithMany("Ndeshjet")
@@ -592,8 +565,6 @@ namespace FederataFutbollit.Migrations
                         .HasForeignKey("StatusiId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Kombetarja");
 
                     b.Navigation("Kompeticioni");
 
@@ -616,7 +587,7 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Entities.Stadiumi", b =>
                 {
                     b.HasOne("FederataFutbollit.Entities.Kombetarja", "Kombetarja")
-                        .WithMany("Stadiumet")
+                        .WithMany()
                         .HasForeignKey("KombetarjaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -698,12 +669,8 @@ namespace FederataFutbollit.Migrations
                 {
                     b.Navigation("Lojtaret");
 
-                    b.Navigation("Ndeshjet");
-
                     b.Navigation("Selektori")
                         .IsRequired();
-
-                    b.Navigation("Stadiumet");
 
                     b.Navigation("Stafi");
                 });
@@ -711,11 +678,6 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Entities.Kompeticionet", b =>
                 {
                     b.Navigation("Ndeshja");
-                });
-
-            modelBuilder.Entity("FederataFutbollit.Entities.Ndeshja", b =>
-                {
-                    b.Navigation("Ndeshjet");
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Roli", b =>

@@ -14,6 +14,8 @@ namespace FederataFutbollit.Entities
         public Selektori Selektori { get; set; }
 
         public List<Stafi> Stafi { get; set; }
+         public List<Ndeshja> Ndeshjet { get; set; }
+         public List<Stadiumi> Stadiumet { get; set; }
 
 
     }
