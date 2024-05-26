@@ -7,8 +7,10 @@
 ## Get latest from `dotnet new gitignore`
 .vs
 # dotenv files
-.env
+/FederataFutbollit/obj/
 
+.env
+.appsettings.json
 # User-specific files
 *.rsuser
 *.suo

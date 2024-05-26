@@ -28,5 +28,8 @@ namespace FederataFutbollit.Entities
         [JsonIgnore]
         public ICollection<Ndeshja> Ndeshjet { get; set; }
 
+        [JsonIgnore]
+        public List<Bileta> Bileta { get; set; }
+
     }
 }
