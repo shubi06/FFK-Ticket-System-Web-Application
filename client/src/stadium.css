@@ -1,46 +1,46 @@
-
-  
-  /* Add more styles as needed */
-
-  /* src/Stadium.css */
 .stadium {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    background-image: url('C:\Users\Shuajb Bunjaku\Desktop\stadium-ticketing-system\public\1.jpg'); /* Replace with your stadium image */
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-  
-  .row {
-    display: flex;
-    margin-bottom: 10px;
-  }
-  
-  .seat {
-    width: 30px; /* Adjust as needed */
-    height: 30px; /* Adjust as needed */
-    margin-right: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.5); /* Add a transparent background to the seats for better visibility */
-  }
-  
-  .available {
-    background-color: #b8ffb5;
-  }
-  
-  .selected {
-    background-color: #ffce8d;
-  }
-  
-  /* Add more styles as needed */
-  
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  background-image: url('C:/Users/Shuajb Bunjaku/Desktop/stadium-ticketing-system/public/1.jpg'); /* Replace with your stadium image */
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
+.row {
+  display: flex;
+  margin-bottom: 10px;
+}
 
-  
+.seat {
+  width: 40px; /* Adjusted for better visibility */
+  height: 40px; /* Adjusted for better visibility */
+  margin-right: 5px;
+  margin-bottom: 5px; /* Add margin for better spacing */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Slightly more rounded corners */
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.8); /* Add a transparent background to the seats for better visibility */
+  transition: background-color 0.3s ease;
+}
+
+.seat:hover {
+  background-color: #e0e0e0; /* Light gray on hover */
+}
+
+.available {
+  background-color: #fffff; /* A more vibrant green */
+}
+
+.selected {
+  background-color: #ff8c00; /* A brighter orange */
+  color: white;
+  font-weight: bold;
+}
