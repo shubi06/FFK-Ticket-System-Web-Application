@@ -17,6 +17,7 @@ namespace FederataFutbollit.Entities
         public Ndeshja Ndeshja { get; set; }
         public int NdeshjaID { get; set; }
 
-    
+    public ApplicationUser ApplicationUser { get; set; }
+        public string ApplicationUserID { get; set; }
     }
 }
