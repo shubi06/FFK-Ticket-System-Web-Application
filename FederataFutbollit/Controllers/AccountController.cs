@@ -51,22 +51,25 @@ namespace FederataFutbollit.Controllers
         }
 
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO loginDTO)
-        {
-            if (loginDTO == null)
-            {
-                return BadRequest("Login data is missing.");
-            }
+     [HttpPost("login")]
+public async Task<IActionResult> Login(LoginDTO loginDTO)
+{
+    if (loginDTO == null)
+    {
+        return BadRequest("Login data is missing.");
+    }
 
-            var response = await _userAccount.LoginAccount(loginDTO);
-            if (!response.Flag)
-            {
-                return Unauthorized(response.Message);
-            }
+    var response = await _userAccount.LoginAccount(loginDTO);
+    if (!response.Flag)
+    {
+        return Unauthorized(response.Message);
+    }
 
-            return Ok(response);
-        }
+    return Ok(response);
+}
+
+
+
           [HttpGet("protected")]
     public IActionResult GetProtected()
     {
