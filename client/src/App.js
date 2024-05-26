@@ -12,6 +12,7 @@ import Home from'./Components/Home';
 import Player from "./Components/Player";
 import Header from "./Components/Header";
 import Slider from './Components/Slider';
+import Stadium from './Stadium';
 
 
 const App = () => {
@@ -45,6 +46,7 @@ const AppContent = () => {
         <Route path='/slider' element={<Slider/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/stadium" element={<Stadium />} />
         <Route path="/portal/*" element={
           <PrivateRoute allowedRoles={['Admin']}>
             <Portal />

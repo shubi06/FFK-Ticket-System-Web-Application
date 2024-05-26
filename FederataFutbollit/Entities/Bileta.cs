@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using FederataFutbollit.Data;
+using System.Text.Json.Serialization;
 
 namespace FederataFutbollit.Entities
 {
@@ -15,5 +16,7 @@ namespace FederataFutbollit.Entities
         [JsonIgnore]
         public Ndeshja Ndeshja { get; set; }
         public int NdeshjaID { get; set; }
+
+    
     }
 }

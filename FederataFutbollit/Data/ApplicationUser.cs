@@ -10,6 +10,8 @@ namespace FederataFutbollit.Data
     {
    
         public string ? Name { get; set; }
+
+        
         
 
     }

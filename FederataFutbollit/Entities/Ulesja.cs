@@ -10,15 +10,14 @@ namespace FederataFutbollit.Entities
 
         [JsonIgnore]
         public Bileta Bileta { get; set; }
-   
-
-        [JsonIgnore]
-        public Stadiumi Stadiumi { get; set; }
-        public int StadiumiID { get; set; }
 
         [JsonIgnore]
         public SektoriUlseve SektoriUlseve { get; set; }
-        public int SektoriUlseve { get; set; }
+        public int SektoriUlseveID { get; set; }
+
+     
+
+
 
     }
 }

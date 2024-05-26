@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240526194158_Bileta")]
+    partial class Bileta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -469,12 +472,12 @@ namespace FederataFutbollit.Migrations
                     b.Property<int>("Numri")
                         .HasColumnType("int");
 
-                    b.Property<int>("SektoriUlseveID")
+                    b.Property<int?>("StadiumiId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SektoriUlseveID");
+                    b.HasIndex("StadiumiId");
 
                     b.ToTable("Uleset");
                 });
@@ -735,13 +738,9 @@ namespace FederataFutbollit.Migrations
 
             modelBuilder.Entity("FederataFutbollit.Entities.Ulesja", b =>
                 {
-                    b.HasOne("FederataFutbollit.Entities.SektoriUlseve", "SektoriUlseve")
+                    b.HasOne("FederataFutbollit.Entities.Stadiumi", null)
                         .WithMany("Uleset")
-                        .HasForeignKey("SektoriUlseveID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SektoriUlseve");
+                        .HasForeignKey("StadiumiId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -826,11 +825,6 @@ namespace FederataFutbollit.Migrations
                     b.Navigation("Stafi");
                 });
 
-            modelBuilder.Entity("FederataFutbollit.Entities.SektoriUlseve", b =>
-                {
-                    b.Navigation("Uleset");
-                });
-
             modelBuilder.Entity("FederataFutbollit.Entities.Shteti", b =>
                 {
                     b.Navigation("Kombetarja")
@@ -840,6 +834,8 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Entities.Stadiumi", b =>
                 {
                     b.Navigation("Ndeshjet");
+
+                    b.Navigation("Uleset");
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Statusi", b =>
