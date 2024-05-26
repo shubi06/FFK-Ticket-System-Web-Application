@@ -22,30 +22,33 @@ namespace FederataFutbollit.Controllers
             _logger = logger;
         }
 
-[HttpPost("register")]
-public async Task<IActionResult> Register(UserDTO userDTO)
-{
-    if (!ModelState.IsValid)
-    {
-        return BadRequest(new { errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)) });
-    }
-
-    try
-    {
-        var response = await _userAccount.CreateAccount(userDTO);
-        if (!response.Flag)
+ [HttpPost("register")]
+        public async Task<IActionResult> Register(UserDTO userDTO)
         {
-            return BadRequest(new { message = response.Message });
-        }
-        return Ok(response);
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error registering user");
-        return StatusCode(500, new { message = "An error occurred while processing your request." });
-    }
-}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)) });
+            }
 
+            try
+            {
+                var response = await _userAccount.CreateAccount(userDTO);
+                if (!response.Flag)
+                {
+                    if (response.Message == "User registered already")
+                    {
+                        return Conflict(new { message = response.Message });
+                    }
+                    return BadRequest(new { message = response.Message });
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error registering user");
+                return StatusCode(500, new { message = "An error occurred while processing your request." });
+            }
+        }
 
 
         [HttpPost("login")]

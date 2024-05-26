@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../Services/UserContext';
 
 export default function Register() {
-    const { register, error } = useUser();
-    const navigate = useNavigate();  
+    const { register } = useUser();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
         confirmPassword: ''
     });
-    const [success, setSuccess] = useState(false);  
+    const [message, setMessage] = useState({ type: '', content: '' });
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,17 +25,27 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match!");
+            setMessage({ type: 'error', content: 'Passwords do not match!' });
             return;
         }
+
+        setIsLoading(true); // Start loading
+        setMessage({ type: '', content: '' }); // Clear previous messages
+
         try {
-            await register(formData);  
-            setSuccess(true);
+            await register(formData);
+            setMessage({ type: 'success', content: 'You have registered successfully!' });
             setTimeout(() => {
-                navigate('/login');  
-            }, 3000); 
+                navigate('/login');
+            }, 3000);
         } catch (error) {
-            console.error('Registration failed:', error);
+            let errorMsg = 'Registration failed. Please try again.';
+            if (error.message) {
+                errorMsg = error.message;
+            }
+            setMessage({ type: 'error', content: errorMsg });
+        } finally {
+            setIsLoading(false); // End loading
         }
     };
 
@@ -51,6 +61,11 @@ export default function Register() {
                                     <div className="text-center">
                                         <h1 className="h4 text-gray-900 mb-4">Create an Account!</h1>
                                     </div>
+                                    {message.content && (
+                                        <div className={`alert ${message.type === 'success' ? 'alert-success' : 'alert-danger'}`}>
+                                            {message.content}
+                                        </div>
+                                    )}
                                     <form className="user" onSubmit={handleSubmit}>
                                         <div className="form-group">
                                             <input type="text" className="form-control form-control-user"
@@ -78,11 +93,9 @@ export default function Register() {
                                                 id="exampleInputConfirmPassword" placeholder="Confirm Password"
                                                 value={formData.confirmPassword} onChange={handleChange} />
                                         </div>
-                                        <button type="submit" className="btn btn-primary btn-user btn-block">
-                                            Register Account
+                                        <button type="submit" className="btn btn-primary btn-user btn-block" disabled={isLoading}>
+                                            {isLoading ? 'Registering...' : 'Register Account'}
                                         </button>
-                                        {success && <div className="alert alert-success mt-2">You have registered successfully!</div>}
-                                        {error && <p className="text-danger">{error}</p>}
                                         <hr />
                                     </form>
                                     <div className="text-center">

@@ -6,7 +6,6 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [error, setError] = useState('');
 
     const register = async (userData) => {
         try {
@@ -17,28 +16,27 @@ export const UserProvider = ({ children }) => {
                 },
                 body: JSON.stringify(userData)
             });
-    
+
             if (!response.ok) {
                 if (response.headers.get('Content-Type')?.includes('application/json')) {
                     const errorData = await response.json();
-                    throw new Error(`Failed to register user: ${errorData.message || JSON.stringify(errorData)}`);
+                    throw new Error(errorData.message || 'Failed to register user.');
                 } else {
-                    // This handles non-JSON responses, assuming they are plain text
                     const errorText = await response.text();
-                    throw new Error(`Failed to register user: ${errorText}`);
+                    throw new Error(errorText || 'Failed to register user.');
                 }
             }
-    
+
             const result = await response.json();
             setUser(result);
+            return result; // Return the result for further handling
         } catch (error) {
-            setError(error.message);
+            throw error; // Throw the error for the component to handle
         }
     };
-    
-    
+
     return (
-        <UserContext.Provider value={{ user, register, error }}>
+        <UserContext.Provider value={{ user, register }}>
             {children}
         </UserContext.Provider>
     );
