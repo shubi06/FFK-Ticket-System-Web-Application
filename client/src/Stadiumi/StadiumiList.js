@@ -4,20 +4,20 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-function Stafilist() {
-  const [stafiList, setStafiList] = useState([]);
+function StadiumiList() {
+  const [stadiumiList, setStadiumiList] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     //On Load
-    getStafs();
+    getStadiumi();
     console.log("welcome");
   }, []);
 
-  let getStafs = async () => {
+  let getStadiumi = async () => {
     try {
-      const stafs = await axios.get("http://localhost:5178/api/Stafi");
-      setStafiList(stafs.data);
+      const stadiumi = await axios.get("http://localhost:5178/api/Stadiumi");
+      setStadiumiList(stadiumi.data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -30,8 +30,8 @@ function Stafilist() {
         "Are you sure do you want to delete the data?"
       );
       if (confirmDelete) {
-        await axios.delete(`http://localhost:5178/api/Stafi/${id}`);
-        getStafs();
+        await axios.delete(`http://localhost:5178/api/Stadiumi/${id}`);
+        getStadiumi();
       }
     } catch (error) {
       console.log(error);
@@ -41,13 +41,13 @@ function Stafilist() {
   return (
     <>
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 className="h3 mb-0 text-gray-800">Lista e Stafit</h1>
+        <h1 className="h3 mb-0 text-gray-800">Lista e Stadiumit</h1>
         <Link
-          to="/portal/stafi-create"
+          to="/portal/stadiumi-create"
           className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
         >
           <FontAwesomeIcon icon={faUser} className="creatinguser mr-2" />
-          Shto Stafin
+          Shto Stadiumin
         </Link>
       </div>
       {/* <!-- DataTables --> */}
@@ -73,42 +73,36 @@ function Stafilist() {
                   <tr>
                     <th>Id</th>
                     <th>Emri</th>
-                    <th>Mbiemri</th>
-                    <th>Paga</th>
-                    <th>Email</th>
-                    <th>Telefon</th>
-                    <th>Pozita</th>
+                    <th>Kapaciteti</th>
+                    <th>Viti Ndertimit</th>
                     <th>Veprimet</th>
                   </tr>
                 </thead>
               
                 <tbody>
-                  {stafiList.map((stafi) => {
+                  {stadiumiList.map((stadiumi) => {
                     return (
-                      <tr key={stafi.id}>
-                        <td>{stafi.id}</td>
-                        <td>{stafi.emri}</td>
-                        <td>{stafi.mbiemri}</td>
-                     
-                        <td>{stafi.paga}</td>
-                        <td>{stafi.email}</td>
-                        <td>{stafi.telefoni}</td>
-                        <td>{stafi.roliEmri}</td>
+                      <tr key={stadiumi.id}>
+                        <td>{stadiumi.id}</td>
+                        <td>{stadiumi.emri}</td>
+                        <td>{stadiumi.kapaciteti}</td>  
+                        <td>{stadiumi.vitiNdertuar}</td>
+                    
                         <td>
                           <Link
-                            to={`/portal/stafi-view/${stafi.id}`}
+                            to={`/portal/stadiumi-view/${stadiumi.id}`}
                             className="btn btn-primary btn-sm mr-1"
                           >
                             View
                           </Link>
                           <Link
-                            to={`/portal/stafi-edit/${stafi.id}`}
+                            to={`/portal/stadiumi-edit/${stadiumi.id}`}
                             className="btn btn-info btn-sm mr-1"
                           >
                             Edit
                           </Link>
                           <button
-                            onClick={() => handleDelete(stafi.id)}
+                            onClick={() => handleDelete(stadiumi.id)}
                             className="btn btn-danger btn-sm mr-1"
                           >
                             Delete
@@ -126,4 +120,4 @@ function Stafilist() {
     </>
   );
 }
-export default Stafilist;
+export default StadiumiList;

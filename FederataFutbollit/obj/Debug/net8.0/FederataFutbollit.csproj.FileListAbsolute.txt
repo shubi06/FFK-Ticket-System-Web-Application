@@ -295,3 +295,4 @@ C:\Users\Shuajb Bunjaku\Desktop\Lab1-Final-\FederataFutbollit\obj\Debug\net8.0\F
 C:\Users\Shuajb Bunjaku\Desktop\Lab1-Final-\FederataFutbollit\obj\Debug\net8.0\FederataFutbollit.genruntimeconfig.cache
 C:\Users\Shuajb Bunjaku\Desktop\Lab1-Final-\FederataFutbollit\obj\Debug\net8.0\ref\FederataFutbollit.dll
 C:\Users\gentr\OneDrive\Desktop\Lab1-Final-\FederataFutbollit\bin\Debug\net8.0\FederataFutbollit.staticwebassets.runtime.json
+C:\Users\Shuajb Bunjaku\Desktop\Lab1-Final-\FederataFutbollit\bin\Debug\net8.0\FederataFutbollit.staticwebassets.runtime.json

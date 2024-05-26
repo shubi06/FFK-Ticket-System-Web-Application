@@ -30,6 +30,11 @@ import LojtaretList from './Lojtaret/LojtaretList';
 import LojtaretCreate from './Lojtaret/LojtaretCreate';
 import LojtaretEdit from './Lojtaret/LojtaretEdit';
 import LojtaretView from './Lojtaret/LojtaretView';
+import StadiumiList from './Stadiumi/StadiumiList';
+import StadiumiCreate from './Stadiumi/StadiumiCreate';
+import StadiumiEdit from './Stadiumi/StadiumiEdit';
+import StadiumiView from './Stadiumi/StadiumiView';
+
 
 import NdeshjaList from './Ndeshja/NdeshjaList';
 import CreateNdeshja from './Ndeshja/CreateNdeshja';
@@ -78,6 +83,11 @@ function Portal() {
        
               <Route path='ndeshja-list' element={<NdeshjaList/>}/>
               <Route path='create-ndeshja' element={<CreateNdeshja/>}/>
+
+              <Route path="stadiumi-list" element={<StadiumiList />} />
+              <Route path="stadiumi-create" element={<StadiumiCreate />} />
+              <Route path="stadiumi-edit/:id" element={<StadiumiEdit />} />
+              <Route path="stadiumi-view/:id" element={<StadiumiView />} />
               
               <Route path="*" element={<div>Page Not Found</div>} />
 

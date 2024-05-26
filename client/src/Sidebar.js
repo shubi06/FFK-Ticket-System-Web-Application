@@ -53,6 +53,19 @@ function Sidebar() {
         </Link>
       </li>
 
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/stadiumi-list">
+          <span>STADIUMI</span>
+        </Link>
+      </li>
+
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/ndeshja-list">
+          <span>NDESHJA</span>
+        </Link>
+      </li>
+
+
 
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/selektor-list">
@@ -88,12 +101,7 @@ function Sidebar() {
       </li>
 
 
-      <li className="nav-item active">
-        <Link className="nav-link" to="/portal/ndeshja-list">
-          <span>Ndeshja</span>
-        </Link>
-      </li>
-
+    
 
 
 

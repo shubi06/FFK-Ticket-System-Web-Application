@@ -11,6 +11,7 @@ namespace FederataFutbollit.DTOs
         public int Paga { get; set; }
         public string Email { get; set; } = string.Empty;
         public int Telefoni { get; set; }
+
         public int KombetarjaID { get; set; }
         public int RoliID { get; set; }
     }

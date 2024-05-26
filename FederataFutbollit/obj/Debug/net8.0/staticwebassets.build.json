@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "lYgZg63hQ1Jk6OYZEu8JJoB8F5gFp2sshL/piOrpWEg=",
+  "Hash": "8aGYg/aRlIULAyDyYZWcCt+VN1mAG7tdceitzDEl6zI=",
   "Source": "FederataFutbollit",
   "BasePath": "_content/FederataFutbollit",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "FederataFutbollit\\wwwroot",
       "Source": "FederataFutbollit",
-      "ContentRoot": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\",
       "BasePath": "_content/FederataFutbollit",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\uploads\\Fadil.jpg",
+      "Identity": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\uploads\\Fadil.jpg",
       "SourceId": "FederataFutbollit",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\",
       "BasePath": "_content/FederataFutbollit",
       "RelativePath": "uploads/Fadil.jpg",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\Fadil.jpg"
     },
     {
-      "Identity": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\uploads\\images.jpg",
+      "Identity": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\uploads\\images.jpg",
       "SourceId": "FederataFutbollit",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\gentr\\OneDrive\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\Shuajb Bunjaku\\Desktop\\Lab1-Final-\\FederataFutbollit\\wwwroot\\",
       "BasePath": "_content/FederataFutbollit",
       "RelativePath": "uploads/images.jpg",
       "AssetKind": "All",

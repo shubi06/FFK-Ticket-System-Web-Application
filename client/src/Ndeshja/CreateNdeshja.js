@@ -27,11 +27,6 @@ function CreateNdeshja() {
           axios.get("http://localhost:5178/api/Stadiumi")
         ]);
 
-        console.log("Status Response:", statusResponse.data);
-        console.log("Kompeticioni Response:", kompeticioniResponse.data);
-        console.log("Kombetarja Response:", kombetarjaResponse.data);
-        console.log("Stadiumi Response:", stadiumiResponse.data);
-
         setStatuset(statusResponse.data);
         setKompeticionet(kompeticioniResponse.data);
         setKombetaret(kombetarjaResponse.data);
@@ -50,6 +45,20 @@ function CreateNdeshja() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!ekipiKundershtar) {
+      alert("Ekipi Kundershtar is required.");
+      return;
+    }
+
+    const selectedStatus = statuset.find(status => status.id === parseInt(statusiId));
+    if (selectedStatus && selectedStatus.emri === "E Zhvilluar") {
+      if (!golaEkipiJone || !golaEkipiKundershtar) {
+        alert("Gola Ekipi Jone and Gola Ekipi Kundershtar are required when the status is 'E Zhvilluar'.");
+        return;
+      }
+    }
+
     const newNdeshja = {
       data,
       stadiumiId: parseInt(stadiumiId),
@@ -165,6 +174,7 @@ function CreateNdeshja() {
             value={ekipiKundershtar}
             onChange={(e) => setEkipiKundershtar(e.target.value)}
             className="form-control"
+            required
           />
         </div>
         <div className="form-group">
@@ -175,6 +185,7 @@ function CreateNdeshja() {
             onChange={(e) => setGolaEkipiJone(e.target.value)}
             className="form-control"
             min="0"
+            required={statusiId && statuset.find(status => status.id === parseInt(statusiId))?.emri === "E Zhvilluar"}
           />
         </div>
         <div className="form-group">
@@ -185,6 +196,7 @@ function CreateNdeshja() {
             onChange={(e) => setGolaEkipiKundershtar(e.target.value)}
             className="form-control"
             min="0"
+            required={statusiId && statuset.find(status => status.id === parseInt(statusiId))?.emri === "E Zhvilluar"}
           />
         </div>
         <button type="submit" className="btn btn-primary">

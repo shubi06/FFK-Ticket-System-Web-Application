@@ -23,6 +23,11 @@ namespace FederataFutbollit.Data
         public DbSet<Ndeshja> Ndeshja { get; set; }
         public DbSet<Statusi> Statusi { get; set; }
 
+        public DbSet<Bileta> Biletat { get; set; }
+        public DbSet<Ulesja> Uleset { get; set; }
+
+        public DbSet<SektoriUlseve> SektoriUlseve { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
