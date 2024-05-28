@@ -13,7 +13,7 @@ import Player from "./Components/Player";
 import Header from "./Components/Header";
 import Slider from './Components/Slider';
 import Stadium from './Stadium';
-
+import Cart from "./Components/Cart";
 
 const App = () => {
   return (
@@ -42,6 +42,7 @@ const AppContent = () => {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Home />} />
         <Route path='/player' element={<Player/>}/>
+        <Route path='/cart' element={<Cart/>}/>
         <Route path='/header' element={<Header/>}/>
         <Route path='/slider' element={<Slider/>}/>
         <Route path="/login" element={<Login />} />
