@@ -1,33 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Seat from './Seat';
 import './stadium.css';
 
-const Seat = ({ id, status, onClick }) => {
-  const handleClick = () => {
-    if (status === 'available') {
-      onClick(id);
+const Stadium = () => {
+  const [sectors, setSectors] = useState([]);
+  const [selectedSector, setSelectedSector] = useState(null);
+  const [seats, setSeats] = useState([]);
+  const [selectedSeats, setSelectedSeats] = useState([]);
+
+  useEffect(() => {
+    const fetchSectors = async () => {
+      try {
+        const response = await fetch('http://localhost:5178/api/SektoriUlseve'); // Adjust the URL as needed
+        const data = await response.json();
+        setSectors(data);
+      } catch (error) {
+        console.error('Error fetching sectors:', error);
+      }
+    };
+
+    fetchSectors();
+  }, []);
+
+  useEffect(() => {
+    if (selectedSector) {
+      setSeats(selectedSector.uleset);
+      setSelectedSeats([]);
     }
+  }, [selectedSector]);
+
+  const handleSectorClick = (sectorId) => {
+    const sector = sectors.find(s => s.id === sectorId);
+    setSelectedSector(sector);
   };
 
-  return (
-    <div
-      className={`seat ${status}`}
-      onClick={handleClick}
-    >
-      {id}
-    </div>
-  );
-};
-
-const Stadium = () => {
-  const [seats, setSeats] = useState(Array.from({ length: 100 }, (_, index) => ({ id: index + 1, status: 'available' }))); // 5 rows * 20 seats
-
   const handleSeatClick = (seatId) => {
-    setSeats(seats.map(seat => {
-      if (seat.id === seatId) {
-        return { ...seat, status: seat.status === 'available' ? 'selected' : 'available' };
-      }
-      return seat;
-    }));
+    const seat = seats.find(s => s.id === seatId);
+    if (seat.isAvailable && selectedSeats.length < 4) {
+      setSelectedSeats([...selectedSeats, seatId]);
+      setSeats(seats.map(seat => 
+        seat.id === seatId ? { ...seat, isAvailable: false } : seat
+      ));
+    } else if (!seat.isAvailable) {
+      setSelectedSeats(selectedSeats.filter(id => id !== seatId));
+      setSeats(seats.map(seat => 
+        seat.id === seatId ? { ...seat, isAvailable: true } : seat
+      ));
+    }
   };
 
   const renderSeats = () => {
@@ -38,7 +57,7 @@ const Stadium = () => {
         <Seat
           key={seats[i].id}
           id={seats[i].id}
-          status={seats[i].status}
+          status={seats[i].isAvailable ? 'available' : (selectedSeats.includes(seats[i].id) ? 'selected' : 'unavailable')}
           onClick={handleSeatClick}
         />
       );
@@ -55,7 +74,16 @@ const Stadium = () => {
 
   return (
     <div className="stadium">
-      {renderSeats()}
+      <h1>Stadium Seating</h1>
+      <div className="sector-buttons">
+        {sectors.map(sector => (
+          <button key={sector.id} onClick={() => handleSectorClick(sector.id)}>
+            {sector.emri}
+          </button>
+        ))}
+      </div>
+      {selectedSector && renderSeats()}
+      {selectedSeats.length >= 4 && <div className="max-selection">You can select a maximum of 4 seats.</div>}
     </div>
   );
 };
