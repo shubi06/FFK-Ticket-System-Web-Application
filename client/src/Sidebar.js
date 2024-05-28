@@ -19,7 +19,6 @@ function Sidebar() {
       >
         <div className="sidebar-brand-icon rotate-n-15"></div>
         <div className="sidebar-brand-text mx-3">FFK</div>
-      
       </a>
 
       {/* <!-- Divider --> */}
@@ -38,8 +37,6 @@ function Sidebar() {
       {/* <!-- Divider --> */}
       <hr className="sidebar-divider my-0" />
       {/* <!-- Nav Item - Users --> */}
-    
-
 
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/shteti-list">
@@ -65,8 +62,6 @@ function Sidebar() {
         </Link>
       </li>
 
-
-
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/selektor-list">
           <span>SELEKTORI</span>
@@ -86,27 +81,25 @@ function Sidebar() {
         </Link>
       </li>
 
-        {/* <!-- Nav Item - Selektort --> */}
-        <li className="nav-item active">
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/lojtaret-superlige-list">
+          <span>LOJTARET E SUPERLIGES</span>
+        </Link>
+      </li>
+
+      {/* <!-- Nav Item - Selektort --> */}
+      <li className="nav-item active">
         <Link className="nav-link" to="/portal/user-list">
           <span>SUPERLIGA</span>
         </Link>
       </li>
 
-   {/* <!-- Nav Item - Users --> */}
-   <li className="nav-item active">
+      {/* <!-- Nav Item - Users --> */}
+      <li className="nav-item active">
         <Link className="nav-link" to="/portal/list-users">
           <span>USERS</span>
         </Link>
       </li>
-
-
-    
-
-
-
-
-
     </ul>
   );
 }

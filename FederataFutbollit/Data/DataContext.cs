@@ -17,6 +17,7 @@ namespace FederataFutbollit.Data
         public DbSet<Shteti> Shteti { get; set; }
         public DbSet<Kombetarja> Kombetarja { get; set; }
         public DbSet<Lojtaret> Lojtaret { get; set; }
+        public DbSet<LojtaretSuperlige> LojtaretSuperlige{ get; set; }
         public DbSet<Roli> Roli { get; set; }
         public DbSet<Stadiumi> Stadiumi { get; set; }
         public DbSet<Kompeticionet> Kompeticionet { get; set; }
