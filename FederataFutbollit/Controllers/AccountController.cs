@@ -51,22 +51,83 @@ namespace FederataFutbollit.Controllers
         }
 
 
-     [HttpPost("login")]
-public async Task<IActionResult> Login(LoginDTO loginDTO)
+ [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginDTO loginDTO)
+    {
+        if (loginDTO == null)
+        {
+            return BadRequest("Login data is missing.");
+        }
+
+        var response = await _userAccount.LoginAccount(loginDTO);
+        if (!response.Flag)
+        {
+            return Unauthorized(response.Message);
+        }
+
+        Response.Cookies.Append("refreshToken", response.RefreshToken, response.HttpOnlyCookie);
+
+        return Ok(new { token = response.Token });
+    }
+
+   [HttpPost("refresh-token")]
+public async Task<IActionResult> RefreshToken()
 {
-    if (loginDTO == null)
+    _logger.LogInformation("RefreshToken endpoint hit.");
+    
+    var refreshToken = Request.Cookies["refreshToken"];
+    if (string.IsNullOrEmpty(refreshToken))
     {
-        return BadRequest("Login data is missing.");
+        _logger.LogError("Refresh token is missing.");
+        return BadRequest("Refresh token is missing.");
     }
 
-    var response = await _userAccount.LoginAccount(loginDTO);
-    if (!response.Flag)
+    var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+    if (string.IsNullOrEmpty(token))
     {
-        return Unauthorized(response.Message);
+        _logger.LogError("Access token is missing.");
+        return BadRequest("Access token is missing.");
     }
 
-    return Ok(response);
+    try
+    {
+        _logger.LogInformation($"Received refresh token: {refreshToken}");
+        _logger.LogInformation($"Received access token: {token}");
+
+        var response = await _userAccount.RefreshTokenAsync(token, refreshToken);
+        if (!response.Success)
+        {
+            _logger.LogError($"Token refresh failed: {response.Message}");
+            return BadRequest(response.Message);
+        }
+
+        _logger.LogInformation("Token refresh successful.");
+        _logger.LogInformation($"Refresh token expiry time: {response.RefreshTokenExpiryTime}");
+        
+        // Ruajmë refresh tokenin vetëm nëse është ndryshuar
+        Response.Cookies.Append("refreshToken", response.RefreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = response.RefreshTokenExpiryTime
+        });
+
+        return Ok(new { token = response.Token });
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError($"Exception during token refresh: {ex.Message}");
+        return StatusCode(500, "Internal server error");
+    }
 }
+
+
+
+
+
+
+
+
+
 
 
 
