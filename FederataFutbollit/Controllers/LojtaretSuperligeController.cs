@@ -58,8 +58,8 @@ namespace FederataFutbollit.Controllers
             lojtariSuperlige.Gola = updatedLojtari.Gola;
             lojtariSuperlige.Asiste = updatedLojtari.Asiste;
             lojtariSuperlige.NrFaneles = updatedLojtari.NrFaneles;
-            lojtariSuperlige.FotoPath = updatedLojtari.FotoPath; // Shtoni këtë linjë
-            lojtariSuperlige.SuperligaID = updatedLojtari.SuperligaID;
+            
+            lojtariSuperlige.SuperligaId = updatedLojtari.SuperligaId;
 
             await _context.SaveChangesAsync();
 

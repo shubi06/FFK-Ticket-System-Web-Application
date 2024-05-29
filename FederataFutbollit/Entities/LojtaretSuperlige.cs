@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace FederataFutbollit.Entities
 {
@@ -13,10 +14,11 @@ namespace FederataFutbollit.Entities
         public int Gola { get; set; }
         public int Asiste { get; set; }
         public int NrFaneles { get; set; }
-
+        
 
         [JsonIgnore]
+        public int SuperligaId { get; set; }
+        [ForeignKey("SuperligaId")]
         public Superliga Superliga { get; set; }
-        public int SuperligaID { get; set; }
     }
 }
