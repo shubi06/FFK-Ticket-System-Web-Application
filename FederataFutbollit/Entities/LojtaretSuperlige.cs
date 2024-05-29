@@ -14,6 +14,7 @@ namespace FederataFutbollit.Entities
         public int Asiste { get; set; }
         public int NrFaneles { get; set; }
 
+
         [JsonIgnore]
         public Superliga Superliga { get; set; }
         public int SuperligaID { get; set; }

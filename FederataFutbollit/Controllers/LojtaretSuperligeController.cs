@@ -58,12 +58,14 @@ namespace FederataFutbollit.Controllers
             lojtariSuperlige.Gola = updatedLojtari.Gola;
             lojtariSuperlige.Asiste = updatedLojtari.Asiste;
             lojtariSuperlige.NrFaneles = updatedLojtari.NrFaneles;
+            lojtariSuperlige.FotoPath = updatedLojtari.FotoPath; // Shtoni këtë linjë
             lojtariSuperlige.SuperligaID = updatedLojtari.SuperligaID;
 
             await _context.SaveChangesAsync();
 
             return Ok(await _context.LojtaretSuperlige.ToListAsync());
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<LojtaretSuperlige>>> DeleteLojtariSuperlige(int id)
