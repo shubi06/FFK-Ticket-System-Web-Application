@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import './Cart.css';
 const Timer = ({ initialMinutes = 0, initialSeconds = 0 }) => {
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(initialSeconds);
@@ -24,13 +24,13 @@ const Timer = ({ initialMinutes = 0, initialSeconds = 0 }) => {
   }, [minutes, seconds]);
 
   return (
-    <div className="timer">
+    <div className="cart-page-timer">
       {minutes === 0 && seconds === 0 ? (
-        <h2>Time's up!</h2>
+        <h1>Time's up!</h1>
       ) : (
-        <h2>
+        <h1>
           Time Remaining: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-        </h2>
+        </h1>
       )}
     </div>
   );
