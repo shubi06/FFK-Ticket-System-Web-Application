@@ -7,6 +7,7 @@ const Player = () => {
   const [superligaPlayers, setSuperligaPlayers] = useState([]);
   const [kombetarjaPlayers, setKombetarjaPlayers] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [allPlayers, setAllPlayers] = useState([]);
 
   useEffect(() => {
     const fetchSuperligaPlayers = async () => {
@@ -16,6 +17,7 @@ const Player = () => {
         ); // Endpoint për lojtarët e Superligës
         const data = await response.json();
         setSuperligaPlayers(data);
+        setAllPlayers((prevPlayers) => [...prevPlayers, ...data]);
       } catch (error) {
         console.error("Error fetching Superliga players:", error);
       }
@@ -29,6 +31,7 @@ const Player = () => {
           (player) => player.kombetarjaID !== null
         );
         setKombetarjaPlayers(kombetarjaPlayers);
+        setAllPlayers((prevPlayers) => [...prevPlayers, ...kombetarjaPlayers]);
       } catch (error) {
         console.error("Error fetching Kombetarja players:", error);
       }
@@ -47,7 +50,7 @@ const Player = () => {
       ? superligaPlayers
       : selectedCategory === "Kombetarja"
       ? kombetarjaPlayers
-      : [];
+      : allPlayers;
 
   return (
     <>
@@ -61,7 +64,7 @@ const Player = () => {
               value={selectedCategory}
               onChange={handleCategoryChange}
             >
-              <option value="">Zgjidh kategorinë</option>
+              <option value="">Të gjithë lojtarët</option>
               <option value="Superliga">Superliga</option>
               <option value="Kombetarja">Kombëtarja</option>
             </Form.Control>
@@ -82,7 +85,28 @@ const Player = () => {
                     {player.emri} {player.mbiemri}
                   </Card.Title>
                   <Card.Text className="player-card-text">
-                    {player.pozicioni}
+                    <strong>Pozicioni:</strong> {player.pozicioni}
+                    <br />
+                    <strong>Mosha:</strong> {player.mosha}
+                    <br />
+                    <strong>Gola:</strong> {player.gola}
+                    <br />
+                    <strong>Asiste:</strong> {player.asiste}
+                    <br />
+                    <strong>Nr. Faneles:</strong> {player.nrFaneles}
+                    <br />
+                    {player.superligaID && (
+                      <>
+                        <strong>Superliga ID:</strong> {player.superligaID}
+                        <br />
+                      </>
+                    )}
+                    {player.kombetarjaID && (
+                      <>
+                        <strong>Kombëtarja ID:</strong> {player.kombetarjaID}
+                        <br />
+                      </>
+                    )}
                   </Card.Text>
                 </Card.Body>
               </Card>
