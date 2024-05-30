@@ -14,6 +14,7 @@ import Header from "./Components/Header";
 import Slider from './Components/Slider';
 import Stadium from './Stadium';
 import Cart from "./Components/Cart";
+import Seats from './Seats';
 
 const App = () => {
   return (
@@ -48,7 +49,7 @@ const AppContent = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/stadium" element={<Stadium />} />
-      
+        <Route path="/seats/:sectorId" element={<Seats />} />
         <Route path="/portal/*" element={
           <PrivateRoute allowedRoles={['Admin']}>
             <Portal />
