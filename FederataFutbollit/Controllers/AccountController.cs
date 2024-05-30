@@ -1,28 +1,42 @@
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using FederataFutbollit.Contracts;
 using FederataFutbollit.DTOs;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization; 
 using Microsoft.AspNetCore.Identity; 
 using Microsoft.Extensions.Logging; 
 using FederataFutbollit.Models; 
+using FederataFutbollit.Data;
 
 namespace FederataFutbollit.Controllers
 {
-     [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly IUserAccount _userAccount;
         private readonly ILogger<AccountController> _logger;
+        private readonly IEmailSender _emailSender;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(IUserAccount userAccount, ILogger<AccountController> logger)
+        public AccountController(
+            IUserAccount userAccount,
+            ILogger<AccountController> logger,
+            IEmailSender emailSender,
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration)
         {
             _userAccount = userAccount;
             _logger = logger;
+            _emailSender = emailSender;
+            _userManager = userManager;
+            _configuration = configuration;
         }
-
- [HttpPost("register")]
+          [HttpPost("register")]
         public async Task<IActionResult> Register(UserDTO userDTO)
         {
             if (!ModelState.IsValid)
@@ -41,6 +55,15 @@ namespace FederataFutbollit.Controllers
                     }
                     return BadRequest(new { message = response.Message });
                 }
+
+                // Generate email confirmation token
+                var user = await _userManager.FindByEmailAsync(userDTO.Email);
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+
+                // Send email
+                await _emailSender.SendEmailAsync(user.Email, "Confirm your email", confirmationLink);
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -50,25 +73,59 @@ namespace FederataFutbollit.Controllers
             }
         }
 
-
- [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginDTO loginDTO)
-    {
-        if (loginDTO == null)
+        [HttpGet("confirmemail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
-            return BadRequest("Login data is missing.");
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return BadRequest("Invalid email address.");
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return Ok("Email confirmed successfully.");
+            }
+
+            return BadRequest("Email confirmation failed.");
         }
 
-        var response = await _userAccount.LoginAccount(loginDTO);
-        if (!response.Flag)
+        // Existing methods: Login, RefreshToken
+    
+
+
+
+
+  [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
-            return Unauthorized(response.Message);
+            if (loginDTO == null)
+            {
+                return BadRequest("Login data is missing.");
+            }
+
+            var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+            if (user == null)
+            {
+                return Unauthorized("Invalid email or password.");
+            }
+
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return Unauthorized("Email not confirmed. Please check your email for confirmation instructions.");
+            }
+
+            var response = await _userAccount.LoginAccount(loginDTO);
+            if (!response.Flag)
+            {
+                return Unauthorized(response.Message);
+            }
+
+            Response.Cookies.Append("refreshToken", response.RefreshToken, response.HttpOnlyCookie);
+
+            return Ok(new { token = response.Token });
         }
-
-        Response.Cookies.Append("refreshToken", response.RefreshToken, response.HttpOnlyCookie);
-
-        return Ok(new { token = response.Token });
-    }
 
    [HttpPost("refresh-token")]
 public async Task<IActionResult> RefreshToken()
