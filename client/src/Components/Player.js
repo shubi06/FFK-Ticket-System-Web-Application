@@ -72,7 +72,7 @@ const Player = () => {
             </Form.Control>
           </Form.Group>
         </Form>
-
+        <div className="space-between"></div> {/* Hapsira midis pjesëve */}
         <Row>
           {filteredPlayers.map((player, index) => (
             <Col key={index} md={3}>

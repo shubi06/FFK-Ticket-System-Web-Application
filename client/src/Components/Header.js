@@ -33,6 +33,9 @@ const Header = () => {
             <LinkContainer to="/player">
               <Nav.Link>Lojtaret</Nav.Link>
             </LinkContainer>
+            <LinkContainer to="/tabela">
+              <Nav.Link>Tabela</Nav.Link>
+            </LinkContainer>
             <LinkContainer to="/shop">
               <Nav.Link>Shop</Nav.Link>
             </LinkContainer>
