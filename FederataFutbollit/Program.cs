@@ -7,36 +7,49 @@ using FederataFutbollit.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.IdentityModel.Tokens.Jwt;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
-
+// Configure DbContext
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-//ADD Identity & JWT AUTHENTICATION 
+// Configure SMTP settings
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-//Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+// Configure Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(IUserTwoFactorTokenProvider<ApplicationUser>)));
+})
 .AddEntityFrameworkStores<DataContext>()
-.AddSignInManager()
-.AddRoles<IdentityRole>();
+.AddDefaultTokenProviders(); // Add default token providers
 
-//JWT
+// Configure JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,7 +65,7 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
-         ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.Zero
     };
     options.Events = new JwtBearerEvents
     {
@@ -70,31 +83,18 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddSwaggerGen(Options =>
-{
-    Options.AddSecurityDefinition("oauth2",new OpenApiSecurityScheme
-    
-    
-    {
-        In= ParameterLocation.Header,
-        Name= "Authorization",
-        Type=SecuritySchemeType.ApiKey
+// Register application services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserAccount, AccountRepository>();
 
-    });
-    Options.OperationFilter<SecurityRequirementsOperationFilter>();
-
-});
-    builder.Services.AddScoped<IUserService, UserService>();
-
-   builder.Services.AddControllers();
-
- builder.Services.AddScoped<IUserAccount, AccountRepository>();
+// Configure Authorization Policies
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
     options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
 });
 
+// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder =>
@@ -105,6 +105,7 @@ builder.Services.AddCors(options =>
                .AllowCredentials();
     });
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -116,8 +117,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseCors("CorsPolicy");
-
-
 
 app.UseAuthentication();
 app.UseAuthorization();

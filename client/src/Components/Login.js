@@ -3,11 +3,13 @@ import axios from 'axios';
 import { AuthContext } from '../Services/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
   const { login, logout, authData } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -25,8 +27,11 @@ const Login = () => {
       const userData = {
         name: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
         email: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-        role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+        role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+        emailConfirmed: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/emailConfirmed']
       };
+
+   
 
       localStorage.setItem('user', JSON.stringify(userData));
       login(userData, response.data.token);
@@ -44,6 +49,11 @@ const Login = () => {
       }
     }
   };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
   return (
     <div className="row justify-content-center">
       <div className="col-xl-10 col-lg-12 col-md-9">
@@ -80,13 +90,7 @@ const Login = () => {
                     <button type="submit" className="btn btn-primary btn-user btn-block">
                       Kyquni
                     </button>
-                    <hr />
-                    <a href="index.html" className="btn btn-google btn-user btn-block">
-                      <i className="fab fa-google fa-fw"></i> Kyquni me Google
-                    </a>
-                    <a href="index.html" className="btn btn-facebook btn-user btn-block">
-                      <i className="fab fa-facebook-f fa-fw"></i> Kyquni me Facebook
-                    </a>
+                  
                   </form>
                   <hr />
                   <div className="text-center">
@@ -101,7 +105,9 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
+
+     
+  </div>
   );
 };
 

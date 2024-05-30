@@ -48,6 +48,7 @@ const AppContent = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/stadium" element={<Stadium />} />
+      
         <Route path="/portal/*" element={
           <PrivateRoute allowedRoles={['Admin']}>
             <Portal />
