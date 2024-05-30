@@ -1,4 +1,5 @@
 ﻿using FederataFutbollit.Data;
+using FederataFutbollit.DTOs;
 using FederataFutbollit.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,13 +39,19 @@ namespace FederataFutbollit.Controllers
 
 
         [HttpPost]
-
-        public async Task<ActionResult<List<Superliga>>> AddSuperliga(Superliga super)
+        public async Task<ActionResult<List<Superliga>>> AddSuperliga([FromBody] SuperligaCreateDto request)
         {
-            _context.Superligat.Add(super);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Superligat.ToListAsync());
+            var newSuperliga = new Superliga
+            {
+                Emri = request.Emri,
+                Sponzori = request.Sponzori,
+                NumriSkuadrave = request.NumriSkuadrave
+            };
 
+            _context.Superligat.Add(newSuperliga);
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Superligat.ToListAsync());
         }
 
         [HttpPut("{id}")]
