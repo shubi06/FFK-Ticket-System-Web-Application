@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
-import './Header.css';
-import Login from'./Login';
-import Register from'./Register';
-import Player from './Player';
-import Logo from '../Assets/Logo.png';
-import { AuthContext } from '../Services/AuthContext';
-import './Header.css';
+import React, { useContext } from "react";
+import { Navbar, Nav, Container } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import "./Header.css";
+import Login from "./Login";
+import Register from "./Register";
+import Player from "./Player";
+import Logo from "../Assets/Logo.png";
+import { AuthContext } from "../Services/AuthContext";
+import "./Header.css";
 
 const Header = () => {
   const { authData, logout } = useContext(AuthContext);
@@ -22,7 +22,7 @@ const Header = () => {
             alt="lo"
             className="d-inline-block align-top"
           />
-          {' FFK'}
+          {" FFK"}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -31,7 +31,7 @@ const Header = () => {
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/player">
-              <Nav.Link>Player</Nav.Link>
+              <Nav.Link>Lojtaret</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/shop">
               <Nav.Link>Shop</Nav.Link>
@@ -46,17 +46,12 @@ const Header = () => {
               <Nav.Link>Contact</Nav.Link>
             </LinkContainer>
 
-            {authData && authData.role === 'Admin' && (
+            {authData && authData.role === "Admin" && (
               <LinkContainer to="/portal/dashboard">
                 <Nav.Link>Dashboard</Nav.Link>
               </LinkContainer>
             )}
-
-
           </Nav>
-
-
-
 
           <Nav className="ml-auto right-nav">
             {authData ? (

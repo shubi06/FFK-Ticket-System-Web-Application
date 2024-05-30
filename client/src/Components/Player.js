@@ -17,7 +17,6 @@ const Player = () => {
         ); // Endpoint për lojtarët e Superligës
         const data = await response.json();
         setSuperligaPlayers(data);
-        setAllPlayers((prevPlayers) => [...prevPlayers, ...data]);
       } catch (error) {
         console.error("Error fetching Superliga players:", error);
       }
@@ -31,7 +30,6 @@ const Player = () => {
           (player) => player.kombetarjaID !== null
         );
         setKombetarjaPlayers(kombetarjaPlayers);
-        setAllPlayers((prevPlayers) => [...prevPlayers, ...kombetarjaPlayers]);
       } catch (error) {
         console.error("Error fetching Kombetarja players:", error);
       }
@@ -40,6 +38,10 @@ const Player = () => {
     fetchSuperligaPlayers();
     fetchKombetarjaPlayers();
   }, []);
+
+  useEffect(() => {
+    setAllPlayers([...superligaPlayers, ...kombetarjaPlayers]);
+  }, [superligaPlayers, kombetarjaPlayers]);
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -77,7 +79,7 @@ const Player = () => {
               <Card className="player-card">
                 <Card.Img
                   variant="top"
-                  src={player.fotoPath}
+                  src={`http://localhost:5178${player.fotoPath}`} // Sigurohuni që rruga është e saktë
                   className="player-card-img-top"
                 />
                 <Card.Body className="player-card-body">
@@ -101,9 +103,9 @@ const Player = () => {
                         <br />
                       </>
                     )}
-                    {player.kombetarjaID && (
+                    {player.kombetarjaEmri && (
                       <>
-                        <strong>Kombëtarja ID:</strong> {player.kombetarjaID}
+                        <strong>Kombëtarja:</strong> {player.kombetarjaEmri}
                         <br />
                       </>
                     )}
