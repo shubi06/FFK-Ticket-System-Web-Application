@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { CartContext } from './Services/CartContext';
 import './seats.css';
 
 const Seats = () => {
   const { sectorId } = useParams();
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const { addToCart, removeFromCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSeats = async () => {
@@ -22,11 +25,18 @@ const Seats = () => {
   }, [sectorId]);
 
   const handleSeatClick = (seat) => {
+    const seatWithSector = { ...seat, sectorId }; // Ensure sectorId is included
     if (selectedSeats.includes(seat.id)) {
       setSelectedSeats(selectedSeats.filter(id => id !== seat.id));
+      removeFromCart(seat.id);
     } else if (selectedSeats.length < 4) {
       setSelectedSeats([...selectedSeats, seat.id]);
+      addToCart(seatWithSector); // Pass seatWithSector to addToCart
     }
+  };
+
+  const handleContinueClick = () => {
+    navigate('/cart');
   };
 
   const getRows = (seats) => {
@@ -61,6 +71,9 @@ const Seats = () => {
           const seat = seats.find(s => s.id === id);
           return <span key={id} className="selected-seat">{seat.numri}</span>;
         })}
+      </div>
+      <div className="continue-button-wrapper">
+        <button onClick={handleContinueClick} className="continue-button">Vazhdo tek Shporta</button>
       </div>
     </div>
   );

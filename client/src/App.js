@@ -15,15 +15,19 @@ import Slider from './Components/Slider';
 import Stadium from './Stadium';
 import Cart from "./Components/Cart";
 import Seats from './Seats';
-
+import { CartProvider } from './Services/CartContext';
 const App = () => {
   return (
     <AuthProvider>
+      
       <UserProvider>
+      <CartProvider>
         <BrowserRouter>
           <AppContent />
         </BrowserRouter>
+        </CartProvider>
       </UserProvider>
+      
     </AuthProvider>
   );
 };

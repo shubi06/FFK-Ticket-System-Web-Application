@@ -97,7 +97,7 @@ builder.Services.AddAuthorization(options =>
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", builder =>
+    options.AddPolicy("AllowAll", builder =>
     {
         builder.WithOrigins("http://localhost:3000")
                .AllowAnyHeader()
@@ -116,7 +116,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
-app.UseCors("CorsPolicy");
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
