@@ -1,8 +1,11 @@
-﻿using FederataFutbollit.Data;
-using FederataFutbollit.Entities;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using FederataFutbollit.Data;
+using FederataFutbollit.Entities;
 using Microsoft.EntityFrameworkCore;
+using FederataFutbollit.DTOs;
+using System.Security.Claims;
 
 namespace FederataFutbollit.Controllers
 {
@@ -16,11 +19,13 @@ namespace FederataFutbollit.Controllers
         {
             _context = context;
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<LojtaretSuperlige>>> GetLojtaretSuperlige()
+        public async Task<ActionResult<List<LojtaretSuperlige>>> Get()
         {
-            var lojtaretSuperlige = await _context.LojtaretSuperlige.ToListAsync();
-            return Ok(lojtaretSuperlige);
+
+
+            return await _context.LojtaretSuperlige.ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -29,60 +34,120 @@ namespace FederataFutbollit.Controllers
             var lojtariSuperlige = await _context.LojtaretSuperlige.FindAsync(id);
             if (lojtariSuperlige == null)
             {
-                return NotFound("Lojtari nuk u gjet");
+                return NotFound();
             }
-            return Ok(lojtariSuperlige);
+            return lojtariSuperlige;
         }
+
 
         [HttpPost]
-        public async Task<ActionResult<List<LojtaretSuperlige>>> AddLojtariSuperlige(LojtaretSuperlige lojtari)
+        public async Task<ActionResult<List<LojtaretSuperlige>>> Create([FromForm] LojtariSuperligeCreateDto request, [FromForm] IFormFile file)
         {
-            _context.LojtaretSuperlige.Add(lojtari);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.LojtaretSuperlige.ToListAsync());
-        }
+            var superliga = await _context.Superligat.FindAsync(request.SuperligaID);
+            if (superliga == null)
+                return NotFound();
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<List<LojtaretSuperlige>>> UpdateLojtariSuperlige(int id, LojtaretSuperlige updatedLojtari)
-        {
-            var lojtariSuperlige = await _context.LojtaretSuperlige.FindAsync(id);
-            if (lojtariSuperlige == null)
+            var newLojtariSuperlige = new LojtaretSuperlige
             {
-                return NotFound("Lojtari nuk u gjet");
+                Emri = request.Emri,
+                Mbiemri = request.Mbiemri,
+                Mosha = request.Mosha,
+                Pozicioni = request.Pozicioni,
+                Gola = request.Gola,
+                Asiste = request.Asiste,
+                NrFaneles = request.NrFaneles,
+                SuperligaID = request.SuperligaID,
+                FotoPath = "" // Initialize with an empty string or handle appropriately
+            };
+
+            if (file != null && file.Length > 0)
+            {
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+                // Check if the directory exists, if not, create it
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                var filePath = Path.Combine(uploadPath, file.FileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                newLojtariSuperlige.FotoPath = "/uploads/" + file.FileName;
             }
 
-            lojtariSuperlige.Emri = updatedLojtari.Emri;
-            lojtariSuperlige.Mbiemri = updatedLojtari.Mbiemri;
-            lojtariSuperlige.Mosha = updatedLojtari.Mosha;
-            lojtariSuperlige.Pozicioni = updatedLojtari.Pozicioni;
-            lojtariSuperlige.Gola = updatedLojtari.Gola;
-            lojtariSuperlige.Asiste = updatedLojtari.Asiste;
-            lojtariSuperlige.NrFaneles = updatedLojtari.NrFaneles;
-            
-            lojtariSuperlige.SuperligaId = updatedLojtari.SuperligaId;
-
+            _context.LojtaretSuperlige.Add(newLojtariSuperlige);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.LojtaretSuperlige.ToListAsync());
+            return await Get();
         }
 
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateLojtariSuperlige(LojtariSuperligeCreateDto request)
+        {
+            // Gjej lojtarin që duhet përditësuar dhe merr kombëtaren e lidhur
+            var lojtariSuperlige = await _context.LojtaretSuperlige.Include(s => s.Superliga).FirstOrDefaultAsync(s => s.Id == request.Id);
+            if (lojtariSuperlige == null)
+            {
+                return NotFound(); // Nëse lojtari nuk gjendet, kthe një përgjigje 404 Not Found
+            }
+
+            // Përditëso vetitë e lojtarit nga kërkesa
+            _context.Entry(lojtariSuperlige).CurrentValues.SetValues(request);
+
+            // Ruaj ndryshimet në bazën e të dhënave
+            await _context.SaveChangesAsync();
+
+            // Kthe një përgjigje 204 No Content si konfirmim se përditësimi u bë me sukses
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<LojtaretSuperlige>>> DeleteLojtariSuperlige(int id)
+        public async Task<IActionResult> DeleteLojtariSuperlige(int id)
         {
             var lojtariSuperlige = await _context.LojtaretSuperlige.FindAsync(id);
             if (lojtariSuperlige == null)
             {
-                return NotFound("Lojtari nuk u gjet");
+                return NotFound();
             }
 
             _context.LojtaretSuperlige.Remove(lojtariSuperlige);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.LojtaretSuperlige.ToListAsync());
+            return NoContent();
         }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadFoto([FromForm] IFormFile file, [FromForm] int lojtariSuperligeId)
+        {
+            var lojtariSuperlige = await _context.LojtaretSuperlige.FindAsync(lojtariSuperligeId);
+            if (lojtariSuperlige == null)
+            {
+                return NotFound("Lojtari nuk u gjet.");
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Asnjë skedar nuk u ngarkua.");
+            }
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file.FileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            lojtariSuperlige.FotoPath = "/uploads/" + file.FileName;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { path = lojtariSuperlige.FotoPath });
+        }
+
     }
 }
-
-
-

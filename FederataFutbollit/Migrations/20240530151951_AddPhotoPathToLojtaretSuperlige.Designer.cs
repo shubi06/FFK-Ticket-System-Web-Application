@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240530151951_AddPhotoPathToLojtaretSuperlige")]
+    partial class AddPhotoPathToLojtaretSuperlige
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,56 +133,6 @@ namespace FederataFutbollit.Migrations
                         .IsUnique();
 
                     b.ToTable("Biletat");
-                });
-
-            modelBuilder.Entity("FederataFutbollit.Entities.Cart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("FederataFutbollit.Entities.CartSeat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SektoriUlseveId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UlesjaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("SektoriUlseveId");
-
-                    b.HasIndex("UlesjaId");
-
-                    b.ToTable("CartSeats");
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Kombetarja", b =>
@@ -304,12 +257,12 @@ namespace FederataFutbollit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SuperligaId")
+                    b.Property<int>("SuperligaID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SuperligaId");
+                    b.HasIndex("SuperligaID");
 
                     b.ToTable("LojtaretSuperlige");
                 });
@@ -747,44 +700,6 @@ namespace FederataFutbollit.Migrations
                     b.Navigation("Ulesja");
                 });
 
-            modelBuilder.Entity("FederataFutbollit.Entities.Cart", b =>
-                {
-                    b.HasOne("FederataFutbollit.Data.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("FederataFutbollit.Entities.CartSeat", b =>
-                {
-                    b.HasOne("FederataFutbollit.Entities.Cart", "Cart")
-                        .WithMany("CartSeats")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FederataFutbollit.Entities.SektoriUlseve", "SektoriUlseve")
-                        .WithMany()
-                        .HasForeignKey("SektoriUlseveId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FederataFutbollit.Entities.Ulesja", "Ulesja")
-                        .WithMany()
-                        .HasForeignKey("UlesjaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("SektoriUlseve");
-
-                    b.Navigation("Ulesja");
-                });
-
             modelBuilder.Entity("FederataFutbollit.Entities.Kombetarja", b =>
                 {
                     b.HasOne("FederataFutbollit.Entities.Shteti", "Shteti")
@@ -963,11 +878,6 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Data.ApplicationUser", b =>
                 {
                     b.Navigation("Biletat");
-                });
-
-            modelBuilder.Entity("FederataFutbollit.Entities.Cart", b =>
-                {
-                    b.Navigation("CartSeats");
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Kombetarja", b =>
