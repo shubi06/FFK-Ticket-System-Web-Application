@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import "./About.css";
 
 const About = () => {
+  const [activeSection, setActiveSection] = useState(null);
+
+  const toggleSection = (section) => {
+    setActiveSection(activeSection === section ? null : section);
+  };
+
   return (
-    <div>
-      <h1>Rreth Federates se Futbollit te Kosoves</h1>
+    <div className="about-container">
+      <h1>Rreth Federatës së Futbollit të Kosovës</h1>
 
       <div>
-        <h2>Historia</h2>
+        <h2
+          className={activeSection === "historia" ? "active" : ""}
+          onClick={() => toggleSection("historia")}
+        >
+          Historia
+        </h2>
         <p>
           Federata e Futbollit e Kosovës (FFK) u themelua në vitin 1946 dhe ka
           kaluar nëpër periudha të ndryshme të zhvillimit dhe sfidave. Pas
@@ -22,7 +33,12 @@ const About = () => {
       </div>
 
       <div>
-        <h2>Misioni</h2>
+        <h2
+          className={activeSection === "misioni" ? "active" : ""}
+          onClick={() => toggleSection("misioni")}
+        >
+          Misioni
+        </h2>
         <p>
           Misioni i Federatës së Futbollit të Kosovës (FFK) është të promovojë
           dhe të zhvillojë futbollin në të gjitha nivelet, duke përfshirë
@@ -37,7 +53,12 @@ const About = () => {
       </div>
 
       <div>
-        <h2>Synimet</h2>
+        <h2
+          className={activeSection === "synimet" ? "active" : ""}
+          onClick={() => toggleSection("synimet")}
+        >
+          Synimet
+        </h2>
         <p>
           Synimi i Federatës së Futbollit të Kosovës është të bëhemi një nga
           federatat më të respektuara dhe të suksesshme në rajon dhe më gjerë.
@@ -53,7 +74,12 @@ const About = () => {
       </div>
 
       <div>
-        <h2>Aktivitetet</h2>
+        <h2
+          className={activeSection === "aktivitetet" ? "active" : ""}
+          onClick={() => toggleSection("aktivitetet")}
+        >
+          Aktivitetet
+        </h2>
         <ul>
           <li>
             Organizimi i Kampionateve Kombëtare:
@@ -100,7 +126,12 @@ const About = () => {
       </div>
 
       <div>
-        <h2>Arritjet</h2>
+        <h2
+          className={activeSection === "arritjet" ? "active" : ""}
+          onClick={() => toggleSection("arritjet")}
+        >
+          Arritjet
+        </h2>
         <ul>
           <li>
             Anëtarësimi në FIFA dhe UEFA:
@@ -146,7 +177,12 @@ const About = () => {
       </div>
 
       <div>
-        <h2>Partnerët e FFK-së</h2>
+        <h2
+          className={activeSection === "partneret" ? "active" : ""}
+          onClick={() => toggleSection("partneret")}
+        >
+          Partnerët e FFK-së
+        </h2>
         <ul>
           <li>
             FIFA:
