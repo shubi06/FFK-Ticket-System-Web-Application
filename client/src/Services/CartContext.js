@@ -11,7 +11,7 @@ export const CartProvider = ({ children }) => {
 
   const getCart = useCallback(async () => {
     if (!token) {
-      console.error('Token is not available');
+      
       return;
     }
 

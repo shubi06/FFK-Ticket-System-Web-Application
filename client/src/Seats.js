@@ -3,14 +3,22 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CartContext } from './Services/CartContext';
 import './seats.css';
+import { useNavigationProgress } from './Services/NavigationProgressContext';
 
 const Seats = () => {
   const { sectorId } = useParams();
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const { cart, addToCart, removeFromCart, getCart } = useContext(CartContext);
+  const { isStepCompleted } = useNavigationProgress(); // Use the hook to get context value
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!isStepCompleted) {
+      navigate(-1); // Navigate back if the step is not completed
+    }
+  }, [isStepCompleted, navigate]);
+  
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -77,6 +85,10 @@ const Seats = () => {
 
   const rows = getRows(seats);
 
+ 
+  if (!isStepCompleted) {
+    return null; // Don't render anything if the step is not completed
+  }
   return (
     <div className="seats-wrapper">
       <h1>Seats in Sector {sectorId}</h1>

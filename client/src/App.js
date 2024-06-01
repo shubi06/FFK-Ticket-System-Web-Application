@@ -24,14 +24,18 @@ import Cart from "./Components/Cart";
 import Seats from "./Seats";
 import { CartProvider } from "./Services/CartContext";
 import About from "./Components/About";
+import { NavigationProgressProvider } from './Services/NavigationProgressContext';
+import PrivateRoute from './Services/PrivateRoute';
 const App = () => {
   return (
     <AuthProvider>
       <UserProvider>
         <CartProvider>
-          <BrowserRouter>
-            <AppContent />
-          </BrowserRouter>
+          <NavigationProgressProvider> 
+            <BrowserRouter>
+              <AppContent />
+            </BrowserRouter>
+          </NavigationProgressProvider>
         </CartProvider>
       </UserProvider>
     </AuthProvider>
@@ -64,9 +68,9 @@ const AppContent = () => {
         <Route path="/seats/:sectorId" element={<Seats />} />
         <Route path="/about" element={<About />} />
         <Route
-          path="/portal/*"
+          path='/portal/*'
           element={
-            <PrivateRoute allowedRoles={["Admin"]}>
+            <PrivateRoute allowedRoles={['Admin']}>
               <Portal />
             </PrivateRoute>
           }
@@ -76,14 +80,6 @@ const AppContent = () => {
   );
 };
 
-const PrivateRoute = ({ children, allowedRoles }) => {
-  const { authData } = useContext(AuthContext);
-  console.log("Auth Data:", authData);
-  return authData && allowedRoles.includes(authData.role) ? (
-    children
-  ) : (
-    <Navigate to="/login" />
-  );
-};
+
 
 export default App;
