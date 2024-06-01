@@ -8,6 +8,8 @@ namespace FederataFutbollit.Entities
         public int Numri { get; set; }
         public  bool IsAvailable { get; set; }
 
+        public  double Cmimi { get; set; }
+
         [JsonIgnore]
         public Bileta Bileta { get; set; }
 

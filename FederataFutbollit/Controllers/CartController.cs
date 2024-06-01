@@ -42,13 +42,14 @@ namespace FederataFutbollit.Controllers
                     UlesjaId = cs.UlesjaId,
                     Quantity = cs.Quantity,
                     SektoriUlseveId = cs.SektoriUlseveId,
+                      Cmimi = cs.Cmimi,
                 }).ToList()
             };
 
             return Ok(cartDto);
         }
 
-      [HttpPost]
+ [HttpPost]
 public async Task<ActionResult<CartDto>> AddToCart([FromBody] CartSeatDto cartSeatDto)
 {
     var ulesja = await _context.Uleset.FindAsync(cartSeatDto.UlesjaId);
@@ -81,6 +82,7 @@ public async Task<ActionResult<CartDto>> AddToCart([FromBody] CartSeatDto cartSe
     if (existingSeat != null)
     {
         existingSeat.Quantity += cartSeatDto.Quantity;
+        existingSeat.Cmimi = ulesja.Cmimi; // Update the price if necessary
     }
     else
     {
@@ -90,6 +92,7 @@ public async Task<ActionResult<CartDto>> AddToCart([FromBody] CartSeatDto cartSe
             Quantity = cartSeatDto.Quantity,
             CartId = cart.Id,
             SektoriUlseveId = cartSeatDto.SektoriUlseveId,
+            Cmimi = ulesja.Cmimi // Include the price from the seat
         });
     }
 
@@ -105,11 +108,13 @@ public async Task<ActionResult<CartDto>> AddToCart([FromBody] CartSeatDto cartSe
             UlesjaId = cs.UlesjaId,
             Quantity = cs.Quantity,
             SektoriUlseveId = cs.SektoriUlseveId,
+            Cmimi = cs.Cmimi // Include the price
         }).ToList()
     };
 
     return Ok(cartDto);
 }
+
 
 
         [HttpPut("{userId}")]

@@ -8,7 +8,7 @@ const Seats = () => {
   const { sectorId } = useParams();
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const { addToCart, removeFromCart } = useContext(CartContext);
+  const { cart, addToCart, removeFromCart, getCart } = useContext(CartContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,14 +24,42 @@ const Seats = () => {
     fetchSeats();
   }, [sectorId]);
 
+  useEffect(() => {
+    getCart();
+  }, [getCart]);
+
+  useEffect(() => {
+    if (cart && cart.cartSeats) {
+      const cartSeatIds = cart.cartSeats.map(seat => seat.ulesjaId);
+      setSelectedSeats(cartSeatIds);
+    }
+  }, [cart]);
+
   const handleSeatClick = (seat) => {
-    const seatWithSector = { ...seat, sectorId }; // Ensure sectorId is included
-    if (selectedSeats.includes(seat.id)) {
+    const seatWithSector = { ...seat, sectorId };
+    const isSeatSelected = selectedSeats.includes(seat.id);
+  
+    if (isSeatSelected) {
+      // If the seat is already selected, remove it from the selected seats
       setSelectedSeats(selectedSeats.filter(id => id !== seat.id));
-      removeFromCart(seat.id);
-    } else if (selectedSeats.length < 4) {
-      setSelectedSeats([...selectedSeats, seat.id]);
-      addToCart(seatWithSector); // Pass seatWithSector to addToCart
+  
+      // Find the seat in the cart using the cart seat's ulesjaId
+      const cartSeat = cart.cartSeats.find(cartSeat => cartSeat.ulesjaId === seat.id);
+      if (cartSeat) {
+        removeFromCart(cartSeat.id); // Use the cart seat's ID to remove it
+      } else {
+        console.error('Seat not found in cart:', seat.id);
+      }
+    } else {
+      // Check if selecting this seat exceeds the maximum allowed seats
+      const totalSelectedSeats = selectedSeats.length + cart.cartSeats.filter(cs => !selectedSeats.includes(cs.ulesjaId)).length;
+      if (totalSelectedSeats < 4) {
+        // Add the seat to the selected seats
+        setSelectedSeats([...selectedSeats, seat.id]);
+        addToCart(seatWithSector);
+      } else {
+        alert('You cannot select more than 4 seats.');
+      }
     }
   };
 
@@ -60,20 +88,21 @@ const Seats = () => {
               className={`seat ${seat.isAvailable ? 'available' : 'unavailable'} ${selectedSeats.includes(seat.id) ? 'selected' : ''}`}
               onClick={() => handleSeatClick(seat)}
             >
-              {seat.numri}
+              <span className="seat-number">{seat.numri}</span>
+              <span className="seat-price">{seat.cmimi} EUR</span>
             </div>
           ))}
         </div>
       ))}
       <div className="selected-seats">
-        <h2>Uleset e selektuara:</h2>
+        <h2>Selected Seats:</h2>
         {selectedSeats.map(id => {
           const seat = seats.find(s => s.id === id);
-          return <span key={id} className="selected-seat">{seat.numri}</span>;
+          return seat ? <span key={id} className="selected-seat">{seat.numri} - {seat.cmimi} EUR</span> : null;
         })}
       </div>
       <div className="continue-button-wrapper">
-        <button onClick={handleContinueClick} className="continue-button">Vazhdo tek Shporta</button>
+        <button onClick={handleContinueClick} className="continue-button">Proceed to Cart</button>
       </div>
     </div>
   );

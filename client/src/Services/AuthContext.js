@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; // Correct import
 
 export const AuthContext = createContext(null);
 
@@ -9,23 +9,17 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [isManualLogout, setIsManualLogout] = useState(false);
 
-  const login = (token) => {
+  const login = (userData, token) => {
     try {
       const decodedToken = jwtDecode(token);
       console.log("Decoded Token:", decodedToken);
 
-      const userData = {
-        userId: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
-        name: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
-        email: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-        role: decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-      };
       setAuthData(userData);
       setToken(token);
       setIsManualLogout(false);
       localStorage.setItem('auth', JSON.stringify(userData));
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', userData.userId); // Ruaj userId në localStorage
+      localStorage.setItem('userId', userData.userId); // Save userId to localStorage
       console.log('Logged in with new token:', token);
     } catch (error) {
       console.error('Error decoding token:', error);
@@ -41,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem('auth');
     localStorage.removeItem('token');
-    localStorage.removeItem('userId'); // Fshij userId nga localStorage
+    localStorage.removeItem('userId'); // Remove userId from localStorage
 
     deleteCookie('refreshToken', '/', 'localhost');
 
@@ -91,7 +85,16 @@ export const AuthProvider = ({ children }) => {
       console.log('Refresh token response:', response.data);
 
       const newToken = response.data.token;
-      login(newToken);
+      const decodedToken = jwtDecode(newToken);
+
+      const userData = {
+        userId: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+        name: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+        email: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+        role: decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+      };
+
+      login(userData, newToken);
     } catch (error) {
       console.error('Error refreshing token:', error.response ? error.response.data : error.message);
       if (error.response && error.response.status === 401) {

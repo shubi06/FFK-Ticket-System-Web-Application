@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../Services/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { useNavigate, useLocation } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'; // Correct import
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
@@ -12,6 +12,9 @@ const Login = () => {
   const [showPopup, setShowPopup] = useState(false);
   const { login, logout, authData } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/home';
 
   useEffect(() => {
     if (authData) {
@@ -22,7 +25,18 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:5178/api/account/login', { email, password }, { withCredentials: true });
-      const decoded = jwtDecode(response.data.token);
+      
+      const token = response.data.token;
+      
+      if (!token) {
+        throw new Error('Token not found in response');
+      }
+
+      if (typeof token !== 'string') {
+        throw new Error('Token is not a string');
+      }
+
+      const decoded = jwtDecode(token);
 
       const userData = {
         name: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
@@ -31,29 +45,19 @@ const Login = () => {
         emailConfirmed: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/emailConfirmed']
       };
 
-   
-
       localStorage.setItem('user', JSON.stringify(userData));
-      login(userData, response.data.token);
+      login(userData, token);
 
-      if (userData.role === 'Admin') {
-        navigate('/portal/dashboard');
-      } else {
-        navigate('/home');
-      }
+      navigate(from, { replace: true });
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError(error.response.data);
-      } else {
-        setError('Login failed. Please try again.');
-      }
+      console.error('Error during login:', error);
+      setError(error.message || 'Login failed. Please try again.');
     }
   };
 
   const handleClosePopup = () => {
     setShowPopup(false);
   };
-
   return (
     <div className="row justify-content-center">
       <div className="col-xl-10 col-lg-12 col-md-9">
@@ -90,7 +94,6 @@ const Login = () => {
                     <button type="submit" className="btn btn-primary btn-user btn-block">
                       Kyquni
                     </button>
-                  
                   </form>
                   <hr />
                   <div className="text-center">
@@ -105,9 +108,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-
-     
-  </div>
+    </div>
   );
 };
 

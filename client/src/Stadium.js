@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from './Services/AuthContext'; // Import AuthContext
 import './stadium.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
+import { Modal, Button } from 'react-bootstrap'; // Import necessary Bootstrap components
 
 const Stadium = () => {
   const [selectedSector, setSelectedSector] = useState('');
   const [sectorData, setSectorData] = useState(null);
+  const { authData } = useContext(AuthContext); // Use AuthContext
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
+  const [showModal, setShowModal] = useState(false); // State for controlling the modal
 
   const handleSectorClick = async (sectorId) => {
     try {
@@ -19,8 +25,14 @@ const Stadium = () => {
   };
 
   const handleContinueClick = () => {
-    navigate(`/seats/${selectedSector}`);
+    if (authData) {
+      navigate(`/seats/${selectedSector}`);
+    } else {
+      setShowModal(true);
+    }
   };
+
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <div className="wrapper">
@@ -73,6 +85,25 @@ const Stadium = () => {
           </button>
         </div>
       )}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Ju lutem regjistrohuni ose kyquni</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Ju lutem regjistrohuni ose kyquni për të vazhduar.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Mbyll
+          </Button>
+          <Button variant="primary" onClick={() => navigate('/login', { state: { from: location } })}>
+            Kyquni
+          </Button>
+          <Button variant="primary" onClick={() => navigate('/register', { state: { from: location } })}>
+            Regjistrohuni
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

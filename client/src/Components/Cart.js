@@ -17,6 +17,9 @@ const Cart = () => {
     removeFromCart(seatId);
   };
 
+  // Calculate the total price
+  const totalPrice = cart ? cart.cartSeats.reduce((total, seat) => total + seat.cmimi * seat.quantity, 0) : 0;
+
   return (
     <div className="cart-wrapper">
       <h1>Shporta</h1>
@@ -27,9 +30,13 @@ const Cart = () => {
               <span>Ulesja: {seat.ulesjaId}</span>
               <span>Sasia: {seat.quantity}</span>
               <span>Sektori: {seat.sektoriUlseveId}</span>
+              <span>Cmimi: {seat.cmimi} EUR</span>
               <button onClick={() => handleRemove(seat.id)}>Remove</button>
             </div>
           ))}
+          <div className="total-price">
+            <span>Total: {totalPrice.toFixed(2)} EUR</span>
+          </div>
           <div className="continue-button-wrapper">
             <button onClick={handleCheckout} className="continue-button">Vazhdo te Pagesa</button>
           </div>
@@ -42,4 +49,3 @@ const Cart = () => {
 };
 
 export default Cart;
-

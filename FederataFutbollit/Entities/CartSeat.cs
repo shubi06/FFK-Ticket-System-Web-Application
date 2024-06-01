@@ -13,6 +13,7 @@ namespace FederataFutbollit.Entities
         public int UlesjaId { get; set; }
         public Ulesja Ulesja { get; set; }
         public int Quantity { get; set; }  
+        public double Cmimi { get; set; }
         public int SektoriUlseveId { get; set; }
         public SektoriUlseve SektoriUlseve { get; set; }
     }

@@ -75,3 +75,19 @@
 .continue-button:hover {
   background-color: #218838;
 }
+.total-price {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.continue-button-wrapper {
+  margin-top: 20px;
+}
