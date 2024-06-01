@@ -10,15 +10,15 @@ const Seats = () => {
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const { cart, addToCart, removeFromCart, getCart } = useContext(CartContext);
-  const { isStepCompleted } = useNavigationProgress(); // Use the hook to get context value
+  const { isStepCompleted } = useNavigationProgress();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!isStepCompleted) {
-      navigate(-1); // Navigate back if the step is not completed
+      navigate('/');
     }
   }, [isStepCompleted, navigate]);
-  
+
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -48,21 +48,17 @@ const Seats = () => {
     const isSeatSelected = selectedSeats.includes(seat.id);
   
     if (isSeatSelected) {
-      // If the seat is already selected, remove it from the selected seats
       setSelectedSeats(selectedSeats.filter(id => id !== seat.id));
   
-      // Find the seat in the cart using the cart seat's ulesjaId
       const cartSeat = cart.cartSeats.find(cartSeat => cartSeat.ulesjaId === seat.id);
       if (cartSeat) {
-        removeFromCart(cartSeat.id); // Use the cart seat's ID to remove it
+        removeFromCart(cartSeat.id);
       } else {
         console.error('Seat not found in cart:', seat.id);
       }
     } else {
-      // Check if selecting this seat exceeds the maximum allowed seats
       const totalSelectedSeats = selectedSeats.length + cart.cartSeats.filter(cs => !selectedSeats.includes(cs.ulesjaId)).length;
       if (totalSelectedSeats < 4) {
-        // Add the seat to the selected seats
         setSelectedSeats([...selectedSeats, seat.id]);
         addToCart(seatWithSector);
       } else {
@@ -85,10 +81,6 @@ const Seats = () => {
 
   const rows = getRows(seats);
 
- 
-  if (!isStepCompleted) {
-    return null; // Don't render anything if the step is not completed
-  }
   return (
     <div className="seats-wrapper">
       <h1>Seats in Sector {sectorId}</h1>

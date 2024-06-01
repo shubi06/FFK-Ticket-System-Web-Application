@@ -5,11 +5,13 @@ import { AuthContext } from './Services/AuthContext'; // Import AuthContext
 import './stadium.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
 import { Modal, Button } from 'react-bootstrap'; // Import necessary Bootstrap components
+import { useNavigationProgress } from './Services/NavigationProgressContext';
 
 const Stadium = () => {
   const [selectedSector, setSelectedSector] = useState('');
   const [sectorData, setSectorData] = useState(null);
   const { authData } = useContext(AuthContext); // Use AuthContext
+  const { setIsStepCompleted } = useNavigationProgress();
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
   const [showModal, setShowModal] = useState(false); // State for controlling the modal
@@ -18,7 +20,7 @@ const Stadium = () => {
     try {
       const response = await axios.get(`http://localhost:5178/api/SektoriUlseve/${sectorId}`);
       setSectorData(response.data);
-      setSelectedSector(sectorId);
+      setSelectedSector(sectorId); // Ensure this line is executed
     } catch (error) {
       console.error("There was an error fetching the sector data!", error);
     }
@@ -26,6 +28,7 @@ const Stadium = () => {
 
   const handleContinueClick = () => {
     if (authData) {
+      setIsStepCompleted(true); // Mark the step as completed
       navigate(`/seats/${selectedSector}`);
     } else {
       setShowModal(true);
