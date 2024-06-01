@@ -117,6 +117,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseCors("AllowAll");
+app.Use(async (context, next) =>
+{
+    var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("Handling request: {Method} {Path}", context.Request.Method, context.Request.Path);
+    await next.Invoke();
+    logger.LogInformation("Finished handling request.");
+});
 
 app.UseAuthentication();
 app.UseAuthorization();

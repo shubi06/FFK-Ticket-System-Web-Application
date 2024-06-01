@@ -31,8 +31,11 @@ const Slider = () => (
         />
       </Carousel.Item>
     </Carousel>
-    <Button className="static-button" variant="danger">Buy Now Ticket</Button>
+    <Button className="static-button"  variant="danger">Buy Now Ticket</Button>
   </div>
 );
 
 export default Slider;
+/*<Link className="nav-link" to="/portal/list-users">
+          <span>USERS</span>
+        </Link>*/

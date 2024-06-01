@@ -26,6 +26,14 @@ import { CartProvider } from "./Services/CartContext";
 import About from "./Components/About";
 import { NavigationProgressProvider } from './Services/NavigationProgressContext';
 import PrivateRoute from './Services/PrivateRoute';
+import ForgotPassword from './Components/ForgotPassword';
+import ResetPassword from './Components/ResetPassword';
+
+
+
+
+
+
 const App = () => {
   return (
     <AuthProvider>
@@ -67,6 +75,11 @@ const AppContent = () => {
         <Route path="/stadium" element={<Stadium />} />
         <Route path="/seats/:sectorId" element={<Seats />} />
         <Route path="/about" element={<About />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
+
+
+
         <Route
           path='/portal/*'
           element={

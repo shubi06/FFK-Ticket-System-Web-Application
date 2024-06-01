@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging; 
 using FederataFutbollit.Models; 
 using FederataFutbollit.Data;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
+
 
 namespace FederataFutbollit.Controllers
 {
@@ -36,6 +39,7 @@ namespace FederataFutbollit.Controllers
             _userManager = userManager;
             _configuration = configuration;
         }
+        /*-------------------------------------------------------------------*/
           [HttpPost("register")]
         public async Task<IActionResult> Register(UserDTO userDTO)
         {
@@ -72,7 +76,7 @@ namespace FederataFutbollit.Controllers
                 return StatusCode(500, new { message = "An error occurred while processing your request." });
             }
         }
-
+/*-------------------------------------------------------------------*/
         [HttpGet("confirmemail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
@@ -95,7 +99,7 @@ namespace FederataFutbollit.Controllers
     
 
 
-
+/*-------------------------------------------------------------------*/
 
   [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
@@ -126,7 +130,7 @@ namespace FederataFutbollit.Controllers
 
             return Ok(new { token = response.Token });
         }
-
+/*-------------------------------------------------------------------*/
    [HttpPost("refresh-token")]
 public async Task<IActionResult> RefreshToken()
 {
@@ -176,6 +180,71 @@ public async Task<IActionResult> RefreshToken()
         return StatusCode(500, "Internal server error");
     }
 }
+/*-------------------------------------------------------------------*/
+
+  [HttpPost("forgotpassword")]
+public async Task<IActionResult> ForgotPassword(ForgotPasswordDTO forgotPasswordDTO)
+{
+    _logger.LogInformation("Received ForgotPassword request: {ForgotPasswordDTO}", forgotPasswordDTO);
+
+    if (!ModelState.IsValid)
+    {
+        _logger.LogWarning("Model state invalid: {@ModelState}", ModelState);
+        return BadRequest(new { errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)) });
+    }
+
+    var user = await _userManager.FindByEmailAsync(forgotPasswordDTO.Email);
+    if (user == null)
+    {
+        _logger.LogWarning("User not found with email: {Email}", forgotPasswordDTO.Email);
+        return BadRequest(new { message = "Email address does not exist." });
+    }
+
+    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+    var resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+    var tokenExpirationMinutes = 3;
+    var validUntil = DateTime.Now.AddMinutes(tokenExpirationMinutes);
+
+    // Change this URL to point to your React app
+    var resetLink = $"http://localhost:3000/resetpassword?token={resetToken}&email={user.Email}&validUntil={validUntil}";
+
+    await _emailSender.SendEmailAsync(user.Email, "Reset your password", resetLink);
+
+    _logger.LogInformation("Password reset link sent to: {Email}", user.Email);
+    return Ok(new { message = "A password reset link has been sent to your email address." });
+}
+
+[HttpPost("resetpassword")]
+public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPasswordDTO)
+{
+    _logger.LogInformation("Received ResetPassword request: {ResetPasswordDTO}", resetPasswordDTO);
+
+    if (!ModelState.IsValid)
+    {
+        var errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
+        _logger.LogWarning("Model state invalid: {Errors}", string.Join(", ", errors));
+        return BadRequest(new { errors });
+    }
+
+    var user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
+    if (user == null)
+    {
+        _logger.LogWarning("User not found with email: {Email}", resetPasswordDTO.Email);
+        return BadRequest(new { message = "Invalid email address." });
+    }
+
+    var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(resetPasswordDTO.Token));
+    var result = await _userManager.ResetPasswordAsync(user, decodedToken, resetPasswordDTO.NewPassword);
+    if (result.Succeeded)
+    {
+        _logger.LogInformation("Password reset succeeded for user: {Email}", resetPasswordDTO.Email);
+        return Ok(new { message = "Password has been reset successfully." });
+    }
+
+    var resultErrors = result.Errors.Select(e => e.Description).ToList();
+    _logger.LogWarning("Password reset failed for user: {Email}, errors: {Errors}", resetPasswordDTO.Email, string.Join(", ", resultErrors));
+    return BadRequest(new { errors = resultErrors });
+}
 
 
 
@@ -184,9 +253,7 @@ public async Task<IActionResult> RefreshToken()
 
 
 
-
-
-
+/*-------------------------------------------------------------------*/
 
           [HttpGet("protected")]
     public IActionResult GetProtected()
@@ -198,6 +265,13 @@ public async Task<IActionResult> RefreshToken()
     {
         return Ok(DateTime.UtcNow);
     }
-     
+    /*----------------------------------------------------*/ 
+
+
+
+
+
+
+
     }
 }
