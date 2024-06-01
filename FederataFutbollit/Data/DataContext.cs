@@ -32,6 +32,7 @@ namespace FederataFutbollit.Data
         public DbSet<Cart> Carts { get; set; }
     public DbSet<CartSeat> CartSeats { get; set; }
 
+        public DbSet<Contact> Contacts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -8,6 +8,7 @@
 .vs
 # dotenv files
 /FederataFutbollit/obj/
+/FederataFutbollit/appsettings.json
 
 .env
 appsettings.json
