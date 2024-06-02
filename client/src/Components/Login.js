@@ -9,7 +9,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
   const { login, logout, authData } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -50,22 +49,21 @@ const Login = () => {
 
       navigate(from, { replace: true });
     } catch (error) {
-      console.error('Error during login:', error);
-      setError(error.message || 'Login failed. Please try again.');
+      if (error.response && error.response.data) {
+        setError(error.response.data); // Set the error message from the server
+      } else {
+        setError('Login failed. Please try again.');
+      }
     }
   };
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
   return (
     <div className="row justify-content-center">
       <div className="col-xl-10 col-lg-12 col-md-9">
         <div className="card o-hidden border-0 shadow-lg my-5">
           <div className="card-body p-0">
             <div className="row">
-            <div className="col-lg-6 d-none d-lg-block" style={{ width: '100px', backgroundImage: `url(${require('../Fadil.jpg')})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}></div>
-
+              <div className="col-lg-6 d-none d-lg-block" style={{ width: '100px', backgroundImage: `url(${require('../Fadil.jpg')})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}></div>
               <div className="col-lg-6">
                 <div className="p-5">
                   <div className="text-center">

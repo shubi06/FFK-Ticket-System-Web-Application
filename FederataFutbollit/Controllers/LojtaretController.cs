@@ -149,5 +149,24 @@ public async Task<IActionResult> UploadFoto([FromForm] IFormFile file, [FromForm
     return Ok(new { path = lojtari.FotoPath });
 }
 
+
+[HttpGet("report")]
+public IActionResult GetPlayersReport()
+{
+    var playersReport = _context.Lojtaret.Select(p => new 
+    {
+        p.Emri,
+        p.Mbiemri,
+        p.Gola,
+        p.Asiste
+    }).ToList();
+
+    return Ok(playersReport);
+}
+
+
+
+
+
     }
 }
