@@ -6,8 +6,8 @@
         public required string Emri { get; set; }
         public required string Sponzori { get; set; }
         public int NumriSkuadrave { get; set; }
-
-        public List<LojtaretSuperlige> LojtaretSuperlige { get; set; }
+        
+        public ICollection<Ekipa>? Ekipa { get; set; } = new List<Ekipa>();
 
     }
 }
