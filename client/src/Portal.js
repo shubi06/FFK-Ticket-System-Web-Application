@@ -44,6 +44,11 @@ import StadiumiView from "./Stadiumi/StadiumiView";
 import NdeshjaList from "./Ndeshja/NdeshjaList";
 import CreateNdeshja from "./Ndeshja/CreateNdeshja";
 
+import EkipaList from './Ekipa/EkipaList';
+import EkipaCreate from './Ekipa/EkipaCreate';
+import EkipaEdit from './Ekipa/EkipaEdit';
+import EkipaDelete from './Ekipa/EkipaDelete';
+
 function Portal() {
   return (
     <>
@@ -108,6 +113,13 @@ function Portal() {
               <Route path="stadiumi-create" element={<StadiumiCreate />} />
               <Route path="stadiumi-edit/:id" element={<StadiumiEdit />} />
               <Route path="stadiumi-view/:id" element={<StadiumiView />} />
+
+              
+              <Route path="ekipa-list" element={<EkipaList />} />
+              <Route path="ekipa-create" element={<EkipaCreate />} />
+              <Route path="ekipa-edit/:id" element={<EkipaEdit />} />
+              <Route path="ekipa-delete/:id" element={<EkipaDelete />} />
+
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
