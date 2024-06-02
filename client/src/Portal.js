@@ -44,6 +44,10 @@ import StadiumiView from "./Stadiumi/StadiumiView";
 import NdeshjaList from "./Ndeshja/NdeshjaList";
 import CreateNdeshja from "./Ndeshja/CreateNdeshja";
 
+import ContactList from "./Contact/ContactList";
+import ContactView from "./Contact/ContactView";
+import ContactEdit from "./Contact/ContactEdit";
+
 function Portal() {
   return (
     <>
@@ -108,7 +112,10 @@ function Portal() {
               <Route path="stadiumi-create" element={<StadiumiCreate />} />
               <Route path="stadiumi-edit/:id" element={<StadiumiEdit />} />
               <Route path="stadiumi-view/:id" element={<StadiumiView />} />
-              
+
+              <Route path="contacts" element={<ContactList />} />
+              <Route path="contact/edit/:id" element={<ContactEdit />} />
+              <Route path="contact/view/:id" element={<ContactView />} />
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
