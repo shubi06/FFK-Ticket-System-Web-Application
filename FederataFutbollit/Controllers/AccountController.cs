@@ -248,6 +248,52 @@ public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO reset
 
 
 
+[HttpPost("validate-reset-link")]
+public async Task<IActionResult> ValidateResetLink([FromBody] ValidateResetLinkDTO validateResetLinkDTO)
+{
+    _logger.LogInformation("Received ValidateResetLink request: {ValidateResetLinkDTO}", validateResetLinkDTO);
+
+    if (!ModelState.IsValid)
+    {
+        var errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
+        _logger.LogWarning("Model state invalid: {Errors}", string.Join(", ", errors));
+        return BadRequest(new { message = "Invalid link" });
+    }
+
+    var user = await _userManager.FindByEmailAsync(validateResetLinkDTO.Email);
+    if (user == null)
+    {
+        _logger.LogWarning("User not found with email: {Email}", validateResetLinkDTO.Email);
+        return BadRequest(new { message = "Invalid link" });
+    }
+
+    var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(validateResetLinkDTO.Token));
+    var result = await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, "ResetPassword", decodedToken);
+    if (!result)
+    {
+        _logger.LogWarning("Invalid token for user: {Email}", validateResetLinkDTO.Email);
+        return BadRequest(new { message = "Invalid link" });
+    }
+
+    // Additional validation for the expiration date
+    if (DateTime.TryParse(validateResetLinkDTO.ValidUntil, out var validUntil))
+    {
+        if (DateTime.UtcNow > validUntil)
+        {
+            _logger.LogWarning("Reset link expired for user: {Email}", validateResetLinkDTO.Email);
+            return BadRequest(new { message = "Link has expired" });
+        }
+    }
+    else
+    {
+        return BadRequest(new { message = "Invalid link" });
+    }
+
+    return Ok(new { message = "Valid link" });
+}
+
+
+
 
 
 

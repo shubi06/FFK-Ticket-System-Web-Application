@@ -10,6 +10,7 @@ const ResetPassword = () => {
     const [message, setMessage] = useState('');
     const [errors, setErrors] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [isValidLink, setIsValidLink] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -24,13 +25,45 @@ const ResetPassword = () => {
 
         setEmail(emailParam || '');
         setToken(tokenParam || '');
+
+        if (emailParam && tokenParam && validUntil) {
+            validateLink(emailParam, tokenParam, validUntil);
+        } else {
+            navigate('/login'); // Redirect if URL parameters are missing
+        }
     }, [location.search]);
+
+    const validateLink = async (email, token, validUntil) => {
+        try {
+            const response = await fetch('http://localhost:5178/api/account/validate-reset-link', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, token, validUntil }),
+            });
+
+            const data = await response.json();
+            console.log('Validation Response:', data);
+
+            if (response.ok) {
+                setIsValidLink(true);
+            } else {
+                setMessage(data.message);
+                setShowModal(true);
+                navigate('/login');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setErrors(['An unexpected error occurred.']);
+            setShowModal(true);
+            navigate('/login');
+        }
+    };
 
     const handleCloseModal = () => {
         setShowModal(false);
-        if (message === "Password has been reset successfully.") {
-            navigate('/login');
-        }
+        navigate('/login');
     };
 
     const handleSubmit = async (e) => {
@@ -64,16 +97,20 @@ const ResetPassword = () => {
 
     return (
         <div className="reset-password-container">
-            <div className="reset-password-box">
-                <h2>Reset Password</h2>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        New Password:
-                        <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-                    </label>
-                    <button type="submit">Reset Password</button>
-                </form>
-            </div>
+            {isValidLink ? (
+                <div className="reset-password-box">
+                    <h2>Reset Password</h2>
+                    <form onSubmit={handleSubmit}>
+                        <label>
+                            New Password:
+                            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
+                        </label>
+                        <button type="submit">Reset Password</button>
+                    </form>
+                </div>
+            ) : (
+                <p>Validating link...</p>
+            )}
 
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
@@ -91,4 +128,3 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
-
