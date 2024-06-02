@@ -100,6 +100,12 @@ function Sidebar() {
           <span>USERS</span>
         </Link>
       </li>
+
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/contacts">
+          <span>CONTACTS</span>
+        </Link>
+      </li>
     </ul>
   );
 }
