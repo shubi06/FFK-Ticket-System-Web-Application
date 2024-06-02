@@ -11,14 +11,13 @@ export const CartProvider = ({ children }) => {
 
   const getCart = useCallback(async () => {
     if (!token) {
+      console.error('Token is not available');
       return;
     }
 
     try {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-      console.log('Get cart - User ID:', userId);
-      console.log('Token:', token);
 
       if (!userId) {
         console.error('User ID is not available');
@@ -27,8 +26,8 @@ export const CartProvider = ({ children }) => {
 
       const response = await axios.get(`http://localhost:5178/api/Cart/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       setCart(response.data);
@@ -55,8 +54,6 @@ export const CartProvider = ({ children }) => {
     try {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-      console.log('Add to cart - User ID:', userId);
-      console.log('Token:', token);
 
       if (!userId) {
         console.error('User ID is not available');
@@ -68,11 +65,11 @@ export const CartProvider = ({ children }) => {
         quantity: 1,
         sektoriUlseveId: seat.sectorId,
         cmimi: seat.cmimi,
-        applicationUserId: userId
+        applicationUserId: userId,
       }, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       setCart(response.data);
@@ -95,16 +92,12 @@ export const CartProvider = ({ children }) => {
     try {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-      console.log('Remove from cart - User ID:', userId);
-      console.log('Token:', token);
-      console.log('Seat ID:', seatId);
 
       if (!userId) {
         console.error('User ID is not available');
         return;
       }
 
-      // Check if the seat exists in the cart
       const seatInCart = cart?.cartSeats?.find((seat) => seat.id === seatId);
       if (!seatInCart) {
         console.error('Seat ID not found in cart:', seatId);
@@ -113,8 +106,8 @@ export const CartProvider = ({ children }) => {
 
       const response = await axios.delete(`http://localhost:5178/api/Cart/${userId}/${seatId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.status === 204) {

@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem('auth');
     localStorage.removeItem('token');
-    localStorage.removeItem('userId'); 
+    localStorage.removeItem('userId'); // Remove userId from localStorage
 
     deleteCookie('refreshToken', '/', 'localhost');
 

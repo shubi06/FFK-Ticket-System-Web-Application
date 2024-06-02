@@ -22,7 +22,7 @@ import Seats from './Seats';
 import About from './Components/About';
 import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/ResetPassword';
-import CheckoutForm from './Components/CheckoutForm';
+import Success from './Components/Success';
 
 import './App.css';
 import './sb-admin-2.min.css';
@@ -73,7 +73,7 @@ const AppContent = () => {
         <Route path="/about" element={<About />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-    
+       
         <Route
           path="/portal/*"
           element={
