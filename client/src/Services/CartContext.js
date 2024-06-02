@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode'; 
+import {jwtDecode} from 'jwt-decode';
 import { AuthContext } from './AuthContext';
 
 export const CartContext = createContext();
@@ -11,7 +11,6 @@ export const CartProvider = ({ children }) => {
 
   const getCart = useCallback(async () => {
     if (!token) {
-      
       return;
     }
 
