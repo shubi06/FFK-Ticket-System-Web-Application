@@ -14,11 +14,12 @@ namespace FederataFutbollit.Entities
         public int Gola { get; set; }
         public int Asiste { get; set; }
         public int NrFaneles { get; set; }
-        
 
         [JsonIgnore]
-        public int SuperligaId { get; set; }
-        [ForeignKey("SuperligaId")]
         public Superliga Superliga { get; set; }
+        public int SuperligaID { get; set; }
+        public string FotoPath { get; set; }
+
+
     }
 }

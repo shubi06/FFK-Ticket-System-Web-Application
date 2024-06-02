@@ -113,6 +113,7 @@ function Portal() {
               <Route path="stadiumi-create" element={<StadiumiCreate />} />
               <Route path="stadiumi-edit/:id" element={<StadiumiEdit />} />
               <Route path="stadiumi-view/:id" element={<StadiumiView />} />
+              
 
               
               <Route path="ekipa-list" element={<EkipaList />} />

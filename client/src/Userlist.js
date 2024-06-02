@@ -65,15 +65,7 @@ function Userlist() {
                        <th>Veprimet</th>
                     </tr>
                   </thead>
-                  <tfoot>
-                    <tr>
-                    <th>Id</th>
-                      <th>Emri</th>
-                      <th>Sponzori</th>
-                      <th>NrSkuadrave</th>
-                      <th>Veprimet</th>
-                    </tr>
-                  </tfoot>
+                 
                   <tbody>
                     {userList.map((user) => {
                       return (

@@ -100,5 +100,24 @@ namespace FederataFutbollit.Controllers
 
             return NoContent();
         }
+
+ [HttpPost("addSeats")]
+        public async Task<IActionResult> AddSeats(int sektorId, int numberOfSeats)
+        {
+            var maxNumri = _context.Uleset.Any() ? _context.Uleset.Max(s => s.Numri) : 0;
+
+            var seats = Enumerable.Range(1, numberOfSeats).Select(i => new Ulesja
+            {
+                Numri = maxNumri + i,
+                IsAvailable = true,
+                SektoriUlseveID = sektorId
+            }).ToList();
+
+            _context.Uleset.AddRange(seats);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = $"{numberOfSeats} seats added to sector {sektorId}." });
+        }
+
     }
 }

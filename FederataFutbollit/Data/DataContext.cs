@@ -28,6 +28,12 @@ namespace FederataFutbollit.Data
         public DbSet<SektoriUlseve> SektoriUlseve { get; set; }
         public DbSet<Ekipa> Ekipa { get; set; }
 
+        public DbSet<Cart> Carts { get; set; }
+    public DbSet<CartSeat> CartSeats { get; set; }
+
+        public DbSet<Contact> Contacts { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

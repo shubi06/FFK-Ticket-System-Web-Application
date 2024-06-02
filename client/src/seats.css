@@ -1,0 +1,107 @@
+.seats-wrapper {
+  padding: 20px;
+  text-align: center;
+}
+
+.seats-wrapper h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.seats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 90px);
+  gap: 30px;
+  justify-items: center;
+  justify-content: center;
+}
+
+.seat {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-direction: column; /* Change to column for number and price */
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  margin-top: 5px;
+}
+
+.seat.available {
+  background-color: #4caf50;
+  border-color: #388e3c;
+}
+
+.seat.unavailable {
+  background-color: #f44336;
+  border-color: #d32f2f;
+}
+
+.seat.selected {
+  background-color: #ffa726;
+  border-color: #fb8c00;
+}
+
+.seat:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.seat.available:hover {
+  background-color: #388e3c;
+}
+
+.seat.unavailable:hover {
+  background-color: #d32f2f;
+}
+
+.seat-number {
+  margin-bottom: 5px; /* Add margin to separate number and price */
+}
+
+.seat-price {
+  font-size: 14px; /* Adjust font size for price */
+  color: #fff; /* Ensure the color contrasts with background */
+}
+
+.selected-seats {
+  margin-top: 20px;
+}
+
+.selected-seat {
+  display: inline-block;
+  margin: 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+
+.continue-button-wrapper {
+  margin-top: 20px;
+}
+
+.continue-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.continue-button:hover {
+  background-color: #0056b3;
+}

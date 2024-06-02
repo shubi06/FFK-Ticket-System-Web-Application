@@ -87,15 +87,7 @@ function ListUsers() {
                     <th>Veprimet</th>
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Roles</th>
-                    <th>Veprimet</th>
-                  </tr>
-                </tfoot>
+                
                 <tbody>
                   {listUsers.map((user) => (
                     <tr key={user.id}>

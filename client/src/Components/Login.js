@@ -1,15 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../Services/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { useNavigate, useLocation } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'; // Correct import
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
   const { login, logout, authData } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/home';
 
   useEffect(() => {
     if (authData) {
@@ -20,29 +25,38 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:5178/api/account/login', { email, password }, { withCredentials: true });
-      const decoded = jwtDecode(response.data.token);
+      
+      const token = response.data.token;
+      
+      if (!token) {
+        throw new Error('Token not found in response');
+      }
+
+      if (typeof token !== 'string') {
+        throw new Error('Token is not a string');
+      }
+
+      const decoded = jwtDecode(token);
 
       const userData = {
         name: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
         email: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-        role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+        role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+        emailConfirmed: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/emailConfirmed']
       };
 
       localStorage.setItem('user', JSON.stringify(userData));
-      login(userData, response.data.token);
+      login(userData, token);
 
-      if (userData.role === 'Admin') {
-        navigate('/portal/dashboard');
-      } else {
-        navigate('/home');
-      }
+      navigate(from, { replace: true });
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError(error.response.data);
-      } else {
-        setError('Login failed. Please try again.');
-      }
+      console.error('Error during login:', error);
+      setError(error.message || 'Login failed. Please try again.');
     }
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
   return (
     <div className="row justify-content-center">
@@ -50,7 +64,8 @@ const Login = () => {
         <div className="card o-hidden border-0 shadow-lg my-5">
           <div className="card-body p-0">
             <div className="row">
-              <div className="col-lg-6 d-none d-lg-block" style={{ backgroundImage: `url(${require('../Fadil.jpg')})` }}></div>
+            <div className="col-lg-6 d-none d-lg-block" style={{ width: '100px', backgroundImage: `url(${require('../Fadil.jpg')})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}></div>
+
               <div className="col-lg-6">
                 <div className="p-5">
                   <div className="text-center">
@@ -80,17 +95,10 @@ const Login = () => {
                     <button type="submit" className="btn btn-primary btn-user btn-block">
                       Kyquni
                     </button>
-                    <hr />
-                    <a href="index.html" className="btn btn-google btn-user btn-block">
-                      <i className="fab fa-google fa-fw"></i> Kyquni me Google
-                    </a>
-                    <a href="index.html" className="btn btn-facebook btn-user btn-block">
-                      <i className="fab fa-facebook-f fa-fw"></i> Kyquni me Facebook
-                    </a>
                   </form>
                   <hr />
                   <div className="text-center">
-                    <a className="small" href="forgot-password.html">Keni harruar fjalëkalimin?</a>
+                    <a className="small" href="forgotpassword">Keni harruar fjalëkalimin?</a>
                   </div>
                   <div className="text-center">
                     <a className="small" href="register">Krijo një llogari!</a>

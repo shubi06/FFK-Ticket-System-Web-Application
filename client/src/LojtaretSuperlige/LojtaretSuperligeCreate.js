@@ -14,7 +14,7 @@ function LojtaretSuperligeCreate() {
         const response = await axios.get("http://localhost:5178/api/Superliga");
         setSuperligaList(response.data);
       } catch (error) {
-        console.error("Failed to fetch superliga", error);
+        console.error("Failed to fetch Superliga", error);
       }
     };
     fetchSuperliga();
@@ -30,51 +30,66 @@ function LojtaretSuperligeCreate() {
       asiste: "",
       nrFaneles: "",
       superligaID: "",
+      foto: null,
     },
     validate: (values) => {
       let errors = {};
-      if (!values.emri) {
-        errors.emri = "Ju lutem shkruani emrin e lojtarit";
-      }
-      if (!values.mbiemri) {
+      if (!values.emri) errors.emri = "Ju lutem shkruani emrin e lojtarit";
+      if (!values.mbiemri)
         errors.mbiemri = "Ju lutem shkruani mbiemrin e lojtarit";
-      }
-      if (!values.mosha) {
-        errors.mosha = "Ju lutem shkruani moshen e lojtarit";
-      }
-      if (!values.pozicioni) {
+      if (!values.mosha) errors.mosha = "Ju lutem shkruani moshen e lojtarit";
+      if (!values.pozicioni)
         errors.pozicioni = "Ju lutem shkruani pozicionin e lojtarit";
-      }
-      if (!values.gola) {
-        errors.gola = "Ju lutem shkruani golat e lojtarit";
-      }
-      if (!values.asiste) {
+      if (!values.gola) errors.gola = "Ju lutem shkruani golat e lojtarit";
+      if (!values.asiste)
         errors.asiste = "Ju lutem shkruani asistet e lojtarit";
-      }
-      if (!values.nrFaneles) {
+      if (!values.nrFaneles)
         errors.nrFaneles = "Ju lutem shkruani nrFaneles se lojtarit";
-      }
-      if (!values.superligaID) {
-        errors.superligaID = "Ju lutem zgjidhni një superligë";
-      }
-
+      if (!values.superligaID)
+        errors.superligaID = "Ju lutem zgjidhni një kombetare";
+      if (!values.foto) errors.foto = "Ju lutem ngarkoni një foto";
       return errors;
     },
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        const payload = {
-          ...values,
-          superligaID: parseInt(values.superligaID), // Ensure superligaID is sent as an integer
-        };
-        await axios.post(
+        const formData = new FormData();
+        formData.append("Emri", values.emri);
+        formData.append("Mbiemri", values.mbiemri);
+        formData.append("Mosha", values.mosha);
+        formData.append("Pozicioni", values.pozicioni);
+        formData.append("Gola", values.gola);
+        formData.append("Asiste", values.asiste);
+        formData.append("NrFaneles", values.nrFaneles);
+        formData.append("SuperligaID", values.superligaID);
+        formData.append("file", values.foto);
+
+        console.log("Form Data: ", formData); // Debug log to check formData
+
+        const response = await axios.post(
           "http://localhost:5178/api/LojtaretSuperlige",
-          payload
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
-        navigate("/portal/lojtaret-superlige-list");
+
+        console.log("Server Response: ", response); // Debug log to check server response
+
+        navigate("/portal/lojtaretSuperlige-list");
       } catch (error) {
         console.error("Error during form submission:", error);
-        alert("Failed to create Lojtari Superlige: " + error.message);
+        if (error.response) {
+          console.error("Server Error Response: ", error.response); // Debug log to check server error response
+          console.error("Error Data: ", error.response.data); // Log the error data from the server
+          alert(
+            "Failed to create Lojtari: " + JSON.stringify(error.response.data)
+          );
+        } else {
+          alert("Failed to create Lojtari: " + error.message);
+        }
         setLoading(false);
       }
     },
@@ -90,7 +105,7 @@ function LojtaretSuperligeCreate() {
               name="emri"
               value={formik.values.emri}
               onChange={formik.handleChange}
-              type={"text"}
+              type="text"
               className={`form-control ${
                 formik.errors.emri ? "is-invalid" : ""
               }`}
@@ -104,7 +119,7 @@ function LojtaretSuperligeCreate() {
               name="mbiemri"
               value={formik.values.mbiemri}
               onChange={formik.handleChange}
-              type={"text"}
+              type="text"
               className={`form-control ${
                 formik.errors.mbiemri ? "is-invalid" : ""
               }`}
@@ -118,7 +133,7 @@ function LojtaretSuperligeCreate() {
               name="mosha"
               value={formik.values.mosha}
               onChange={formik.handleChange}
-              type={"number"}
+              type="number"
               className={`form-control ${
                 formik.errors.mosha ? "is-invalid" : ""
               }`}
@@ -132,7 +147,7 @@ function LojtaretSuperligeCreate() {
               name="pozicioni"
               value={formik.values.pozicioni}
               onChange={formik.handleChange}
-              type={"text"}
+              type="text"
               className={`form-control ${
                 formik.errors.pozicioni ? "is-invalid" : ""
               }`}
@@ -146,7 +161,7 @@ function LojtaretSuperligeCreate() {
               name="gola"
               value={formik.values.gola}
               onChange={formik.handleChange}
-              type={"number"}
+              type="number"
               className={`form-control ${
                 formik.errors.gola ? "is-invalid" : ""
               }`}
@@ -160,7 +175,7 @@ function LojtaretSuperligeCreate() {
               name="asiste"
               value={formik.values.asiste}
               onChange={formik.handleChange}
-              type={"number"}
+              type="number"
               className={`form-control ${
                 formik.errors.asiste ? "is-invalid" : ""
               }`}
@@ -174,7 +189,7 @@ function LojtaretSuperligeCreate() {
               name="nrFaneles"
               value={formik.values.nrFaneles}
               onChange={formik.handleChange}
-              type={"number"}
+              type="number"
               className={`form-control ${
                 formik.errors.nrFaneles ? "is-invalid" : ""
               }`}
@@ -182,13 +197,13 @@ function LojtaretSuperligeCreate() {
             <span style={{ color: "red" }}>{formik.errors.nrFaneles}</span>
           </div>
 
-          <div className="form-group">
+          <div className="col-lg-6">
             <label htmlFor="superligaID">Superliga</label>
             <select
               id="superligaID"
               name="superligaID"
               onChange={formik.handleChange}
-              value={formik.values.superligaID}
+              value={formik.values.kombetarjaID}
               className={`form-control ${
                 formik.errors.superligaID ? "is-invalid" : ""
               }`}
@@ -205,6 +220,21 @@ function LojtaretSuperligeCreate() {
                 {formik.errors.superligaID}
               </div>
             ) : null}
+          </div>
+
+          <div className="col-lg-6">
+            <label>Foto</label>
+            <input
+              name="foto"
+              type="file"
+              onChange={(event) => {
+                formik.setFieldValue("foto", event.currentTarget.files[0]);
+              }}
+              className={`form-control ${
+                formik.errors.foto ? "is-invalid" : ""
+              }`}
+            />
+            <span style={{ color: "red" }}>{formik.errors.foto}</span>
           </div>
 
           <div className="col-lg-4 mt-3">

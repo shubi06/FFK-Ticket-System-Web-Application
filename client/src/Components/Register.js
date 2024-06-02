@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../Services/UserContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Register() {
     const { register } = useUser();
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -34,7 +36,7 @@ export default function Register() {
 
         try {
             await register(formData);
-            setMessage({ type: 'success', content: 'You have registered successfully!' });
+            setMessage({ type: 'success', content: 'You have registered successfully, please confirm your email !' });
             setTimeout(() => {
                 navigate('/login');
             }, 3000);
@@ -55,7 +57,7 @@ export default function Register() {
                 <div className="card o-hidden border-0 shadow-lg my-5">
                     <div className="card-body p-0">
                         <div className="row">
-                            <div className="col-lg-6 d-none d-lg-block bg-register-image"></div>
+                        <div className="col-lg-6 d-none d-lg-block" style={{ width: '100px', backgroundImage: `url(${require('../Fadil.jpg')})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}></div>
                             <div className="col-lg-6">
                                 <div className="p-5">
                                     <div className="text-center">
