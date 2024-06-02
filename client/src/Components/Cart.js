@@ -1,23 +1,60 @@
 import React, { useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../Services/CartContext';
+import { loadStripe } from '@stripe/stripe-js';
 import './Cart.css';
+
+// Initialize Stripe with your publishable key
+const stripePromise = loadStripe('pk_test_51PMYxGKZSCNvwzpPpalShd0ed3RuEiZqlpa51qkcNuWIqN46ngMuPKuPq3eEhJqKsHxKhmN729ZtcVlq0LWvlCj700qYIlraVI');
 
 const Cart = () => {
   const { cart, getCart, removeFromCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCart();
-  }, []);
+  }, [getCart]);
 
-  const handleCheckout = () => {
-    console.log('Vazhdo te Pagesa');
+  const handleCheckout = async () => {
+    const stripe = await stripePromise;
+
+    console.log('Cart:', cart); // Log cart data before sending
+
+    try {
+      const response = await fetch('http://localhost:5178/api/payment/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cart),
+      });
+
+      if (response.ok) {
+        const session = await response.json();
+        console.log('Checkout Session:', session); // Log session data
+        const result = await stripe.redirectToCheckout({
+          sessionId: session.sessionId,
+        });
+
+        if (result.error) {
+          console.error('Stripe error:', result.error.message);
+          navigate('/error');
+        }
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to create checkout session:', errorData); // Log error data
+        navigate('/error');
+      }
+    } catch (error) {
+      console.error('Error:', error); // Log any other errors
+      navigate('/error');
+    }
   };
 
   const handleRemove = (seatId) => {
     removeFromCart(seatId);
   };
 
-  // Calculate the total price
   const totalPrice = cart ? cart.cartSeats.reduce((total, seat) => total + seat.cmimi * seat.quantity, 0) : 0;
 
   return (
