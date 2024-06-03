@@ -53,6 +53,11 @@ import KontabilitetiEdit from "./Kontabiliteti/KontabilitetiEdit";
 import KontabilitetiList from "./Kontabiliteti/KontabilitetiList";
 import KontabilitetiView from "./Kontabiliteti/KontabilitetiView";
 
+import EkipaCreate from "./Ekipa/EkipaCreate";
+import EkipaDelete from "./Ekipa/EkipaDelete";
+import EkipaEdit from "./Ekipa/EkipaEdit";
+import EkipaList from "./Ekipa/EkipaList";
+
 function Portal() {
   return (
     <>
@@ -138,6 +143,11 @@ function Portal() {
                 path="kontabiliteti-view/:id"
                 element={<KontabilitetiView />}
               />
+
+              <Route path="/ekipa-create" element={<EkipaCreate />} />
+              <Route path="/ekipa-delete/:id" element={<EkipaDelete />} />
+              <Route path="/ekipa-edit/:id" element={<EkipaEdit />} />
+              <Route path="/ekipa-list" element={<EkipaList />} />
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
