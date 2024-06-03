@@ -33,6 +33,8 @@ namespace FederataFutbollit.Data
 
         public DbSet<Contact> Contacts { get; set; }
 
+        public DbSet<AboutSection> AboutSections { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,4 @@
-/* About.css */
+/* About.css
 body {
   font-family: "Arial", sans-serif;
   background-color: #f0f0f0;
@@ -67,4 +67,51 @@ body {
 
 .about-container li {
   margin-bottom: 10px;
+} */
+
+/* About.css */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+.about-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 40px auto;
+}
+
+.about-container h1 {
+  text-align: center;
+  color: #333;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.about-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.about-container th,
+.about-container td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.about-container th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+}
+
+.about-container tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
