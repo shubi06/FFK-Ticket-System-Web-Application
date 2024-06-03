@@ -7,39 +7,35 @@ import { useNavigate } from "react-router-dom";
 function KontabilitetiCreate() {
   const [isLoading, setLoading] = useState(false);
   const [staffList, setStaffList] = useState([]);
-  const [expensesList, setExpensesList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchStaffAndExpenses = async () => {
+    const fetchStaff = async () => {
       try {
         const staffResponse = await axios.get(
           "http://localhost:5178/api/Stafi"
         );
         setStaffList(staffResponse.data);
-        const expensesResponse = await axios.get(
-          "http://localhost:5178/api/Shpenzimet"
-        );
-        setExpensesList(expensesResponse.data);
       } catch (error) {
-        console.error("Failed to fetch staff or expenses", error);
+        console.error("Failed to fetch staff", error);
       }
     };
-    fetchStaffAndExpenses();
+    fetchStaff();
   }, []);
 
   const formik = useFormik({
     initialValues: {
       stafiId: "",
-      shpenzimetId: "",
+      shpenzimetPershkrimi: "",
       data: "",
       shumaTotale: "",
     },
     validate: (values) => {
       let errors = {};
       if (!values.stafiId) errors.stafiId = "Ju lutem zgjidhni një staf";
-      if (!values.shpenzimetId)
-        errors.shpenzimetId = "Ju lutem zgjidhni një shpenzim";
+      if (!values.shpenzimetPershkrimi)
+        errors.shpenzimetPershkrimi =
+          "Ju lutem shkruani përshkrimin e shpenzimeve";
       if (!values.data) errors.data = "Ju lutem shkruani datën";
       if (!values.shumaTotale)
         errors.shumaTotale = "Ju lutem shkruani shumën totale";
@@ -48,9 +44,15 @@ function KontabilitetiCreate() {
     onSubmit: async (values) => {
       try {
         setLoading(true);
+
         const response = await axios.post(
           "http://localhost:5178/api/Kontabiliteti",
-          values
+          {
+            stafiId: values.stafiId, // Dërgo stafiId në vend të objektit të plotë
+            shpenzimetPershkrimi: values.shpenzimetPershkrimi,
+            data: values.data,
+            shumaTotale: values.shumaTotale,
+          }
         );
         console.log("Server Response: ", response);
         navigate("/portal/kontabiliteti-list");
@@ -95,22 +97,18 @@ function KontabilitetiCreate() {
 
           <div className="col-lg-6">
             <label>Shpenzimet</label>
-            <select
-              name="shpenzimetId"
-              value={formik.values.shpenzimetId}
+            <input
+              name="shpenzimetPershkrimi"
+              value={formik.values.shpenzimetPershkrimi}
               onChange={formik.handleChange}
+              type="text"
               className={`form-control ${
-                formik.errors.shpenzimetId ? "is-invalid" : ""
+                formik.errors.shpenzimetPershkrimi ? "is-invalid" : ""
               }`}
-            >
-              <option value="">Zgjidhni Shpenzimet</option>
-              {expensesList.map((expense) => (
-                <option key={expense.id} value={expense.id}>
-                  {expense.pershkrimi}
-                </option>
-              ))}
-            </select>
-            <span style={{ color: "red" }}>{formik.errors.shpenzimetId}</span>
+            />
+            <span style={{ color: "red" }}>
+              {formik.errors.shpenzimetPershkrimi}
+            </span>
           </div>
 
           <div className="col-lg-6">

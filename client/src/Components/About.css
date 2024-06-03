@@ -1,117 +1,53 @@
-/* About.css
-body {
-  font-family: "Arial", sans-serif;
-  background-color: #f0f0f0;
-  margin: 0;
-  padding: 0;
-}
-
 .about-container {
   padding: 20px;
-  background-color: #f9f9f9;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f9;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 40px auto;
 }
 
-.about-container h1 {
+.about-title {
   text-align: center;
-  color: #333;
   font-size: 2.5em;
   margin-bottom: 20px;
+  color: #063d78; /* FFK related color */
 }
 
-.about-container h2 {
-  cursor: pointer;
-  color: #007bff;
-  font-size: 1.8em;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  transition: color 0.3s ease;
-}
-
-.about-container h2:hover {
-  color: #0056b3;
-}
-
-.about-container p,
-.about-container ul {
-  display: none;
-  color: #555;
-  font-size: 1.2em;
-  line-height: 1.6;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.about-container h2.active + p,
-.about-container h2.active + ul {
-  display: block;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.about-container ul {
-  list-style-type: disc;
-  margin-left: 20px;
-}
-
-.about-container li {
-  margin-bottom: 10px;
-} */
-
-/* About.css */
-body {
-  font-family: "Arial", sans-serif;
-  background-color: #f0f0f0;
-  margin: 0;
-  padding: 0;
-}
-
-.about-container {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 40px auto;
-}
-
-.about-container h1 {
-  text-align: center;
-  color: #333;
-  font-size: 2.5em;
-  margin-bottom: 20px;
-}
-
-.about-container table {
+.about-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
-.about-container th,
-.about-container td {
-  padding: 12px;
+.about-table th,
+.about-table td {
   border: 1px solid #ddd;
+  padding: 12px;
   text-align: left;
 }
 
-.about-container th {
-  background-color: #f2f2f2;
-  color: #333;
-  font-weight: bold;
+.about-table th {
+  background-color: #063d78; /* FFK related color */
+  color: #ffffff;
+  font-size: 1.1em;
 }
 
-.about-container tr:nth-child(even) {
+.about-row:nth-child(even) {
   background-color: #f9f9f9;
+}
+
+.about-row:hover {
+  background-color: #e2f1ff; /* Light blue for hover effect */
+}
+
+.about-title-cell {
+  width: 30%;
+  font-weight: bold;
+  color: #333;
+}
+
+.about-content-cell {
+  width: 70%;
+  color: #555;
 }
