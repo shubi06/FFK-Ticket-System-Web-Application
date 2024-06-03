@@ -106,6 +106,12 @@ function Sidebar() {
           <span>CONTACTS</span>
         </Link>
       </li>
+
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/kontabiliteti-list">
+          <span>KONTABILITETI</span>
+        </Link>
+      </li>
     </ul>
   );
 }

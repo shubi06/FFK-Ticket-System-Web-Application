@@ -7,7 +7,7 @@ const About = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/About") // Make sure this URL is correct
+      .get("http://localhost:5178/api/About") // Make sure this URL is correct
       .then((response) => {
         console.log(response.data); // Check if data is coming through
         setSections(response.data);

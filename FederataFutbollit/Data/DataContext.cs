@@ -35,6 +35,10 @@ namespace FederataFutbollit.Data
 
         public DbSet<AboutSection> AboutSections { get; set; }
 
+        //public DbSet<Stafi> Stafi { get; set; }
+        public DbSet<Shpenzimet> Shpenzimet { get; set; }
+        public DbSet<Kontabiliteti> Kontabiliteti { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
