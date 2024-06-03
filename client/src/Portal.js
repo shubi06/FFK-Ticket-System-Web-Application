@@ -48,6 +48,11 @@ import ContactList from "./Contact/ContactList";
 import ContactView from "./Contact/ContactView";
 import ContactEdit from "./Contact/ContactEdit";
 
+import KontabilitetiCreate from "./Kontabiliteti/KontabilitetiCreate";
+import KontabilitetiEdit from "./Kontabiliteti/KontabilitetiEdit";
+import KontabilitetiList from "./Kontabiliteti/KontabilitetiList";
+import KontabilitetiView from "./Kontabiliteti/KontabilitetiView";
+
 function Portal() {
   return (
     <>
@@ -116,6 +121,23 @@ function Portal() {
               <Route path="contacts" element={<ContactList />} />
               <Route path="contact/edit/:id" element={<ContactEdit />} />
               <Route path="contact/view/:id" element={<ContactView />} />
+
+              <Route
+                path="kontabiliteti-create"
+                element={<KontabilitetiCreate />}
+              />
+              <Route
+                path="kontabiliteti-edit/:id"
+                element={<KontabilitetiEdit />}
+              />
+              <Route
+                path="kontabiliteti-list"
+                element={<KontabilitetiList />}
+              />
+              <Route
+                path="kontabiliteti-view/:id"
+                element={<KontabilitetiView />}
+              />
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
