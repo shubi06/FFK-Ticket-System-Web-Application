@@ -9,12 +9,11 @@ function Stafilist() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    //On Load
+    // On Load
     getStafs();
-    console.log("welcome");
   }, []);
 
-  let getStafs = async () => {
+  const getStafs = async () => {
     try {
       const stafs = await axios.get("http://localhost:5178/api/Stafi");
       setStafiList(stafs.data);
@@ -24,10 +23,10 @@ function Stafilist() {
     }
   };
 
-  let handleDelete = async (id) => {
+  const handleDelete = async (id) => {
     try {
       const confirmDelete = window.confirm(
-        "Are you sure do you want to delete the data?"
+        "A jeni i sigurt që doni të fshini të dhënat?"
       );
       if (confirmDelete) {
         await axios.delete(`http://localhost:5178/api/Stafi/${id}`);
@@ -50,7 +49,6 @@ function Stafilist() {
           Shto Stafin
         </Link>
       </div>
-      {/* <!-- DataTables --> */}
       <div className="card shadow mb-4">
         <div className="card-header py-3">
           <h6 className="m-0 font-weight-bold text-primary">DataTables</h6>
@@ -81,7 +79,6 @@ function Stafilist() {
                     <th>Veprimet</th>
                   </tr>
                 </thead>
-              
                 <tbody>
                   {stafiList.map((stafi) => {
                     return (
@@ -89,18 +86,12 @@ function Stafilist() {
                         <td>{stafi.id}</td>
                         <td>{stafi.emri}</td>
                         <td>{stafi.mbiemri}</td>
-                     
                         <td>{stafi.paga}</td>
                         <td>{stafi.email}</td>
                         <td>{stafi.telefoni}</td>
-                        <td>{stafi.roliEmri}</td>
+                        <td>{stafi.roli?.emri}</td>{" "}
+                        {/* Përdorni roli.emri nëse ky është emri i fushës për pozita */}
                         <td>
-                          <Link
-                            to={`/portal/stafi-view/${stafi.id}`}
-                            className="btn btn-primary btn-sm mr-1"
-                          >
-                            View
-                          </Link>
                           <Link
                             to={`/portal/stafi-edit/${stafi.id}`}
                             className="btn btn-info btn-sm mr-1"

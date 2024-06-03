@@ -94,6 +94,12 @@ function Sidebar() {
         </Link>
       </li>
 
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/ekipa-list">
+          <span>EKIPA</span>
+        </Link>
+      </li>
+
       {/* <!-- Nav Item - Users --> */}
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/list-users">
