@@ -106,6 +106,11 @@ function Sidebar() {
           <span>CONTACTS</span>
         </Link>
       </li>
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/ekipa">
+          <span>EKIPA E SUPERLIGES</span>
+        </Link>
+      </li>
     </ul>
   );
 }

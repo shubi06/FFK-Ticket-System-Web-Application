@@ -87,5 +87,7 @@ namespace FederataFutbollit.Controllers
             return Ok(await _context.Superligat.ToListAsync());
 
         }
+        public ICollection<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
+
     }
 }

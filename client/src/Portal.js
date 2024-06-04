@@ -48,6 +48,12 @@ import ContactList from "./Contact/ContactList";
 import ContactView from "./Contact/ContactView";
 import ContactEdit from "./Contact/ContactEdit";
 
+// Ekipa components
+import EkipaList from "./Ekipa/EkipaList";
+import EkipaCreate from "./Ekipa/EkipaCreate";
+import EkipaEdit from "./Ekipa/EkipaEdit";
+import EkipaDelete from "./Ekipa/EkipaDelete";
+
 function Portal() {
   return (
     <>
@@ -116,6 +122,15 @@ function Portal() {
               <Route path="contacts" element={<ContactList />} />
               <Route path="contact/edit/:id" element={<ContactEdit />} />
               <Route path="contact/view/:id" element={<ContactView />} />
+
+              <Route path="ekipa" element={<EkipaList />} />
+              <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
+
+               {/* Ekipa Routes */}
+               <Route path="ekipa" element={<EkipaList />} />
+              <Route path="ekipa/create" element={<EkipaCreate />} />
+              <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
+              <Route path="ekipa/delete/:id" element={<EkipaDelete />} />
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>

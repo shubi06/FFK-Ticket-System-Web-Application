@@ -31,7 +31,7 @@ import Contact from "./Components/ContactForm";
 
 import ForgotPassword from "./Components/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword";
-import CheckoutForm from "./Components/CheckoutForm";
+
 
 import "./App.css";
 import "./sb-admin-2.min.css";
