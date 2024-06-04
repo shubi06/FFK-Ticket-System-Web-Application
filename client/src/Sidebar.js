@@ -94,12 +94,6 @@ function Sidebar() {
         </Link>
       </li>
 
-      <li className="nav-item active">
-        <Link className="nav-link" to="/portal/ekipa-list">
-          <span>EKIPA</span>
-        </Link>
-      </li>
-
       {/* <!-- Nav Item - Users --> */}
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/list-users">
@@ -112,10 +106,9 @@ function Sidebar() {
           <span>CONTACTS</span>
         </Link>
       </li>
-
       <li className="nav-item active">
-        <Link className="nav-link" to="/portal/kontabiliteti-list">
-          <span>KONTABILITETI</span>
+        <Link className="nav-link" to="/portal/ekipa">
+          <span>EKIPA E SUPERLIGES</span>
         </Link>
       </li>
     </ul>

@@ -29,9 +29,10 @@ import About from "./Components/About";
 
 import Contact from "./Components/ContactForm";
 
+import SuperligaTable from "./Components/SuperligaTable";
+
 import ForgotPassword from "./Components/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword";
-import Success from "./Components/Success";
 
 import "./App.css";
 import "./sb-admin-2.min.css";
@@ -77,13 +78,14 @@ const AppContent = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/stadium" element={<Stadium />} />
         <Route path="/seats/:sectorId" element={<Seats />} />
-        
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
 
+        <Route path="/superliga" element={<SuperligaTable />} />
+
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/success" element={<Success />} />
+
         <Route
           path="/portal/*"
           element={

@@ -7,9 +7,9 @@ const About = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5178/api/About") // Make sure this URL is correct
+      .get("http://localhost:5178/api/About")
       .then((response) => {
-        console.log(response.data); // Check if data is coming through
+        console.log(response.data);
         setSections(response.data);
       })
       .catch((error) => {
@@ -19,8 +19,8 @@ const About = () => {
 
   return (
     <div className="about-container">
-      <h1>Rreth Federatës së Futbollit të Kosovës</h1>
-      <table>
+      <h1 className="about-title">Rreth Federatës së Futbollit të Kosovës</h1>
+      <table className="about-table">
         <thead>
           <tr>
             <th>Titulli</th>
@@ -28,10 +28,10 @@ const About = () => {
           </tr>
         </thead>
         <tbody>
-          {sections.map((section) => (
-            <tr key={section.id}>
-              <td>{section.title}</td>
-              <td>{section.content}</td>
+          {sections.map((section, index) => (
+            <tr key={section.id} className={`about-row about-row-${index}`}>
+              <td className="about-title-cell">{section.title}</td>
+              <td className="about-content-cell">{section.content}</td>
             </tr>
           ))}
         </tbody>

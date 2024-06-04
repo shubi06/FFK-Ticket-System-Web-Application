@@ -7,54 +7,54 @@ import { useNavigate, useParams } from "react-router-dom";
 function KontabilitetiEdit() {
   const params = useParams();
   const [staffList, setStaffList] = useState([]);
-  const [expensesList, setExpensesList] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchStaffAndExpenses = async () => {
-      try {
-        const staffResponse = await axios.get(
-          "http://localhost:5178/api/Stafi"
-        );
-        setStaffList(staffResponse.data);
-        const expensesResponse = await axios.get(
-          "http://localhost:5178/api/Shpenzimet"
-        );
-        setExpensesList(expensesResponse.data);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
-
-    const fetchKontabiliteti = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5178/api/Kontabiliteti/${params.id}`
-        );
-        myFormik.setValues(response.data);
-      } catch (error) {
-        console.error("Error fetching Kontabiliteti data", error);
-      }
-    };
-
-    fetchStaffAndExpenses();
+    fetchStaff();
     fetchKontabiliteti();
   }, [id]);
+
+  const fetchStaff = async () => {
+    try {
+      const response = await axios.get("http://localhost:5178/api/Stafi");
+      setStaffList(response.data);
+    } catch (error) {
+      console.error("Failed to fetch staff", error);
+    }
+  };
+
+  const fetchKontabiliteti = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5178/api/Kontabiliteti/${params.id}`
+      );
+      console.log("Fetched data:", response.data);
+      myFormik.setValues({
+        stafiId: response.data.stafi.id,
+        shpenzimetPershkrimi: response.data.shpenzimet.pershkrimi,
+        data: response.data.data.split("T")[0],
+        shumaTotale: response.data.shumaTotale,
+      });
+    } catch (error) {
+      console.error("Error fetching Kontabiliteti data", error);
+    }
+  };
 
   const myFormik = useFormik({
     initialValues: {
       stafiId: "",
-      shpenzimetId: "",
+      shpenzimetPershkrimi: "",
       data: "",
       shumaTotale: "",
     },
     validate: (values) => {
       let errors = {};
       if (!values.stafiId) errors.stafiId = "Ju lutem zgjidhni një staf";
-      if (!values.shpenzimetId)
-        errors.shpenzimetId = "Ju lutem zgjidhni një shpenzim";
+      if (!values.shpenzimetPershkrimi)
+        errors.shpenzimetPershkrimi =
+          "Ju lutem shkruani përshkrimin e shpenzimeve";
       if (!values.data) errors.data = "Ju lutem shkruani datën";
       if (!values.shumaTotale)
         errors.shumaTotale = "Ju lutem shkruani shumën totale";
@@ -63,14 +63,22 @@ function KontabilitetiEdit() {
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        await axios.put(
+        console.log("Submitting values:", values);
+
+        const response = await axios.put(
           `http://localhost:5178/api/Kontabiliteti/${params.id}`,
-          values
+          {
+            stafiId: values.stafiId,
+            shpenzimetPershkrimi: values.shpenzimetPershkrimi,
+            data: values.data,
+            shumaTotale: values.shumaTotale,
+          }
         );
+        console.log("Response:", response);
         setLoading(false);
         navigate("/portal/kontabiliteti-list");
       } catch (error) {
-        console.log(error);
+        console.log("Error submitting form:", error);
         setLoading(false);
       }
     },
@@ -104,23 +112,17 @@ function KontabilitetiEdit() {
 
             <div className="col-lg-6">
               <label>Shpenzimet</label>
-              <select
-                name="shpenzimetId"
-                value={myFormik.values.shpenzimetId}
+              <input
+                name="shpenzimetPershkrimi"
+                value={myFormik.values.shpenzimetPershkrimi}
                 onChange={myFormik.handleChange}
+                type="text"
                 className={`form-control ${
-                  myFormik.errors.shpenzimetId ? "is-invalid" : ""
+                  myFormik.errors.shpenzimetPershkrimi ? "is-invalid" : ""
                 }`}
-              >
-                <option value="">Zgjidhni Shpenzimet</option>
-                {expensesList.map((expense) => (
-                  <option key={expense.id} value={expense.id}>
-                    {expense.pershkrimi}
-                  </option>
-                ))}
-              </select>
+              />
               <span style={{ color: "red" }}>
-                {myFormik.errors.shpenzimetId}
+                {myFormik.errors.shpenzimetPershkrimi}
               </span>
             </div>
 

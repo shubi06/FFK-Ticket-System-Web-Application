@@ -33,7 +33,7 @@ const Header = () => {
             <LinkContainer to="/player">
               <Nav.Link>Lojtaret</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/tabela">
+            <LinkContainer to="/superliga">
               <Nav.Link>Tabela</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/shop">
