@@ -48,15 +48,11 @@ import ContactList from "./Contact/ContactList";
 import ContactView from "./Contact/ContactView";
 import ContactEdit from "./Contact/ContactEdit";
 
-import KontabilitetiCreate from "./Kontabiliteti/KontabilitetiCreate";
-import KontabilitetiEdit from "./Kontabiliteti/KontabilitetiEdit";
-import KontabilitetiList from "./Kontabiliteti/KontabilitetiList";
-import KontabilitetiView from "./Kontabiliteti/KontabilitetiView";
-
-import EkipaCreate from "./Ekipa/EkipaCreate";
-import EkipaDelete from "./Ekipa/EkipaDelete";
-import EkipaEdit from "./Ekipa/EkipaEdit";
+// Ekipa components
 import EkipaList from "./Ekipa/EkipaList";
+import EkipaCreate from "./Ekipa/EkipaCreate";
+import EkipaEdit from "./Ekipa/EkipaEdit";
+import EkipaDelete from "./Ekipa/EkipaDelete";
 
 function Portal() {
   return (
@@ -127,27 +123,14 @@ function Portal() {
               <Route path="contact/edit/:id" element={<ContactEdit />} />
               <Route path="contact/view/:id" element={<ContactView />} />
 
-              <Route
-                path="kontabiliteti-create"
-                element={<KontabilitetiCreate />}
-              />
-              <Route
-                path="kontabiliteti-edit/:id"
-                element={<KontabilitetiEdit />}
-              />
-              <Route
-                path="kontabiliteti-list"
-                element={<KontabilitetiList />}
-              />
-              <Route
-                path="kontabiliteti-view/:id"
-                element={<KontabilitetiView />}
-              />
+              <Route path="ekipa" element={<EkipaList />} />
+              <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
 
-              <Route path="/ekipa-create" element={<EkipaCreate />} />
-              <Route path="/ekipa-delete/:id" element={<EkipaDelete />} />
-              <Route path="/ekipa-edit/:id" element={<EkipaEdit />} />
-              <Route path="/ekipa-list" element={<EkipaList />} />
+               {/* Ekipa Routes */}
+               <Route path="ekipa" element={<EkipaList />} />
+              <Route path="ekipa/create" element={<EkipaCreate />} />
+              <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
+              <Route path="ekipa/delete/:id" element={<EkipaDelete />} />
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>

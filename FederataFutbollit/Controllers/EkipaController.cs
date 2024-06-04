@@ -4,6 +4,9 @@ using FederataFutbollit.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FederataFutbollit.Controllers
 {
@@ -37,8 +40,16 @@ namespace FederataFutbollit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Ekipa>> CreateEkipa(Ekipa ekipa)
+        public async Task<ActionResult<Ekipa>> CreateEkipa([FromBody] EkipaDto ekipaDto)
         {
+            var ekipa = new Ekipa
+            {
+                EmriKlubit = ekipaDto.EmriKlubit,
+                Trajneri = ekipaDto.Trajneri,
+                VitiThemelimit = ekipaDto.VitiThemelimit,
+                NrTitujve = ekipaDto.NrTitujve
+            };
+
             _context.Ekipa.Add(ekipa);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetEkipaById), new { id = ekipa.Id }, ekipa);

@@ -87,26 +87,7 @@ namespace FederataFutbollit.Controllers
             return Ok(await _context.Superligat.ToListAsync());
 
         }
-        [HttpGet("tabela")]
-        public async Task<ActionResult> GetSuperligaTable()
-        {
-            var ekipet = await _context.Ekipa.Include(e => e.Superliga).ToListAsync();
+        public ICollection<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
 
-            var tabelaSuperliga = ekipet.Select(e => new
-            {
-                Pozicioni = 0, // Kjo mund të llogaritet bazuar në pikët ose renditjen
-                Ekipi = e.EmriKlubit,
-                NdeshjeTeLuajtura = 0, // Të dhënat mund të shtohen sipas statistikave
-                Fitore = 0,
-                Barazime = 0,
-                Humbje = 0,
-                GolaveTeShenuara = 0,
-                GolaveTePesuara = 0,
-                DiferencaGolave = 0,
-                Piket = 0
-            }).ToList();
-
-            return Ok(tabelaSuperliga);
-        }
     }
 }

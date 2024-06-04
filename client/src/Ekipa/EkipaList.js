@@ -1,100 +1,146 @@
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import { useFormik } from "formik";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function EkipaList() {
-  const [ekipaList, setEkipaList] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+function EkipaCreate() {
+  const [isLoading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    // On component load, fetch Ekipa data
-    fetchEkipas();
-  }, []);
-
-  const fetchEkipas = async () => {
-    try {
-      const response = await axios.get("http://localhost:5178/api/Ekipa");
-      setEkipaList(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.log("Failed to fetch ekipa", error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this ekipa?");
-    if (confirmDelete) {
+  const formik = useFormik({
+    initialValues: {
+      emriKlubit: "",
+      trajneri: "",
+      vitiThemelimit: "",
+      nrTitujve: "",
+      logo: null,
+    },
+    validate: (values) => {
+      let errors = {};
+      if (!values.emriKlubit)
+        errors.emriKlubit = "Ju lutem shkruani emrin e klubit";
+      if (!values.trajneri)
+        errors.trajneri = "Ju lutem shkruani emrin e trajnerit";
+      if (!values.vitiThemelimit)
+        errors.vitiThemelimit = "Ju lutem shkruani vitin e themelimit";
+      if (!values.nrTitujve)
+        errors.nrTitujve = "Ju lutem shkruani numrin e titujve";
+      if (!values.logo) errors.logo = "Ju lutem ngarkoni një logo";
+      return errors;
+    },
+    onSubmit: async (values) => {
       try {
-        await axios.delete(`http://localhost:5178/api/Ekipa/${id}`);
-        fetchEkipas();  // Refresh the list after delete
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("EmriKlubit", values.emriKlubit);
+        formData.append("Trajneri", values.trajneri);
+        formData.append("VitiThemelimit", values.vitiThemelimit);
+        formData.append("NrTitujve", values.nrTitujve);
+        formData.append("file", values.logo);
+
+        console.log("Form Data: ", formData); // Debug log to check formData
+
+        const response = await axios.post(
+          "http://localhost:5178/api/Ekipa",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Server Response: ", response); // Debug log to check server response
+
+        navigate("/portal/ekipa-list");
       } catch (error) {
-        console.log("Failed to delete ekipa", error);
+        console.error("Error during form submission:", error);
+        if (error.response) {
+          console.error("Server Error Response: ", error.response); // Debug log to check server error response
+          console.error("Error Data: ", error.response.data); // Log the error data from the server
+          alert(
+            "Failed to create Ekipa: " + JSON.stringify(error.response.data)
+          );
+        } else {
+          alert("Failed to create Ekipa: " + error.message);
+        }
+        setLoading(false);
       }
-    }
-  };
+    },
+  });
 
   return (
-    <>
-      <div className="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 className="h3 mb-0 text-gray-800">Ekipa List</h1>
-        <Link to="/ekipa-create" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-          <FontAwesomeIcon icon={faUser} className="text-white-50" /> Add New Ekipa
-        </Link>
-      </div>
+    <div className="container">
+      <form onSubmit={formik.handleSubmit}>
+        <div className="row">
+          <div className="col-lg-6">
+            <label>Emri Klubit</label>
+            <input
+              name="emriKlubit"
+              value={formik.values.emriKlubit}
+              onChange={formik.handleChange}
+              type="text"
+              className={`form-control ${
+                formik.errors.emriKlubit ? "is-invalid" : ""
+              }`}
+            />
+            <span style={{ color: "red" }}>{formik.errors.emriKlubit}</span>
+          </div>
 
-      <div className="card shadow mb-4">
-        <div className="card-header py-3">
-          <h6 className="m-0 font-weight-bold text-primary">Ekipa DataTable</h6>
+          <div className="col-lg-6">
+            <label>Trajneri</label>
+            <input
+              name="trajneri"
+              value={formik.values.trajneri}
+              onChange={formik.handleChange}
+              type="text"
+              className={`form-control ${
+                formik.errors.trajneri ? "is-invalid" : ""
+              }`}
+            />
+            <span style={{ color: "red" }}>{formik.errors.trajneri}</span>
+          </div>
+
+          <div className="col-lg-6">
+            <label>Viti Themelimit</label>
+            <input
+              name="vitiThemelimit"
+              value={formik.values.vitiThemelimit}
+              onChange={formik.handleChange}
+              type="number"
+              className={`form-control ${
+                formik.errors.vitiThemelimit ? "is-invalid" : ""
+              }`}
+            />
+            <span style={{ color: "red" }}>{formik.errors.vitiThemelimit}</span>
+          </div>
+
+          <div className="col-lg-6">
+            <label>Nr Titujve</label>
+            <input
+              name="nrTitujve"
+              value={formik.values.nrTitujve}
+              onChange={formik.handleChange}
+              type="number"
+              className={`form-control ${
+                formik.errors.nrTitujve ? "is-invalid" : ""
+              }`}
+            />
+            <span style={{ color: "red" }}>{formik.errors.nrTitujve}</span>
+          </div>
+
+          <div className="col-lg-4 mt-3">
+            <input
+              disabled={isLoading}
+              type="submit"
+              value={isLoading ? "Submitting..." : "Create"}
+              className="btn btn-primary"
+            />
+          </div>
         </div>
-        <div className="card-body">
-          {isLoading ? (
-            <div className="text-center">
-              <img src="https://media.giphy.com/media/ZO9b1ntYVJmjZlsWlm/giphy.gif" alt="Loading" />
-            </div>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>EmriKlubit</th>
-                    <th>Trajneri</th>
-                    <th>VitiThemelimit</th>
-                    <th>NrTitujve</th>
-                    <th>Aksionet</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ekipaList.map((ekipa) => (
-                    <tr key={ekipa.id}>
-                      <td>{ekipa.id}</td>
-                      <td>{ekipa.emriKlubit}</td>
-                      <td>{ekipa.trajneri}</td>
-                      <td>{ekipa.vitiThemelimit}</td>
-                      <td>{ekipa.nrTitujve}</td>
-                      <td>
-                        <Link to={`/ekipa-view/${ekipa.id}`} className="btn btn-primary btn-sm mr-1">
-                          View
-                        </Link>
-                        <Link to={`/ekipa-edit/${ekipa.id}`} className="btn btn-info btn-sm mr-1">
-                          Edit
-                        </Link>
-                        <button onClick={() => handleDelete(ekipa.id)} className="btn btn-danger btn-sm">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+      </form>
+    </div>
   );
 }
 
-export default EkipaList;
+export default EkipaCreate;
