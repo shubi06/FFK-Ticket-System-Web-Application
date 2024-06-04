@@ -30,8 +30,8 @@ const SuperligaTable = () => {
             <th>Fitore</th>
             <th>Barazime</th>
             <th>Humbje</th>
-            <th>Golae të shënuara</th>
-            <th>Golae të pësuara</th>
+            <th>Gola të shënuara</th>
+            <th>Gola të pësuara</th>
             <th>Diferenca e golave</th>
             <th>Pikët</th>
           </tr>
