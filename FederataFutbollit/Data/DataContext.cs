@@ -31,6 +31,11 @@ namespace FederataFutbollit.Data
         public DbSet<CartSeat> CartSeats { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
+        public DbSet<AboutSection> AboutSections { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Kontabiliteti> Kontabiliteti { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
