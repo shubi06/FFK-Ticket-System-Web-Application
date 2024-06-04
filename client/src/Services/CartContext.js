@@ -14,22 +14,22 @@ export const CartProvider = ({ children }) => {
       console.error('Token is not available');
       return;
     }
-
+  
     try {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-
+  
       if (!userId) {
         console.error('User ID is not available');
         return;
       }
-
+  
       const response = await axios.get(`http://localhost:5178/api/Cart/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       setCart(response.data);
     } catch (error) {
       console.error('Error fetching cart:', error);
@@ -40,10 +40,6 @@ export const CartProvider = ({ children }) => {
       }
     }
   }, [token]);
-
-  useEffect(() => {
-    getCart();
-  }, [getCart]);
 
   const addToCart = useCallback(async (seat) => {
     if (!token) {

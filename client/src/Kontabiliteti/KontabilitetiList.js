@@ -1,36 +1,38 @@
+// src/components/KontabilitetiList.js
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-function Stafilist() {
-  const [stafiList, setStafiList] = useState([]);
+function KontabilitetiList() {
+  const [kontabilitetiList, setKontabilitetiList] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    // On Load
-    getStafs();
+    getKontabiliteti();
   }, []);
 
-  const getStafs = async () => {
+  let getKontabiliteti = async () => {
     try {
-      const stafs = await axios.get("http://localhost:5178/api/Stafi");
-      setStafiList(stafs.data);
+      const kontabiliteti = await axios.get(
+        "http://localhost:5178/api/Kontabiliteti"
+      );
+      setKontabilitetiList(kontabiliteti.data);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleDelete = async (id) => {
+  let handleDelete = async (id) => {
     try {
       const confirmDelete = window.confirm(
-        "A jeni i sigurt që doni të fshini të dhënat?"
+        "Are you sure do you want to delete the data?"
       );
       if (confirmDelete) {
-        await axios.delete(`http://localhost:5178/api/Stafi/${id}`);
-        getStafs();
+        await axios.delete(`http://localhost:5178/api/Kontabiliteti/${id}`);
+        getKontabiliteti();
       }
     } catch (error) {
       console.log(error);
@@ -40,13 +42,13 @@ function Stafilist() {
   return (
     <>
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 className="h3 mb-0 text-gray-800">Lista e Stafit</h1>
+        <h1 className="h3 mb-0 text-gray-800">KONTABILITETI</h1>
         <Link
-          to="/portal/stafi-create"
+          to="/portal/kontabiliteti-create"
           className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
         >
           <FontAwesomeIcon icon={faUser} className="creatinguser mr-2" />
-          Shto Stafin
+          Krijo Kontabiliteti
         </Link>
       </div>
       <div className="card shadow mb-4">
@@ -55,10 +57,7 @@ function Stafilist() {
         </div>
         <div className="card-body">
           {isLoading ? (
-            <img
-              src="https://media.giphy.com/media/ZO9b1ntYVJmjZlsWlm/giphy.gif"
-              alt="Loading"
-            />
+            <img src="https://media.giphy.com/media/ZO9b1ntYVJmjZlsWlm/giphy.gif" />
           ) : (
             <div className="table-responsive">
               <table
@@ -69,37 +68,43 @@ function Stafilist() {
               >
                 <thead>
                   <tr>
-                    <th>Id</th>
-                    <th>Emri</th>
-                    <th>Mbiemri</th>
-                    <th>Paga</th>
-                    <th>Email</th>
-                    <th>Telefon</th>
-                    <th>Pozita</th>
-                    <th>Veprimet</th>
+                    <th>ID</th>
+                    <th>Stafi</th>
+                    <th>Shpenzimet</th>
+                    <th>Data</th>
+                    <th>Shuma Totale</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {stafiList.map((stafi) => {
+                  {kontabilitetiList.map((kontabiliteti) => {
                     return (
-                      <tr key={stafi.id}>
-                        <td>{stafi.id}</td>
-                        <td>{stafi.emri}</td>
-                        <td>{stafi.mbiemri}</td>
-                        <td>{stafi.paga}</td>
-                        <td>{stafi.email}</td>
-                        <td>{stafi.telefoni}</td>
-                        <td>{stafi.roli?.emri}</td>{" "}
-                        {/* Përdorni roli.emri nëse ky është emri i fushës për pozita */}
+                      <tr key={kontabiliteti.id}>
+                        <td>{kontabiliteti.id}</td>
+                        <td>
+                          {kontabiliteti.stafi.emri}{" "}
+                          {kontabiliteti.stafi.mbiemri}
+                        </td>
+                        <td>{kontabiliteti.shpenzimet.pershkrimi}</td>
+                        <td>
+                          {new Date(kontabiliteti.data).toLocaleDateString()}
+                        </td>
+                        <td>{kontabiliteti.shumaTotale}</td>
                         <td>
                           <Link
-                            to={`/portal/stafi-edit/${stafi.id}`}
+                            to={`/portal/kontabiliteti-view/${kontabiliteti.id}`}
+                            className="btn btn-primary btn-sm mr-1"
+                          >
+                            View
+                          </Link>
+                          <Link
+                            to={`/portal/kontabiliteti-edit/${kontabiliteti.id}`}
                             className="btn btn-info btn-sm mr-1"
                           >
                             Edit
                           </Link>
                           <button
-                            onClick={() => handleDelete(stafi.id)}
+                            onClick={() => handleDelete(kontabiliteti.id)}
                             className="btn btn-danger btn-sm mr-1"
                           >
                             Delete
@@ -117,4 +122,5 @@ function Stafilist() {
     </>
   );
 }
-export default Stafilist;
+
+export default KontabilitetiList;

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using FederataFutbollit.Entities;
 using FederataFutbollit.Data;
 using FederataFutbollit.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace FederataFutbollit.Controllers
 {
@@ -15,16 +16,16 @@ namespace FederataFutbollit.Controllers
     {
         private readonly DataContext _context;
 
-        public CartController(DataContext context)
-        {
-            _context = context;
-        }
+    private readonly ILogger<CartController> _logger;
 
-        /// <summary>
-        /// Gets the cart for a specific user. Creates a new cart if it doesn't exist.
-        /// </summary>
-        /// <param name="userId">The user's ID.</param>
-        /// <returns>The user's cart.</returns>
+public CartController(DataContext context, ILogger<CartController> logger)
+{
+    _context = context;
+    _logger = logger;
+}
+
+
+        
       [HttpGet("{userId}")]
         public async Task<IActionResult> GetCart(string userId)
         {
@@ -164,5 +165,103 @@ namespace FederataFutbollit.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+  [HttpPost("complete-payment/{userId}")]
+    public async Task<IActionResult> CompletePayment(string userId)
+    {
+        using (var transaction = await _context.Database.BeginTransactionAsync())
+        {
+            try
+            {
+                _logger.LogInformation($"Starting complete payment process for user {userId}");
+
+                var cart = await _context.Carts
+                    .Include(c => c.CartSeats)
+                        .ThenInclude(cs => cs.Ulesja)
+                    .FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
+
+                if (cart == null)
+                {
+                    _logger.LogError($"Cart not found for user {userId}");
+                    await transaction.RollbackAsync();
+                    return NotFound("Cart not found");
+                }
+
+                _logger.LogInformation($"Cart found for user {userId}. Processing seats...");
+                bool isAnySeatUpdated = false;
+                foreach (var seat in cart.CartSeats)
+                {
+                    var ulesja = seat.Ulesja;
+                    if (ulesja != null && ulesja.IsAvailable)
+                    {
+                        _logger.LogInformation($"Updating seat {ulesja.Id} to not available");
+                        ulesja.IsAvailable = false;
+                        _context.Entry(ulesja).State = EntityState.Modified;
+                        isAnySeatUpdated = true;
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Seat {ulesja?.Id} is already not available or does not exist");
+                    }
+                }
+
+                if (isAnySeatUpdated)
+                {
+                    _logger.LogInformation($"Saving changes to database");
+                    await _context.SaveChangesAsync();
+                }
+
+                _logger.LogInformation($"Clearing cart for user {userId}");
+                _context.CartSeats.RemoveRange(cart.CartSeats);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                _logger.LogInformation($"Payment completed and cart cleared for user {userId}");
+                return Ok("Payment completed and cart cleared.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error during payment completion for user {userId}: {ex.Message}");
+                await transaction.RollbackAsync();
+                return StatusCode(500, "Internal Server Error: " + ex.Message);
+            }
+        }
+    }
+/*--------------------------------------------------------*/
+  [HttpPost("create-order/{userId}")]
+public async Task<IActionResult> CreateOrder(string userId, [FromBody] OrderCreationDto orderDto)
+{
+    var cart = await _context.Carts
+        .Include(c => c.CartSeats)
+        .FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
+
+    if (cart == null || !cart.CartSeats.Any())
+    {
+        return BadRequest("Cart is empty");
+    }
+
+    var order = new Order
+    {
+        UserId = userId,
+        OrderDate = DateTime.UtcNow,
+        Status = "Pending",
+        Seats = cart.CartSeats.ToList(),
+        FirstName = orderDto.FirstName,
+        LastName = orderDto.LastName,
+        City = orderDto.City
+    };
+
+    _context.Orders.Add(order);
+    await _context.SaveChangesAsync();
+
+    return Ok(new { orderId = order.Id });
+}
+
+
+
+
+
+
+
+
     }
 }

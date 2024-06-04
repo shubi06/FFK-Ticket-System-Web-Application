@@ -9,6 +9,10 @@ namespace FederataFutbollit.DTOs
     {
            public int Id { get; set; }
     public string ApplicationUserId { get; set; }
+     public string FirstName { get; set; }  // Add this line
+        public string LastName { get; set; }   // Add this line
+        public string City { get; set; }  
     public List<CartSeatDto> CartSeats { get; set; }
+
     }
 }

@@ -16,5 +16,8 @@ namespace FederataFutbollit.Entities
         public double Cmimi { get; set; }
         public int SektoriUlseveId { get; set; }
         public SektoriUlseve SektoriUlseve { get; set; }
+
+          public int? OrderId { get; set; }
+         public Order Order { get; set; }
     }
 }
