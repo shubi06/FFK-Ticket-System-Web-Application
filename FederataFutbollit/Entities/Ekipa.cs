@@ -10,5 +10,8 @@
 
         public int SuperligaId { get; set; }  // Foreign key pointing to Superliga
         public Superliga Superliga { get; set; }  // Navigation property
+
+        public ICollection<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
+
     }
 }
