@@ -36,7 +36,7 @@ namespace FederataFutbollit.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<AboutSection> AboutSections { get; set; }
 
-        //public DbSet<Stafi> Stafi { get; set; }
+        
         public DbSet<Shpenzimet> Shpenzimet { get; set; }
         public DbSet<Kontabiliteti> Kontabiliteti { get; set; }
 

@@ -25,8 +25,6 @@ namespace FederataFutbollit.Entities
         public int? GolaEkipiJone { get; set; }
         public int ?GolaEkipiKundershtar { get; set; }
 
-        [JsonIgnore]
-        public ICollection<Ndeshja> Ndeshjet { get; set; }
 
         [JsonIgnore]
         public List<Bileta> Bileta { get; set; }
