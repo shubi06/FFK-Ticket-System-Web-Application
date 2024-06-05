@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
+import React, { createContext, useState, useContext, useCallback } from 'react';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 import { AuthContext } from './AuthContext';
@@ -14,22 +14,24 @@ export const CartProvider = ({ children }) => {
       console.error('Token is not available');
       return;
     }
-  
+
     try {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-  
+
       if (!userId) {
         console.error('User ID is not available');
         return;
       }
-  
+
+      console.log(`Fetching cart for user: ${userId}`);
       const response = await axios.get(`http://localhost:5178/api/Cart/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
+      console.log('Cart data fetched:', response.data);
       setCart(response.data);
     } catch (error) {
       console.error('Error fetching cart:', error);
@@ -56,18 +58,29 @@ export const CartProvider = ({ children }) => {
         return;
       }
 
+      console.log('Adding to cart:', {
+        ulesjaId: seat.id,
+        quantity: 1,
+        cmimi: seat.cmimi,
+        sektoriUlseveId: seat.sectorId,
+        ndeshjaId: seat.ndeshjaId,
+        applicationUserId: userId // Ensure the applicationUserId is included
+      });
+
       const response = await axios.post('http://localhost:5178/api/Cart', {
         ulesjaId: seat.id,
         quantity: 1,
-        sektoriUlseveId: seat.sectorId,
         cmimi: seat.cmimi,
-        applicationUserId: userId,
+        sektoriUlseveId: seat.sectorId,
+        ndeshjaId: seat.ndeshjaId,
+        applicationUserId: userId
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
+      console.log('Cart data after adding seat:', response.data);
       setCart(response.data);
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -100,6 +113,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
 
+      console.log(`Removing seat ${seatId} from cart for user ${userId}`);
       const response = await axios.delete(`http://localhost:5178/api/Cart/${userId}/${seatId}`, {
         headers: {
           Authorization: `Bearer ${token}`,

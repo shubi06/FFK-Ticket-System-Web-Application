@@ -17,6 +17,11 @@ namespace FederataFutbollit.Entities
         public SektoriUlseve SektoriUlseve { get; set; }
         public int SektoriUlseveID { get; set; }
 
-       
+   [JsonIgnore]
+        public int StadiumiId { get; set; } // Optional foreign key property
+    public Stadiumi Stadiumi { get; set; } = null!;
+
+   [JsonIgnore]
+public CartSeat CartSeat { get; set; }
     }
 }

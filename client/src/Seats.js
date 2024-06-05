@@ -6,7 +6,7 @@ import './seats.css';
 import { useNavigationProgress } from './Services/NavigationProgressContext';
 
 const Seats = () => {
-  const { sectorId } = useParams();
+  const { sectorId, ndeshjaId } = useParams(); // Use useParams to get sectorId and ndeshjaId from URL
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const { cart, addToCart, removeFromCart, getCart } = useContext(CartContext);
@@ -14,15 +14,23 @@ const Seats = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Step completed status:", isStepCompleted);
     if (!isStepCompleted) {
+      console.log("Step not completed. Redirecting to home.");
       navigate('/');
+      return;
     }
   }, [isStepCompleted, navigate]);
 
   useEffect(() => {
+    console.log("sectorId:", sectorId);
+    console.log("ndeshjaId:", ndeshjaId);
+
     const fetchSeats = async () => {
       try {
+        console.log("Fetching seats for sector:", sectorId);
         const response = await axios.get(`http://localhost:5178/api/Ulesja/sector/${sectorId}`);
+        console.log("Seats data fetched:", response.data);
         setSeats(response.data);
       } catch (error) {
         console.error("There was an error fetching the seats data!", error);
@@ -39,19 +47,23 @@ const Seats = () => {
   useEffect(() => {
     if (cart && cart.cartSeats) {
       const cartSeatIds = cart.cartSeats.map(seat => seat.ulesjaId);
+      console.log("Cart seat IDs:", cartSeatIds);
       setSelectedSeats(cartSeatIds);
     }
   }, [cart]);
 
   const handleSeatClick = (seat) => {
-    const seatWithSector = { ...seat, sectorId };
+    console.log("Seat clicked:", seat);
+    const seatWithSector = { ...seat, sectorId, ndeshjaId }; // Ensure ndeshjaId is passed here
+    console.log("Seat with sector and match ID:", seatWithSector);
     const isSeatSelected = selectedSeats.includes(seat.id);
-  
+
     if (isSeatSelected) {
       setSelectedSeats(selectedSeats.filter(id => id !== seat.id));
-  
+
       const cartSeat = cart.cartSeats.find(cartSeat => cartSeat.ulesjaId === seat.id);
       if (cartSeat) {
+        console.log("Removing seat from cart:", cartSeat);
         removeFromCart(cartSeat.id);
       } else {
         console.error('Seat not found in cart:', seat.id);
@@ -60,6 +72,7 @@ const Seats = () => {
       const totalSelectedSeats = selectedSeats.length + cart.cartSeats.filter(cs => !selectedSeats.includes(cs.ulesjaId)).length;
       if (totalSelectedSeats < 4) {
         setSelectedSeats([...selectedSeats, seat.id]);
+        console.log("Adding seat to cart:", seatWithSector);
         addToCart(seatWithSector);
       } else {
         alert('You cannot select more than 4 seats.');
@@ -113,3 +126,4 @@ const Seats = () => {
 };
 
 export default Seats;
+

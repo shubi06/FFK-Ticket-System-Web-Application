@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240604212349_AddUlesjaStadiumiRelationship")]
+    partial class AddUlesjaStadiumiRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,9 +189,6 @@ namespace FederataFutbollit.Migrations
                     b.Property<double>("Cmimi")
                         .HasColumnType("float");
 
-                    b.Property<int>("NdeshjaId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
@@ -205,14 +205,11 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("NdeshjaId");
-
                     b.HasIndex("OrderId");
 
                     b.HasIndex("SektoriUlseveId");
 
-                    b.HasIndex("UlesjaId")
-                        .IsUnique();
+                    b.HasIndex("UlesjaId");
 
                     b.ToTable("CartSeats");
                 });
@@ -987,12 +984,6 @@ namespace FederataFutbollit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FederataFutbollit.Entities.Ndeshja", "Ndeshja")
-                        .WithMany("CartSeats")
-                        .HasForeignKey("NdeshjaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FederataFutbollit.Entities.Order", "Order")
                         .WithMany("Seats")
                         .HasForeignKey("OrderId");
@@ -1004,14 +995,12 @@ namespace FederataFutbollit.Migrations
                         .IsRequired();
 
                     b.HasOne("FederataFutbollit.Entities.Ulesja", "Ulesja")
-                        .WithOne("CartSeat")
-                        .HasForeignKey("FederataFutbollit.Entities.CartSeat", "UlesjaId")
+                        .WithMany()
+                        .HasForeignKey("UlesjaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Cart");
-
-                    b.Navigation("Ndeshja");
 
                     b.Navigation("Order");
 
@@ -1306,8 +1295,6 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Entities.Ndeshja", b =>
                 {
                     b.Navigation("Bileta");
-
-                    b.Navigation("CartSeats");
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Order", b =>
@@ -1355,9 +1342,6 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Entities.Ulesja", b =>
                 {
                     b.Navigation("Bileta")
-                        .IsRequired();
-
-                    b.Navigation("CartSeat")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

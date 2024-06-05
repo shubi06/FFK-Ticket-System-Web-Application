@@ -1,26 +1,28 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from './Services/AuthContext'; // Import AuthContext
+import { AuthContext } from './Services/AuthContext';
 import './stadium.css';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
-import { Modal, Button } from 'react-bootstrap'; // Import necessary Bootstrap components
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal, Button } from 'react-bootstrap';
 import { useNavigationProgress } from './Services/NavigationProgressContext';
 
 const Stadium = () => {
   const [selectedSector, setSelectedSector] = useState('');
   const [sectorData, setSectorData] = useState(null);
-  const { authData } = useContext(AuthContext); // Use AuthContext
+  const [ndeshjaId, setNdeshjaId] = useState(null); // State for ndeshjaId
+  const { authData } = useContext(AuthContext);
   const { setIsStepCompleted } = useNavigationProgress();
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current location
-  const [showModal, setShowModal] = useState(false); // State for controlling the modal
+  const location = useLocation();
+  const [showModal, setShowModal] = useState(false);
 
-  const handleSectorClick = async (sectorId) => {
+  const handleSectorClick = async (sectorId, matchId) => {
     try {
       const response = await axios.get(`http://localhost:5178/api/SektoriUlseve/${sectorId}`);
       setSectorData(response.data);
-      setSelectedSector(sectorId); // Ensure this line is executed
+      setSelectedSector(sectorId);
+      setNdeshjaId(matchId); // Set the ndeshjaId dynamically
     } catch (error) {
       console.error("There was an error fetching the sector data!", error);
     }
@@ -28,8 +30,8 @@ const Stadium = () => {
 
   const handleContinueClick = () => {
     if (authData) {
-      setIsStepCompleted(true); // Mark the step as completed
-      navigate(`/seats/${selectedSector}`);
+      setIsStepCompleted(true);
+      navigate(`/seats/${selectedSector}/${ndeshjaId}`);
     } else {
       setShowModal(true);
     }
@@ -67,16 +69,16 @@ const Stadium = () => {
         </div>
         <div className="ball"></div>
         <div className="sectors">
-          <div className="sector north" onClick={() => handleSectorClick(5)}>
+          <div className="sector north" onClick={() => handleSectorClick(5, 1)}>
             {selectedSector === 5 && <div className="sector-label">Lindje</div>}
           </div>
-          <div className="sector west" onClick={() => handleSectorClick(1)}>
+          <div className="sector west" onClick={() => handleSectorClick(1, 2)}>
             {selectedSector === 1 && <div className="sector-label">Veri</div>}
           </div>
-          <div className="sector south" onClick={() => handleSectorClick(7)}>
+          <div className="sector south" onClick={() => handleSectorClick(7, 3)}>
             {selectedSector === 7 && <div className="sector-label">Perendim</div>}
           </div>
-          <div className="sector east" onClick={() => handleSectorClick(6)}>
+          <div className="sector east" onClick={() => handleSectorClick(6, 4)}>
             {selectedSector === 6 && <div className="sector-label">Jug</div>}
           </div>
         </div>

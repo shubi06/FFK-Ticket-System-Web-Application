@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using FederataFutbollit.Data;
 using FederataFutbollit.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FederataFutbollit.DTOs;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FederataFutbollit.Controllers
 {
@@ -20,27 +21,60 @@ namespace FederataFutbollit.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Ulesja>>> Get()
+        public async Task<ActionResult<List<UlesjaDto>>> Get()
         {
-            return await _context.Uleset.ToListAsync();
+            var uleset = await _context.Uleset
+                .Select(u => new UlesjaDto
+                {
+                    Id = u.Id,
+                    Numri = u.Numri,
+                    IsAvailable = u.IsAvailable,
+                    Cmimi = u.Cmimi,
+                    SektoriUlseveID = u.SektoriUlseveID,
+                    StadiumiId = u.StadiumiId
+                })
+                .ToListAsync();
+
+            return uleset;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ulesja>> GetUlesjaById(int id)
+        public async Task<ActionResult<UlesjaDto>> GetUlesjaById(int id)
         {
-            var ulesja = await _context.Uleset.FindAsync(id);
+            var ulesja = await _context.Uleset
+                .Select(u => new UlesjaDto
+                {
+                    Id = u.Id,
+                    Numri = u.Numri,
+                    IsAvailable = u.IsAvailable,
+                    Cmimi = u.Cmimi,
+                    SektoriUlseveID = u.SektoriUlseveID,
+                    StadiumiId = u.StadiumiId
+                })
+                .FirstOrDefaultAsync(u => u.Id == id);
+
             if (ulesja == null)
             {
                 return NotFound();
             }
+
             return ulesja;
         }
 
         [HttpGet("sector/{sectorId}")]
-        public async Task<ActionResult<List<Ulesja>>> GetUlesetBySector(int sectorId)
+        public async Task<ActionResult<List<UlesjaDto>>> GetUlesetBySector(int sectorId)
         {
             var uleset = await _context.Uleset
                 .Where(u => u.SektoriUlseveID == sectorId)
+                .Select(u => new UlesjaDto
+                {
+                    Id = u.Id,
+                    Numri = u.Numri,
+                    IsAvailable = u.IsAvailable,
+                    Cmimi = u.Cmimi,
+                    SektoriUlseveID = u.SektoriUlseveID,
+                    StadiumiId = u.StadiumiId
+                })
                 .ToListAsync();
 
             if (uleset == null || uleset.Count == 0)
@@ -52,7 +86,7 @@ namespace FederataFutbollit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Ulesja>>> Create(UlesjaCreateDto request)
+        public async Task<ActionResult<List<UlesjaDto>>> Create(UlesjaCreateDto request)
         {
             var sektoriUlseve = await _context.SektoriUlseve.FindAsync(request.SektoriUlseveID);
             if (sektoriUlseve == null)
@@ -62,7 +96,8 @@ namespace FederataFutbollit.Controllers
             {
                 Numri = request.Numri,
                 IsAvailable = request.IsAvailable,
-                SektoriUlseveID = request.SektoriUlseveID
+                SektoriUlseveID = request.SektoriUlseveID,
+                StadiumiId = request.StadiumiId
             };
 
             _context.Uleset.Add(newUlesja);
@@ -72,15 +107,19 @@ namespace FederataFutbollit.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUlesja(UlesjaCreateDto request)
+        public async Task<IActionResult> UpdateUlesja(int id, UlesjaCreateDto request)
         {
-            var ulesja = await _context.Uleset.Include(u => u.SektoriUlseve).FirstOrDefaultAsync(u => u.Id == request.Id);
+            var ulesja = await _context.Uleset.FindAsync(id);
             if (ulesja == null)
             {
                 return NotFound();
             }
 
-            _context.Entry(ulesja).CurrentValues.SetValues(request);
+            ulesja.Numri = request.Numri;
+            ulesja.IsAvailable = request.IsAvailable;
+            ulesja.SektoriUlseveID = request.SektoriUlseveID;
+            ulesja.StadiumiId = request.StadiumiId;
+
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,8 +140,8 @@ namespace FederataFutbollit.Controllers
             return NoContent();
         }
 
- [HttpPost("addSeats")]
-        public async Task<IActionResult> AddSeats(int sektorId, int numberOfSeats)
+        [HttpPost("addSeats")]
+        public async Task<IActionResult> AddSeats(int sektorId, int numberOfSeats, int stadiumiId)
         {
             var maxNumri = _context.Uleset.Any() ? _context.Uleset.Max(s => s.Numri) : 0;
 
@@ -110,14 +149,14 @@ namespace FederataFutbollit.Controllers
             {
                 Numri = maxNumri + i,
                 IsAvailable = true,
-                SektoriUlseveID = sektorId
+                SektoriUlseveID = sektorId,
+                StadiumiId = stadiumiId
             }).ToList();
 
             _context.Uleset.AddRange(seats);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = $"{numberOfSeats} seats added to sector {sektorId}." });
+            return Ok(new { Message = $"{numberOfSeats} seats added to sector {sektorId} in stadium {stadiumiId}." });
         }
-
     }
 }
