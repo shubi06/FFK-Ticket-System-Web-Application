@@ -10,5 +10,8 @@ namespace FederataFutbollit.Entities
          [JsonIgnore]
 
         public List<Ndeshja> Ndeshjet { get; set; } = new List<Ndeshja>(); // Bëjeni fushën jo të kërkuar
+        public ICollection<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
+
+
     }
 }

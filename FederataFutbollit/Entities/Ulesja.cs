@@ -17,9 +17,6 @@ namespace FederataFutbollit.Entities
         public SektoriUlseve SektoriUlseve { get; set; }
         public int SektoriUlseveID { get; set; }
 
-     
-
-
-
+       
     }
 }

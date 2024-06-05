@@ -1,0 +1,68 @@
+/* SuperligaTable.css */
+
+#table-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #2c3e50; /* Example color */
+}
+
+#superliga-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+#superliga-table th,
+#superliga-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#superliga-table th {
+  background-color: #4caf50; /* Example background color for header */
+  color: white;
+}
+
+#superliga-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#superliga-table tr:hover {
+  background-color: #ddd;
+}
+
+#superliga-table .position {
+  font-weight: bold;
+}
+
+#superliga-table .team-name {
+  text-align: left;
+  padding-left: 10px;
+}
+
+/* Additional styles for specific classes */
+#superliga-table .matches-played,
+#superliga-table .wins,
+#superliga-table .draws,
+#superliga-table .losses,
+#superliga-table .goals-scored,
+#superliga-table .goals-conceded,
+#superliga-table .goal-difference,
+#superliga-table .points {
+  text-align: center;
+}
+
+/* Custom styles for specific row IDs if needed */
+#team-row-0 {
+  background-color: #18334a; /* Example color for the first team row */
+}
+
+#team-row-1 {
+  background-color: #a199cf; /* Example color for the second team row */
+}
+
+#team-row-2 {
+  background-color: #2c189c; /* Example color for the third team row */
+}

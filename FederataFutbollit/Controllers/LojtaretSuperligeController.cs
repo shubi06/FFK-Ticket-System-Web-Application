@@ -149,5 +149,20 @@ namespace FederataFutbollit.Controllers
             return Ok(new { path = lojtariSuperlige.FotoPath });
         }
 
+        [HttpGet("report")]
+public IActionResult GetPlayersReport()
+{
+    var playersReport = _context.LojtaretSuperlige.Select(p => new 
+    {
+        p.Emri,
+        p.Mbiemri,
+        p.Gola,
+        p.Asiste
+    }).ToList();
+
+    return Ok(playersReport);
+}
+
+
     }
 }

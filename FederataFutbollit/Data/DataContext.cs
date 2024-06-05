@@ -27,11 +27,14 @@ namespace FederataFutbollit.Data
         public DbSet<Ulesja> Uleset { get; set; }
         public DbSet<SektoriUlseve> SektoriUlseve { get; set; }
         public DbSet<Ekipa> Ekipa { get; set; }
-        public DbSet<Rezultati> Rezultati { get; set; } // E vetmja deklaratë e DbSet<Rezultati>
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartSeat> CartSeats { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-        public DbSet<Referi> Referi { get; set; }
+        public DbSet<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
+        public DbSet<AboutSection> AboutSections { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Kontabiliteti> Kontabiliteti { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -68,7 +71,24 @@ namespace FederataFutbollit.Data
                 .HasForeignKey(e => e.SuperligaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Configuring relations for NdeshjaSuperliges
+            modelBuilder.Entity<NdeshjaSuperliges>()
+                .HasOne(n => n.Superliga)
+                .WithMany(s => s.NdeshjetESuperliges)
+                .HasForeignKey(n => n.SuperligaId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<NdeshjaSuperliges>()
+                .HasOne(n => n.Ekipa)
+                .WithMany(e => e.NdeshjetESuperliges)
+                .HasForeignKey(n => n.EkipaId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<NdeshjaSuperliges>()
+                .HasOne(n => n.Statusi)
+                .WithMany(s => s.NdeshjetESuperliges)
+                .HasForeignKey(n => n.StatusiId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
-       
     }
 }

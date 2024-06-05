@@ -17,7 +17,7 @@ namespace FederataFutbollit.Data
 
 
         public List<Bileta> Biletat { get; set; } = new List<Bileta>();
-        
+         public List<Order> Orders { get; set; } = new List<Order>();
 
     }
 }

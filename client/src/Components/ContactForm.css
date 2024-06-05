@@ -1,0 +1,59 @@
+#unique-contact-form {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#unique-contact-form .form-group {
+  margin-bottom: 15px;
+}
+
+#unique-contact-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #0056b3; /* Ngjyra e kaltër e FFK */
+}
+
+#unique-contact-form input,
+#unique-contact-form textarea {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #e6f0ff; /* Ngjyra e lehtë e kaltër për input */
+}
+
+#unique-contact-form input:focus,
+#unique-contact-form textarea:focus {
+  border-color: #0056b3; /* Ngjyra e kaltër e FFK kur fokusohet */
+  outline: none;
+}
+
+#unique-contact-form button {
+  padding: 10px 15px;
+  background-color: #0056b3; /* Ngjyra e kaltër e FFK */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+#unique-contact-form button:hover {
+  background-color: #003d80; /* Ngjyra më e errët e kaltër kur mouse mbi */
+}
+
+#thank-you-message {
+  text-align: center;
+  font-size: 60px;
+  color: #003d80;
+  margin-top: 200px;
+}
