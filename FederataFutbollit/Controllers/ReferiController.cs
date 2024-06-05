@@ -5,6 +5,7 @@ using FederataFutbollit.Entities;
 using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace FederataFutbollit.Controllers
 {
     [Route("api/[controller]")]
@@ -53,7 +54,7 @@ namespace FederataFutbollit.Controllers
 
             existingReferi.Emri = referi.Emri;
             existingReferi.Mbiemri = referi.Mbiemri;
-            existingReferi.Superliga_ID = referi.Superliga_ID;
+
 
             _context.Referi.Update(existingReferi);
             await _context.SaveChangesAsync();
