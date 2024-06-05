@@ -27,11 +27,11 @@ namespace FederataFutbollit.Data
         public DbSet<Ulesja> Uleset { get; set; }
         public DbSet<SektoriUlseve> SektoriUlseve { get; set; }
         public DbSet<Ekipa> Ekipa { get; set; }
-
+        public DbSet<Rezultati> Rezultati { get; set; } // E vetmja deklaratë e DbSet<Rezultati>
         public DbSet<Cart> Carts { get; set; }
-    public DbSet<CartSeat> CartSeats { get; set; }
-
+        public DbSet<CartSeat> CartSeats { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Referi> Referi { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -67,6 +67,8 @@ namespace FederataFutbollit.Data
                 .WithMany(s => s.Ekipa)
                 .HasForeignKey(e => e.SuperligaId)
                 .OnDelete(DeleteBehavior.Cascade);
+
         }
+       
     }
 }

@@ -106,6 +106,20 @@ function Sidebar() {
           <span>EKIPA E SUPERLIGES</span>
         </Link>
       </li>
+
+      {/* <!-- Nav Item - Rezultati --> */}
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/rezultat-list">
+          <span>REZULTATI</span>
+        </Link>
+      </li>
+
+       {/* <!-- Nav Item - Referi --> */}
+       <li className="nav-item active">
+        <Link className="nav-link" to="/portal/rferi-list">
+          <span>REFERI</span>
+        </Link>
+      </li>
     </ul>
   );
 }
