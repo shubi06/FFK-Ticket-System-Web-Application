@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from './Services/AuthContext';
 import './stadium.css';
@@ -10,19 +10,32 @@ import { useNavigationProgress } from './Services/NavigationProgressContext';
 const Stadium = () => {
   const [selectedSector, setSelectedSector] = useState('');
   const [sectorData, setSectorData] = useState(null);
-  const [ndeshjaId, setNdeshjaId] = useState(null); // State for ndeshjaId
+  const [stadium, setStadium] = useState(null);
   const { authData } = useContext(AuthContext);
   const { setIsStepCompleted } = useNavigationProgress();
   const navigate = useNavigate();
-  const location = useLocation();
+  const { matchId } = useParams();
   const [showModal, setShowModal] = useState(false);
+  const location = useLocation();
 
-  const handleSectorClick = async (sectorId, matchId) => {
+  useEffect(() => {
+    const fetchStadiumByMatchId = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5178/api/Stadiumi/Match/${matchId}`);
+        setStadium(response.data);
+      } catch (error) {
+        console.error('Error fetching stadium details:', error);
+      }
+    };
+
+    fetchStadiumByMatchId();
+  }, [matchId]);
+
+  const handleSectorClick = async (sectorId) => {
     try {
       const response = await axios.get(`http://localhost:5178/api/SektoriUlseve/${sectorId}`);
       setSectorData(response.data);
       setSelectedSector(sectorId);
-      setNdeshjaId(matchId); // Set the ndeshjaId dynamically
     } catch (error) {
       console.error("There was an error fetching the sector data!", error);
     }
@@ -31,7 +44,7 @@ const Stadium = () => {
   const handleContinueClick = () => {
     if (authData) {
       setIsStepCompleted(true);
-      navigate(`/seats/${selectedSector}/${ndeshjaId}`);
+      navigate(`/seats/${selectedSector}/${matchId}`);
     } else {
       setShowModal(true);
     }
@@ -65,6 +78,7 @@ const Stadium = () => {
           <div className="goal">
             <span></span>
             <span></span>
+      
           </div>
         </div>
         <div className="ball"></div>

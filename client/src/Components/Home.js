@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Header from './Header';
 import Slider from './Slider';
-import './Home.css'; // Import the CSS file
+import './Home.css';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -25,7 +24,6 @@ const Home = () => {
     <div>
       <Slider />
       <div className="content-container">
-     
         <section className="matches-section">
           <h2>Upcoming Matches</h2>
           <div className="matches-content">
@@ -36,7 +34,9 @@ const Home = () => {
                   <p>Date: {new Date(match.data).toLocaleDateString()}</p>
                   <p>Time: {new Date(match.data).toLocaleTimeString()}</p>
                   <p>Location: {match.stadiumiEmri}</p>
-               <Link to="/stadium">   <button  className="buy-ticket-button">Buy Ticket</button> </Link> 
+                  <Link to={`/stadium/${match.id}`}>
+                    <button className="buy-ticket-button">Buy Ticket</button>
+                  </Link>
                 </div>
               ))
             ) : (
