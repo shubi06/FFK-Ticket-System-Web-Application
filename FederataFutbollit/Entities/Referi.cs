@@ -15,10 +15,5 @@ namespace FederataFutbollit.Entities
         [Required]
         [MaxLength(50)]
         public string Mbiemri { get; set; }
-
-        [ForeignKey("Superliga")]
-        public int Superliga_ID { get; set; }
-
-        public Superliga Superliga { get; set; }
     }
 }
