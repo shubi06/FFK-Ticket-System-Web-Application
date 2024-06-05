@@ -15,7 +15,7 @@ namespace FederataFutbollit.Entities
 
         [JsonIgnore]
         public List<Ndeshja> Ndeshjet { get; set; }  // Shto këtë linjë për lidhjen me ndeshjet
-
+        public ICollection<Ulesja> Uleset { get; } = new List<Ulesja>();
 
     }
 }

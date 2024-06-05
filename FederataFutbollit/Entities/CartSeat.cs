@@ -19,5 +19,10 @@ namespace FederataFutbollit.Entities
 
           public int? OrderId { get; set; }
          public Order Order { get; set; }
+
+           public int NdeshjaId { get; set; }
+         public Ndeshja Ndeshja { get; set; }
+
+     
     }
 }

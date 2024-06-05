@@ -15,18 +15,15 @@ namespace FederataFutbollit.Controllers
     public class CartController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly ILogger<CartController> _logger;
 
-    private readonly ILogger<CartController> _logger;
+        public CartController(DataContext context, ILogger<CartController> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
 
-public CartController(DataContext context, ILogger<CartController> logger)
-{
-    _context = context;
-    _logger = logger;
-}
-
-
-        
-      [HttpGet("{userId}")]
+         [HttpGet("{userId}")]
         public async Task<IActionResult> GetCart(string userId)
         {
             var cart = await _context.Carts
@@ -56,7 +53,8 @@ public CartController(DataContext context, ILogger<CartController> logger)
                     UlesjaId = cs.UlesjaId,
                     Quantity = cs.Quantity,
                     SektoriUlseveId = cs.SektoriUlseveId,
-                    Cmimi = cs.Cmimi
+                    Cmimi = cs.Cmimi,
+                    NdeshjaId = cs.NdeshjaId // Add this line
                 }).ToList()
             };
 
@@ -66,11 +64,21 @@ public CartController(DataContext context, ILogger<CartController> logger)
         [HttpPost]
         public async Task<ActionResult<CartDto>> AddToCart([FromBody] CartSeatDto cartSeatDto)
         {
+            _logger.LogInformation($"Received AddToCart request for user {cartSeatDto.ApplicationUserId} with NdeshjaId {cartSeatDto.NdeshjaId}");
+
             var ulesja = await _context.Uleset.FindAsync(cartSeatDto.UlesjaId);
             if (ulesja == null) return NotFound("Ulesja not found");
 
             var sektoriUlseve = await _context.SektoriUlseve.FindAsync(cartSeatDto.SektoriUlseveId);
             if (sektoriUlseve == null) return NotFound("Sektori not found");
+
+            // Find Ndeshja from Ulesja's NdeshjaId
+            var ndeshja = await _context.Set<Ndeshja>().FindAsync(cartSeatDto.NdeshjaId);
+            if (ndeshja == null) 
+            {
+                _logger.LogWarning($"Ndeshja with ID {cartSeatDto.NdeshjaId} not found");
+                return NotFound("Ndeshja not found");
+            }
 
             var cart = await _context.Carts
                 .Include(c => c.CartSeats)
@@ -100,7 +108,8 @@ public CartController(DataContext context, ILogger<CartController> logger)
                     Quantity = cartSeatDto.Quantity,
                     CartId = cart.Id,
                     SektoriUlseveId = cartSeatDto.SektoriUlseveId,
-                    Cmimi = ulesja.Cmimi
+                    Cmimi = ulesja.Cmimi,
+                    NdeshjaId = cartSeatDto.NdeshjaId
                 });
             }
 
@@ -116,13 +125,14 @@ public CartController(DataContext context, ILogger<CartController> logger)
                     UlesjaId = cs.UlesjaId,
                     Quantity = cs.Quantity,
                     SektoriUlseveId = cs.SektoriUlseveId,
-                    Cmimi = cs.Cmimi
+                    Cmimi = cs.Cmimi,
+                    NdeshjaId = cs.NdeshjaId
                 }).ToList()
             };
 
             return Ok(cartDto);
         }
-      
+
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateCartSeat(string userId, [FromBody] CartSeat cartSeat)
         {
@@ -138,6 +148,7 @@ public CartController(DataContext context, ILogger<CartController> logger)
             if (cartSeat.Quantity > 0)
             {
                 existingSeat.Quantity = cartSeat.Quantity;
+                existingSeat.NdeshjaId = cartSeat.NdeshjaId;
             }
             else
             {
@@ -148,7 +159,6 @@ public CartController(DataContext context, ILogger<CartController> logger)
             return NoContent();
         }
 
-       
         [HttpDelete("{userId}/{seatId}")]
         public async Task<IActionResult> RemoveFromCart(string userId, int seatId)
         {
@@ -165,103 +175,96 @@ public CartController(DataContext context, ILogger<CartController> logger)
             await _context.SaveChangesAsync();
             return NoContent();
         }
-  [HttpPost("complete-payment/{userId}")]
-    public async Task<IActionResult> CompletePayment(string userId)
-    {
-        using (var transaction = await _context.Database.BeginTransactionAsync())
+
+        [HttpPost("complete-payment/{userId}")]
+        public async Task<IActionResult> CompletePayment(string userId)
         {
-            try
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                _logger.LogInformation($"Starting complete payment process for user {userId}");
-
-                var cart = await _context.Carts
-                    .Include(c => c.CartSeats)
-                        .ThenInclude(cs => cs.Ulesja)
-                    .FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
-
-                if (cart == null)
+                try
                 {
-                    _logger.LogError($"Cart not found for user {userId}");
-                    await transaction.RollbackAsync();
-                    return NotFound("Cart not found");
-                }
+                    _logger.LogInformation($"Starting complete payment process for user {userId}");
 
-                _logger.LogInformation($"Cart found for user {userId}. Processing seats...");
-                bool isAnySeatUpdated = false;
-                foreach (var seat in cart.CartSeats)
-                {
-                    var ulesja = seat.Ulesja;
-                    if (ulesja != null && ulesja.IsAvailable)
+                    var cart = await _context.Carts
+                        .Include(c => c.CartSeats)
+                            .ThenInclude(cs => cs.Ulesja)
+                        .FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
+
+                    if (cart == null)
                     {
-                        _logger.LogInformation($"Updating seat {ulesja.Id} to not available");
-                        ulesja.IsAvailable = false;
-                        _context.Entry(ulesja).State = EntityState.Modified;
-                        isAnySeatUpdated = true;
+                        _logger.LogError($"Cart not found for user {userId}");
+                        await transaction.RollbackAsync();
+                        return NotFound("Cart not found");
                     }
-                    else
-                    {
-                        _logger.LogWarning($"Seat {ulesja?.Id} is already not available or does not exist");
-                    }
-                }
 
-                if (isAnySeatUpdated)
-                {
-                    _logger.LogInformation($"Saving changes to database");
+                    _logger.LogInformation($"Cart found for user {userId}. Processing seats...");
+                    bool isAnySeatUpdated = false;
+                    foreach (var seat in cart.CartSeats)
+                    {
+                        var ulesja = seat.Ulesja;
+                        if (ulesja != null && ulesja.IsAvailable)
+                        {
+                            _logger.LogInformation($"Updating seat {ulesja.Id} to not available");
+                            ulesja.IsAvailable = false;
+                            _context.Entry(ulesja).State = EntityState.Modified;
+                            isAnySeatUpdated = true;
+                        }
+                        else
+                        {
+                            _logger.LogWarning($"Seat {ulesja?.Id} is already not available or does not exist");
+                        }
+                    }
+
+                    if (isAnySeatUpdated)
+                    {
+                        _logger.LogInformation($"Saving changes to database");
+                        await _context.SaveChangesAsync();
+                    }
+
+                    _logger.LogInformation($"Clearing cart for user {userId}");
+                    _context.CartSeats.RemoveRange(cart.CartSeats);
                     await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                    _logger.LogInformation($"Payment completed and cart cleared for user {userId}");
+                    return Ok("Payment completed and cart cleared.");
                 }
-
-                _logger.LogInformation($"Clearing cart for user {userId}");
-                _context.CartSeats.RemoveRange(cart.CartSeats);
-                await _context.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-                _logger.LogInformation($"Payment completed and cart cleared for user {userId}");
-                return Ok("Payment completed and cart cleared.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error during payment completion for user {userId}: {ex.Message}");
-                await transaction.RollbackAsync();
-                return StatusCode(500, "Internal Server Error: " + ex.Message);
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error during payment completion for user {userId}: {ex.Message}");
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, "Internal Server Error: " + ex.Message);
+                }
             }
         }
-    }
-/*--------------------------------------------------------*/
-  [HttpPost("create-order/{userId}")]
-public async Task<IActionResult> CreateOrder(string userId, [FromBody] OrderCreationDto orderDto)
-{
-    var cart = await _context.Carts
-        .Include(c => c.CartSeats)
-        .FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
 
-    if (cart == null || !cart.CartSeats.Any())
-    {
-        return BadRequest("Cart is empty");
-    }
+        [HttpPost("create-order/{userId}")]
+        public async Task<IActionResult> CreateOrder(string userId, [FromBody] OrderCreationDto orderDto)
+        {
+            var cart = await _context.Carts
+                .Include(c => c.CartSeats)
+                .FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
 
-    var order = new Order
-    {
-        UserId = userId,
-        OrderDate = DateTime.UtcNow,
-        Status = "Pending",
-        Seats = cart.CartSeats.ToList(),
-        FirstName = orderDto.FirstName,
-        LastName = orderDto.LastName,
-        City = orderDto.City
-    };
+            if (cart == null || !cart.CartSeats.Any())
+            {
+                return BadRequest("Cart is empty");
+            }
 
-    _context.Orders.Add(order);
-    await _context.SaveChangesAsync();
+            var order = new Order
+            {
+                UserId = userId,
+                OrderDate = DateTime.UtcNow,
+                Status = "Pending",
+                Seats = cart.CartSeats.ToList(),
+                FirstName = orderDto.FirstName,
+                LastName = orderDto.LastName,
+                City = orderDto.City
+            };
 
-    return Ok(new { orderId = order.Id });
-}
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
 
-
-
-
-
-
-
-
+            return Ok(new { orderId = order.Id });
+        }
     }
 }

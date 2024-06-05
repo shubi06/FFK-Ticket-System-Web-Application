@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240604213853_AddNdeshjaCartSeatRelationship")]
+    partial class AddNdeshjaCartSeatRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,8 +214,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("SektoriUlseveId");
 
-                    b.HasIndex("UlesjaId")
-                        .IsUnique();
+                    b.HasIndex("UlesjaId");
 
                     b.ToTable("CartSeats");
                 });
@@ -1004,8 +1006,8 @@ namespace FederataFutbollit.Migrations
                         .IsRequired();
 
                     b.HasOne("FederataFutbollit.Entities.Ulesja", "Ulesja")
-                        .WithOne("CartSeat")
-                        .HasForeignKey("FederataFutbollit.Entities.CartSeat", "UlesjaId")
+                        .WithMany()
+                        .HasForeignKey("UlesjaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1355,9 +1357,6 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Entities.Ulesja", b =>
                 {
                     b.Navigation("Bileta")
-                        .IsRequired();
-
-                    b.Navigation("CartSeat")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

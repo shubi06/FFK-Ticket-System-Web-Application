@@ -7,6 +7,6 @@ public class CartSeatDto
     public int Quantity { get; set; }
      public double Cmimi { get; set; }
     public int SektoriUlseveId { get; set; }
-  
+   public int NdeshjaId { get; set; } 
     public string ApplicationUserId { get; set; }
 }

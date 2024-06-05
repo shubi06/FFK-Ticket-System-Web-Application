@@ -17,6 +17,7 @@ const Cart = () => {
   const [city, setCity] = useState('');
 
   useEffect(() => {
+    console.log("Fetching cart data on component mount");
     getCart();
   }, [getCart]);
 
@@ -28,9 +29,17 @@ const Cart = () => {
         ...cart,
         cartSeats: cart.cartSeats.map(seat => ({
           ...seat,
-          applicationUserId: cart.applicationUserId
+          applicationUserId: cart.applicationUserId,
+          ndeshjaId: seat.ndeshjaId // Ensure NdeshjaId is included
         }))
       };
+
+      console.log("Initiating checkout with data:", {
+        ...cartWithUserId,
+        firstName,
+        lastName,
+        city
+      });
 
       const response = await fetch('http://localhost:5178/api/payment/create-checkout-session', {
         method: 'POST',
@@ -47,6 +56,7 @@ const Cart = () => {
 
       if (response.ok) {
         const session = await response.json();
+        console.log("Checkout session created:", session);
         const result = await stripe.redirectToCheckout({
           sessionId: session.sessionId,
         });
@@ -67,6 +77,7 @@ const Cart = () => {
   };
 
   const handleRemove = (seatId) => {
+    console.log("Removing seat from cart:", seatId);
     removeFromCart(seatId);
   };
 
@@ -81,7 +92,7 @@ const Cart = () => {
             <ul>
               {cart.cartSeats.map((seat) => (
                 <li key={seat.id} className="cart-item">
-                  <span>{`Seat ${seat.ulesjaId} in Sector ${seat.sektoriUlseveId}`}</span>
+                  <span>{`Seat ${seat.ulesjaId} in Sector ${seat.sektoriUlseveId}, Match ID: ${seat.ndeshjaId}`}</span>
                   <span>{seat.quantity} x {seat.cmimi} EUR</span>
                   <button onClick={() => handleRemove(seat.id)}>Remove</button>
                 </li>
@@ -121,3 +132,4 @@ const Cart = () => {
 };
 
 export default Cart;
+
