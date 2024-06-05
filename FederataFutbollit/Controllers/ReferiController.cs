@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FederataFutbollit.Entities;
@@ -76,3 +76,4 @@ namespace FederataFutbollit.Controllers
     }
 }
 
+*/

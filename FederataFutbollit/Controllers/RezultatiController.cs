@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FederataFutbollit.Entities; // Për të përdorur klasën Rezultati
@@ -74,3 +74,4 @@ namespace FederataFutbollit.Controllers
         }
     }
 }
+*/
