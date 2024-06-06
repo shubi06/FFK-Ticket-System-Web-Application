@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Options;
 using FederataFutbollit.Data;
 using FederataFutbollit.Entities;
 using FederataFutbollit.Repositories;
+using Stripe.Issuing;
 
 namespace FederataFutbollit.Controllers
 {
@@ -65,11 +67,15 @@ namespace FederataFutbollit.Controllers
                     }
 
                     // Find the user's cart
-                    var cart = await _context.Carts
-                        .Include(c => c.CartSeats)
-                        .FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
+                    var cartSeats = await _context.CartSeats
+                        .Include(cs => cs.Cart)
+                        .Include(cs => cs.Ndeshja)
+                        .Include(cs => cs.Ulesja)
+                        .Include(cs => cs.SektoriUlseve)
+                        .Where(cs => cs.Cart.ApplicationUserId == userId)
+                        .ToListAsync();
 
-                    if (cart == null || !cart.CartSeats.Any())
+                    if (cartSeats == null || !cartSeats.Any())
                     {
                         _logger.LogError($"Cart is empty or not found for userId: {userId}");
                         return BadRequest("Cart is empty or not found");
@@ -81,10 +87,22 @@ namespace FederataFutbollit.Controllers
                         UserId = userId,
                         OrderDate = DateTime.UtcNow,
                         Status = "Completed",
-                        Seats = cart.CartSeats.ToList(),
                         FirstName = firstName,
                         LastName = lastName,
-                        City = city
+                        City = city,
+               
+                        Cmimi= cartSeats.Select(cs => cs.Cmimi).FirstOrDefault(),
+                        NdeshjaId = cartSeats.Select(cs => cs.NdeshjaId).FirstOrDefault(),
+                        Quantity = cartSeats.Select(cs => cs.Quantity).FirstOrDefault(),
+                        SektoriUlseveId = cartSeats.Select(cs => cs.SektoriUlseveId).FirstOrDefault(),
+                        UlesjaId = cartSeats.Select(cs => cs.UlesjaId).FirstOrDefault(),
+                        
+                    
+                        
+
+
+
+
                     };
 
                     _context.Orders.Add(order);
@@ -93,8 +111,8 @@ namespace FederataFutbollit.Controllers
                     // Log successful order creation
                     _logger.LogInformation($"Order created successfully for userId: {userId}, orderId: {order.Id}");
 
-                    // Clear the cart
-                    _context.CartSeats.RemoveRange(cart.CartSeats);
+                    // Clear the cart seats
+                    _context.CartSeats.RemoveRange(cartSeats);
                     await _context.SaveChangesAsync();
                 }
 
