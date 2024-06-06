@@ -25,56 +25,61 @@ const Cart = () => {
     const stripe = await stripePromise;
 
     try {
-      const cartWithUserId = {
-        ...cart,
-        cartSeats: cart.cartSeats.map(seat => ({
-          ...seat,
-          applicationUserId: cart.applicationUserId,
-          ndeshjaId: seat.ndeshjaId // Ensure NdeshjaId is included
-        }))
-      };
+        const cartWithUserId = {
+            ...cart,
+            cartSeats: cart.cartSeats.map(seat => ({
+                ...seat,
+                applicationUserId: cart.applicationUserId,
+                ndeshjaId: seat.ndeshjaId // Ensure NdeshjaId is included
+            }))
+        };
 
-      console.log("Initiating checkout with data:", {
-        ...cartWithUserId,
-        firstName,
-        lastName,
-        city
-      });
-
-      const response = await fetch('http://localhost:5178/api/payment/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...cartWithUserId,
-          firstName: firstName,
-          lastName: lastName,
-          city: city
-        }),
-      });
-
-      if (response.ok) {
-        const session = await response.json();
-        console.log("Checkout session created:", session);
-        const result = await stripe.redirectToCheckout({
-          sessionId: session.sessionId,
+        console.log("Initiating checkout with data:", {
+            ...cartWithUserId,
+            firstName,
+            lastName,
+            city
         });
 
-        if (result.error) {
-          console.error('Stripe error:', result.error.message);
-          navigate('/error');
+        const response = await fetch('http://localhost:5178/api/payment/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ...cartWithUserId,
+                firstName: firstName,
+                lastName: lastName,
+                city: city
+            }),
+        });
+
+        if (response.ok) {
+            const session = await response.json();
+            console.log("Checkout session created:", session);
+
+            localStorage.setItem('userId', session.userId); // Store userId in localStorage
+
+            const result = await stripe.redirectToCheckout({
+                sessionId: session.sessionId,
+            });
+
+            if (result.error) {
+                console.error('Stripe error:', result.error.message);
+                navigate('/error');
+            }
+        } else {
+            const errorData = await response.json();
+            console.error('Failed to create checkout session:', errorData);
+            navigate('/error');
         }
-      } else {
-        const errorData = await response.json();
-        console.error('Failed to create checkout session:', errorData);
-        navigate('/error');
-      }
     } catch (error) {
-      console.error('Error:', error);
-      navigate('/error');
+        console.error('Error:', error);
+        navigate('/error');
     }
-  };
+};
+
+ 
 
   const handleRemove = (seatId) => {
     console.log("Removing seat from cart:", seatId);

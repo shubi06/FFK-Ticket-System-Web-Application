@@ -90,19 +90,11 @@ namespace FederataFutbollit.Controllers
                         FirstName = firstName,
                         LastName = lastName,
                         City = city,
-               
-                        Cmimi= cartSeats.Select(cs => cs.Cmimi).FirstOrDefault(),
+                        Cmimi = cartSeats.Select(cs => cs.Cmimi).FirstOrDefault(),
                         NdeshjaId = cartSeats.Select(cs => cs.NdeshjaId).FirstOrDefault(),
                         Quantity = cartSeats.Select(cs => cs.Quantity).FirstOrDefault(),
                         SektoriUlseveId = cartSeats.Select(cs => cs.SektoriUlseveId).FirstOrDefault(),
                         UlesjaId = cartSeats.Select(cs => cs.UlesjaId).FirstOrDefault(),
-                        
-                    
-                        
-
-
-
-
                     };
 
                     _context.Orders.Add(order);
@@ -110,6 +102,24 @@ namespace FederataFutbollit.Controllers
 
                     // Log successful order creation
                     _logger.LogInformation($"Order created successfully for userId: {userId}, orderId: {order.Id}");
+
+                    // Create tickets for each seat in the cart
+                    foreach (var cartSeat in cartSeats)
+                    {
+                        var bileta = new Bileta
+                        {
+                            FirstName=firstName,
+                            LastName=lastName,
+                            Cmimi = (int)cartSeat.Cmimi,
+                            OraBlerjes = DateTime.UtcNow,
+                            UlesjaID = cartSeat.UlesjaId,
+                            NdeshjaID = cartSeat.NdeshjaId,
+                            ApplicationUserID = userId
+                        };
+
+                        _context.Biletat.Add(bileta);
+                    }
+                    await _context.SaveChangesAsync();
 
                     // Clear the cart seats
                     _context.CartSeats.RemoveRange(cartSeats);

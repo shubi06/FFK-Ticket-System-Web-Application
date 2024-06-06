@@ -37,6 +37,7 @@ import ResetPassword from "./Components/ResetPassword";
 import "./App.css";
 import "./sb-admin-2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Success from "./Success";
 
 const App = () => {
   return (
@@ -80,6 +81,8 @@ const AppContent = () => {
         <Route path="/stadium/:matchId" element={<Stadium />} />
         <Route path="/stadium/:sectorId/:matchId" element={<Stadium />} />
         <Route path="/seats/:sectorId/:ndeshjaId" element={<Seats />} />
+        <Route path="/success" element={<Success />} />
+
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
 

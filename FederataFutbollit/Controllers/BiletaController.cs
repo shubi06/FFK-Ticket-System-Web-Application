@@ -36,6 +36,23 @@ namespace FederataFutbollit.Controllers
             return bileta;
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<List<Bileta>>> GetTicketsByUserId(string userId)
+        {
+            var tickets = await _context.Biletat
+                .Include(b => b.Ulesja)
+                .Include(b => b.Ndeshja)
+                .Where(b => b.ApplicationUserID == userId)
+                .ToListAsync();
+
+            if (tickets == null || !tickets.Any())
+            {
+                return NotFound();
+            }
+
+            return tickets;
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Bileta>>> Create(BiletaCreateDto request)
         {
