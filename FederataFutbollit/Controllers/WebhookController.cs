@@ -113,6 +113,7 @@ namespace FederataFutbollit.Controllers
                             Cmimi = (int)cartSeat.Cmimi,
                             OraBlerjes = DateTime.UtcNow,
                             UlesjaID = cartSeat.UlesjaId,
+                            SektoriUlseveID = cartSeat.SektoriUlseveId,
                             NdeshjaID = cartSeat.NdeshjaId,
                             ApplicationUserID = userId
                         };

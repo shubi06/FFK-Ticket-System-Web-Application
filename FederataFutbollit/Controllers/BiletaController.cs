@@ -22,13 +22,21 @@ namespace FederataFutbollit.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Bileta>>> Get()
         {
-            return await _context.Biletat.Include(b => b.Ulesja).Include(b => b.Ndeshja).Include(b => b.ApplicationUser).ToListAsync();
+            return await _context.Biletat
+                .Include(b => b.Ulesja)
+                .Include(b => b.Ndeshja)
+                .Include(b => b.ApplicationUser)
+                .ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Bileta>> GetBiletaById(int id)
         {
-            var bileta = await _context.Biletat.Include(b => b.Ulesja).Include(b => b.Ndeshja).Include(b => b.ApplicationUser).FirstOrDefaultAsync(b => b.Id == id);
+            var bileta = await _context.Biletat
+                .Include(b => b.Ulesja)
+                .Include(b => b.Ndeshja)
+                .Include(b => b.ApplicationUser)
+                .FirstOrDefaultAsync(b => b.Id == id);
             if (bileta == null)
             {
                 return NotFound();
@@ -39,19 +47,29 @@ namespace FederataFutbollit.Controllers
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<List<Bileta>>> GetTicketsByUserId(string userId)
         {
-            var tickets = await _context.Biletat
-                .Include(b => b.Ulesja)
-                .Include(b => b.Ndeshja)
-                .Where(b => b.ApplicationUserID == userId)
-                .ToListAsync();
-
-            if (tickets == null || !tickets.Any())
+            try
             {
-                return NotFound();
-            }
+                var tickets = await _context.Biletat
+                    .Include(b => b.Ulesja)
+                    .Include(b => b.Ndeshja)
+                    .Include(b => b.SektoriUlseve)// This includes the Ndeshja entity
+                    .Where(b => b.ApplicationUserID == userId)
+                    .ToListAsync();
 
-            return tickets;
+                if (tickets == null || !tickets.Any())
+                {
+                    return NotFound();
+                }
+
+                return tickets;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ex) here for further investigation
+                return StatusCode(500, "Internal server error");
+            }
         }
+
 
         [HttpPost]
         public async Task<ActionResult<List<Bileta>>> Create(BiletaCreateDto request)
@@ -81,7 +99,11 @@ namespace FederataFutbollit.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBileta(int id, BiletaCreateDto request)
         {
-            var bileta = await _context.Biletat.Include(b => b.Ulesja).Include(b => b.Ndeshja).Include(b => b.ApplicationUser).FirstOrDefaultAsync(b => b.Id == id);
+            var bileta = await _context.Biletat
+                .Include(b => b.Ulesja)
+                .Include(b => b.Ndeshja)
+                .Include(b => b.ApplicationUser)
+                .FirstOrDefaultAsync(b => b.Id == id);
             if (bileta == null)
             {
                 return NotFound();

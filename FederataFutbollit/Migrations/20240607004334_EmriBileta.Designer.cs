@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240607004334_EmriBileta")]
+    partial class EmriBileta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,9 +149,6 @@ namespace FederataFutbollit.Migrations
                     b.Property<DateTime>("OraBlerjes")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("SektoriUlseveID")
-                        .HasColumnType("int");
-
                     b.Property<int>("UlesjaID")
                         .HasColumnType("int");
 
@@ -157,8 +157,6 @@ namespace FederataFutbollit.Migrations
                     b.HasIndex("ApplicationUserID");
 
                     b.HasIndex("NdeshjaID");
-
-                    b.HasIndex("SektoriUlseveID");
 
                     b.HasIndex("UlesjaID")
                         .IsUnique();
@@ -983,10 +981,6 @@ namespace FederataFutbollit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FederataFutbollit.Entities.SektoriUlseve", "SektoriUlseve")
-                        .WithMany("Bileta")
-                        .HasForeignKey("SektoriUlseveID");
-
                     b.HasOne("FederataFutbollit.Entities.Ulesja", "Ulesja")
                         .WithOne("Bileta")
                         .HasForeignKey("FederataFutbollit.Entities.Bileta", "UlesjaID")
@@ -996,8 +990,6 @@ namespace FederataFutbollit.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Ndeshja");
-
-                    b.Navigation("SektoriUlseve");
 
                     b.Navigation("Ulesja");
                 });
@@ -1356,8 +1348,6 @@ namespace FederataFutbollit.Migrations
 
             modelBuilder.Entity("FederataFutbollit.Entities.SektoriUlseve", b =>
                 {
-                    b.Navigation("Bileta");
-
                     b.Navigation("Uleset");
                 });
 
