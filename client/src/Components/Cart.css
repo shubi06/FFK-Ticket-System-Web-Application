@@ -16,7 +16,7 @@
 
 .cart-content {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 20px;
 }
 
@@ -71,17 +71,30 @@
   margin-top: 20px;
 }
 
-.order-form div {
-  margin-bottom: 15px;
+.order-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.order-form label {
+.seat-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.seat-details div {
+  flex: 1;
+}
+
+.seat-details label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.order-form input {
+.seat-details input {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
