@@ -118,9 +118,9 @@ const Seats = () => {
         <button onClick={handleContinueClick} className="continue-button">Proceed to Cart</button>
       </div>
 
-    
+      {/* Modal për ulsën e padisponueshme */}
       <Modal
-        show={!!unavailableSeat} 
+        show={!!unavailableSeat} // Shfaq modalin vetëm kur ka një ulsë të padisponueshme
         onHide={() => setUnavailableSeat(null)}
         centered
       >

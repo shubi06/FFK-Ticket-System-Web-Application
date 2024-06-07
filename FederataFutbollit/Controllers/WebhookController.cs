@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 using FederataFutbollit.Data;
 using FederataFutbollit.Entities;
 using FederataFutbollit.Repositories;
-using Stripe.Issuing;
 
 namespace FederataFutbollit.Controllers
 {
@@ -106,10 +105,19 @@ namespace FederataFutbollit.Controllers
                     // Create tickets for each seat in the cart
                     foreach (var cartSeat in cartSeats)
                     {
+                        // Check if the seat has already been sold
+                        var existingTicket = await _context.Biletat
+                            .AnyAsync(b => b.UlesjaID == cartSeat.UlesjaId);
+                        if (existingTicket)
+                        {
+                            _logger.LogError($"Seat with ID {cartSeat.UlesjaId} has already been sold.");
+                            continue; // Skip this seat
+                        }
+
                         var bileta = new Bileta
                         {
-                            FirstName=firstName,
-                            LastName=lastName,
+                            FirstName = firstName,
+                            LastName = lastName,
                             Cmimi = (int)cartSeat.Cmimi,
                             OraBlerjes = DateTime.UtcNow,
                             UlesjaID = cartSeat.UlesjaId,
@@ -119,6 +127,18 @@ namespace FederataFutbollit.Controllers
                         };
 
                         _context.Biletat.Add(bileta);
+
+                        // Mark the seat as unavailable
+                        var ulesja = await _context.Uleset.FindAsync(cartSeat.UlesjaId);
+                        if (ulesja != null)
+                        {
+                            ulesja.IsAvailable = false;
+                            _context.Uleset.Update(ulesja);
+                        }
+                        else
+                        {
+                            _logger.LogError($"Ulesja not found for ID: {cartSeat.UlesjaId}");
+                        }
                     }
                     await _context.SaveChangesAsync();
 
@@ -128,6 +148,11 @@ namespace FederataFutbollit.Controllers
                 }
 
                 return Ok();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                _logger.LogError($"Database update exception: {dbEx.InnerException?.Message}");
+                return BadRequest("Database update error occurred.");
             }
             catch (StripeException e)
             {
