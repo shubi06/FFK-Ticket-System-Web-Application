@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using FederataFutbollit.Data;
 using FederataFutbollit.Entities;
+using FederataFutbollit.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FederataFutbollit.DTOs;
+using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace FederataFutbollit.Controllers
 {
@@ -13,10 +15,12 @@ namespace FederataFutbollit.Controllers
     public class BiletaController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly ILogger<BiletaController> _logger;
 
-        public BiletaController(DataContext context)
+        public BiletaController(DataContext context, ILogger<BiletaController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -52,7 +56,7 @@ namespace FederataFutbollit.Controllers
                 var tickets = await _context.Biletat
                     .Include(b => b.Ulesja)
                     .Include(b => b.Ndeshja)
-                    .Include(b => b.SektoriUlseve)// This includes the Ndeshja entity
+                    .Include(b => b.SektoriUlseve) // This includes the Ndeshja entity
                     .Where(b => b.ApplicationUserID == userId)
                     .ToListAsync();
 
@@ -70,6 +74,26 @@ namespace FederataFutbollit.Controllers
             }
         }
 
+        [HttpPost("check-ticket-limit")]
+        public async Task<ActionResult> CheckTicketLimit(string userId, int ndeshjaId)
+        {
+            _logger.LogInformation("Checking ticket limit for user {UserId} and match {NdeshjaId}", userId, ndeshjaId);
+            
+            var ticketCount = await _context.Biletat
+                .Where(b => b.ApplicationUserID == userId && b.NdeshjaID == ndeshjaId)
+                .CountAsync();
+            
+            _logger.LogInformation("User {UserId} has {TicketCount} tickets for match {NdeshjaId}", userId, ticketCount, ndeshjaId);
+
+            if (ticketCount >= 4)
+            {
+                _logger.LogWarning("User {UserId} has reached the maximum limit of 4 tickets for match {NdeshjaId}", userId, ndeshjaId);
+                return BadRequest("You have reached the maximum limit of 4 tickets for this match.");
+            }
+
+            _logger.LogInformation("User {UserId} can purchase more tickets for match {NdeshjaId}", userId, ndeshjaId);
+            return Ok("You can purchase tickets.");
+        }
 
         [HttpPost]
         public async Task<ActionResult<List<Bileta>>> Create(BiletaCreateDto request)

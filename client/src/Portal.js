@@ -54,6 +54,9 @@ import EkipaCreate from "./Ekipa/EkipaCreate";
 import EkipaEdit from "./Ekipa/EkipaEdit";
 import EkipaDelete from "./Ekipa/EkipaDelete";
 
+
+import OrderList from "./Order/OrderList";
+
 function Portal() {
   return (
     <>
@@ -83,6 +86,7 @@ function Portal() {
               <Route path="delete-user/:id" element={<DeleteUser />} />
 
               <Route path="shteti-list" element={<ShtetiList />} />
+              <Route path="order-list" element={<OrderList />} />
 
               <Route path="kombetarja-list" element={<KombetarjaList />} />
               <Route path="kombetarja-edit/:id" element={<KombetarjaEdit />} />
