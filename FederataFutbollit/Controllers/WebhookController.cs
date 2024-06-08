@@ -89,11 +89,11 @@ namespace FederataFutbollit.Controllers
                         FirstName = firstName,
                         LastName = lastName,
                         City = city,
-                        Cmimi = cartSeats.Select(cs => cs.Cmimi).FirstOrDefault(),
-                        NdeshjaId = cartSeats.Select(cs => cs.NdeshjaId).FirstOrDefault(),
-                        Quantity = cartSeats.Select(cs => cs.Quantity).FirstOrDefault(),
-                        SektoriUlseveId = cartSeats.Select(cs => cs.SektoriUlseveId).FirstOrDefault(),
-                        UlesjaId = cartSeats.Select(cs => cs.UlesjaId).FirstOrDefault(),
+                        Cmimi = cartSeats.Sum(cs => cs.Cmimi * cs.Quantity),
+                        NdeshjaId = cartSeats.First().NdeshjaId,
+                        Quantity = cartSeats.Sum(cs => cs.Quantity),
+                        SektoriUlseveId = cartSeats.First().SektoriUlseveId,
+                        UlesjaId = cartSeats.First().UlesjaId,
                     };
 
                     _context.Orders.Add(order);
