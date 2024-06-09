@@ -21,6 +21,7 @@ import Portal from "./Portal";
 import Home from "./Components/Home";
 import Player from "./Components/Player";
 import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import Slider from "./Components/Slider";
 import Stadium from "./Stadium";
 import Cart from "./Components/Cart";
@@ -33,6 +34,9 @@ import SuperligaTable from "./Components/SuperligaTable";
 
 import ForgotPassword from "./Components/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword";
+
+import TermsOfService from "./Components/TermsOfService";
+import PrivacyPolicy from "./Components/PrivacyPolicy";
 
 import "./App.css";
 import "./sb-admin-2.min.css";
@@ -60,8 +64,12 @@ const AppContent = () => {
 
   // Vendosni rrugët ku dëshironi të fshehni Header
   const hideHeaderPaths = ["/portal"];
+  const hideFooterPaths = ["/login", "/register", "/portal"];
 
   const shouldShowHeader = !hideHeaderPaths.some((path) =>
+    location.pathname.startsWith(path)
+  );
+  const shouldShowFooter = !hideFooterPaths.some((path) =>
     location.pathname.startsWith(path)
   );
 
@@ -74,6 +82,7 @@ const AppContent = () => {
         <Route path="/player" element={<Player />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/header" element={<Header />} />
+        <Route path="/footer" element={<Footer />} />
         <Route path="/slider" element={<Slider />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -91,6 +100,9 @@ const AppContent = () => {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
 
+        <Route path="/termsofservice" element={<TermsOfService />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+
         <Route
           path="/portal/*"
           element={
@@ -100,6 +112,7 @@ const AppContent = () => {
           }
         />
       </Routes>
+      {shouldShowFooter && <Footer />}
     </>
   );
 };
