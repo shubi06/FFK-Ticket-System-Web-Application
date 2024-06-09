@@ -64,7 +64,14 @@ const AppContent = () => {
 
   // Vendosni rrugët ku dëshironi të fshehni Header
   const hideHeaderPaths = ["/portal"];
-  const hideFooterPaths = ["/login", "/register", "/portal"];
+  const hideFooterPaths = [
+    "/login",
+    "/register",
+    "/portal",
+    "/stadium",
+    "/seats",
+    "/cart",
+  ];
 
   const shouldShowHeader = !hideHeaderPaths.some((path) =>
     location.pathname.startsWith(path)

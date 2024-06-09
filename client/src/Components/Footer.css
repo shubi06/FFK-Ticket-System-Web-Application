@@ -7,6 +7,10 @@
   padding: 2rem 0;
   color: #ffffff;
   text-align: center;
+  margin-top: auto;
+  position: absolute;
+
+  width: 100%;
 }
 
 .footer-container {
