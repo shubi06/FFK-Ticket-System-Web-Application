@@ -1,6 +1,7 @@
-﻿using FederataFutbollit.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using FederataFutbollit.Data;
+using FederataFutbollit.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FederataFutbollit.Data
@@ -30,14 +31,11 @@ namespace FederataFutbollit.Data
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartSeat> CartSeats { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-        public DbSet<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
+        public DbSet<NdeshjaSuperliges> NdeshjaSuperliges { get; set; }
         public DbSet<AboutSection> AboutSections { get; set; }
-         public DbSet<Order> Orders { get; set; }
-        
+        public DbSet<Order> Orders { get; set; }
         public DbSet<Shpenzimet> Shpenzimet { get; set; }
         public DbSet<Kontabiliteti> Kontabiliteti { get; set; }
-
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -76,26 +74,26 @@ namespace FederataFutbollit.Data
             // Configuring relations for NdeshjaSuperliges
             modelBuilder.Entity<NdeshjaSuperliges>()
                 .HasOne(n => n.Superliga)
-                .WithMany(s => s.NdeshjetESuperliges)
+                .WithMany(s => s.NdeshjaSuperliges)
                 .HasForeignKey(n => n.SuperligaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<NdeshjaSuperliges>()
                 .HasOne(n => n.Ekipa)
-                .WithMany(e => e.NdeshjetESuperliges)
+                .WithMany(e => e.NdeshjaSuperliges)
                 .HasForeignKey(n => n.EkipaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<NdeshjaSuperliges>()
                 .HasOne(n => n.Statusi)
-                .WithMany(s => s.NdeshjetESuperliges)
+                .WithMany(s => s.NdeshjaSuperliges)
                 .HasForeignKey(n => n.StatusiId)
                 .OnDelete(DeleteBehavior.Restrict);
-                
-                 modelBuilder.Entity<CartSeat>()
-            .HasOne(cs => cs.Ndeshja)
-            .WithMany(n => n.CartSeats)
-            .HasForeignKey(cs => cs.NdeshjaId);
+
+            modelBuilder.Entity<CartSeat>()
+                .HasOne(cs => cs.Ndeshja)
+                .WithMany(n => n.CartSeats)
+                .HasForeignKey(cs => cs.NdeshjaId);
         }
     }
 }

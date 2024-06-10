@@ -1,113 +1,125 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useEffect, useState, useCallback } from 'react';
+import * as Yup from 'yup';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 function EkipaEdit() {
-    const params = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [isLoading, setLoading] = useState(true); // Ensure isLoading is defined
+    const [isLoading, setLoading] = useState(true);
 
-    // Define formik first since it is used inside useCallback
     const formik = useFormik({
         initialValues: {
             emriKlubit: "",
             trajneri: "",
             vitiThemelimit: "",
-            nrTitujve: ""
+            nrTitujve: "",
+            superligaId: ""
         },
-        validate: (values) => {
-            let errors = {};
-
-            if (!values.emriKlubit) {
-                errors.emriKlubit = "Please enter the club name";
-            } else if (values.emriKlubit.length < 3) {
-                errors.emriKlubit = "Club name should be at least 3 characters long";
-            } else if (values.emriKlubit.length > 50) {
-                errors.emriKlubit = "Club name should not exceed 50 characters";
-            }
-
-            if (!values.trajneri) {
-                errors.trajneri = "Please enter the coach's name";
-            } else if (values.trajneri.length < 3) {
-                errors.trajneri = "Coach's name should be at least 3 characters long";
-            } else if (values.trajneri.length > 50) {
-                errors.trajneri = "Coach's name should not exceed 50 characters";
-            }
-
-            if (!values.vitiThemelimit) {
-                errors.vitiThemelimit = "Please enter the year of foundation";
-            } else if (!/^[0-9]+$/.test(values.vitiThemelimit) || parseInt(values.vitiThemelimit) < 1850 || parseInt(values.vitiThemelimit) > new Date().getFullYear()) {
-                errors.vitiThemelimit = "Please enter a valid year (after 1850 and not in the future)";
-            }
-
-            if (!values.nrTitujve) {
-                errors.nrTitujve = "Please enter the number of titles won";
-            } else if (!/^[0-9]+$/.test(values.nrTitujve)) {
-                errors.nrTitujve = "Number of titles must be a valid number";
-            }
-
-            return errors;
-        },
+        validationSchema: Yup.object({
+            emriKlubit: Yup.string().required('Emri Klubit is required').min(3, 'Emri Klubit must be at least 3 characters'),
+            trajneri: Yup.string().required('Trajneri is required'),
+            vitiThemelimit: Yup.number().required('Viti Themelimit is required').min(1850, 'Viti Themelimit must be after 1850'),
+            nrTitujve: Yup.number().required('Nr Titujve is required'),
+            superligaId: Yup.number().required('SuperligaId is required')
+        }),
         onSubmit: async (values) => {
-            setLoading(true);
             try {
-                await axios.put(`http://localhost:5178/api/Ekipa/${params.id}`, values);
-                toast.success("Club updated successfully!");
-                navigate("/ekipa-list");
+                setLoading(true);
+                await axios.put(`http://localhost:5178/api/Ekipa/${id}`, values);
+                navigate("/portal/ekipa-list");
             } catch (error) {
                 console.error("Failed to update the club", error);
-                toast.error("Update failed. Please try again.");
+                alert("Update failed. Please try again.");
             } finally {
                 setLoading(false);
             }
-        }
+        },
     });
 
-    const { setValues } = formik;
-
-    const fetchEkipaData = useCallback(async () => {
-        try {
-            const response = await axios.get(`http://localhost:5178/api/Ekipa/${params.id}`);
-            setValues(response.data);
-            setLoading(false); // Set loading to false after data is fetched
-        } catch (error) {
-            console.error('Failed to fetch ekipa data', error);
-            toast.error("Failed to fetch data.");
-            setLoading(false); // Set loading to false even on error
-        }
-    }, [params.id, setValues]);
-
     useEffect(() => {
+        const fetchEkipaData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5178/api/Ekipa/${id}`);
+                formik.setValues(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Failed to fetch ekipa data', error);
+                navigate("/portal/ekipa-list");
+            }
+        };
         fetchEkipaData();
-    }, [fetchEkipaData]);
+    }, [id, navigate, formik]);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    // Component JSX...
     return (
         <div className='container'>
-            <h3>Edit Ekipa - ID: {params.id}</h3>
+            <h3>Edit Ekipa - ID: {id}</h3>
             <form onSubmit={formik.handleSubmit}>
-                {/* Form fields here */}
-                {/* Example form field */}
-                <div className="row">
-                    <div className="col-lg-6">
-                        <label>Club Name</label>
-                        <input
-                            name='emriKlubit'
-                            value={formik.values.emriKlubit}
-                            onChange={formik.handleChange}
-                            type="text"
-                            className={`form-control ${formik.errors.emriKlubit ? "is-invalid" : ""}`}
-                        />
+                <div className="form-group">
+                    <label>Emri Klubit</label>
+                    <input
+                        name="emriKlubit"
+                        onChange={formik.handleChange}
+                        value={formik.values.emriKlubit}
+                        className={`form-control ${formik.touched.emriKlubit && formik.errors.emriKlubit ? 'is-invalid' : ''}`}
+                    />
+                    {formik.touched.emriKlubit && formik.errors.emriKlubit ? (
                         <div className="invalid-feedback">{formik.errors.emriKlubit}</div>
-                    </div>
+                    ) : null}
                 </div>
-                {/* More fields based on formik setup */}
+                <div className="form-group">
+                    <label>Trajneri</label>
+                    <input
+                        name="trajneri"
+                        onChange={formik.handleChange}
+                        value={formik.values.trajneri}
+                        className={`form-control ${formik.touched.trajneri && formik.errors.trajneri ? 'is-invalid' : ''}`}
+                    />
+                    {formik.touched.trajneri && formik.errors.trajneri ? (
+                        <div className="invalid-feedback">{formik.errors.trajneri}</div>
+                    ) : null}
+                </div>
+                <div className="form-group">
+                    <label>Viti Themelimit</label>
+                    <input
+                        name="vitiThemelimit"
+                        onChange={formik.handleChange}
+                        value={formik.values.vitiThemelimit}
+                        type="number"
+                        className={`form-control ${formik.touched.vitiThemelimit && formik.errors.vitiThemelimit ? 'is-invalid' : ''}`}
+                    />
+                    {formik.touched.vitiThemelimit && formik.errors.vitiThemelimit ? (
+                        <div className="invalid-feedback">{formik.errors.vitiThemelimit}</div>
+                    ) : null}
+                </div>
+                <div className="form-group">
+                    <label>Nr Titujve</label>
+                    <input
+                        name="nrTitujve"
+                        onChange={formik.handleChange}
+                        value={formik.values.nrTitujve}
+                        type="number"
+                        className={`form-control ${formik.touched.nrTitujve && formik.errors.nrTitujve ? 'is-invalid' : ''}`}
+                    />
+                    {formik.touched.nrTitujve && formik.errors.nrTitujve ? (
+                        <div className="invalid-feedback">{formik.errors.nrTitujve}</div>
+                    ) : null}
+                </div>
+                <div className="form-group">
+                    <label>Superliga ID</label>
+                    <input
+                        name="superligaId"
+                        onChange={formik.handleChange}
+                        value={formik.values.superligaId}
+                        type="number"
+                        className={`form-control ${formik.touched.superligaId && formik.errors.superligaId ? 'is-invalid' : ''}`}
+                    />
+                    {formik.touched.superligaId && formik.errors.superligaId ? (
+                        <div className="invalid-feedback">{formik.errors.superligaId}</div>
+                    ) : null}
+                </div>
+                <button type="submit" className="btn btn-primary">Update</button>
             </form>
         </div>
     );

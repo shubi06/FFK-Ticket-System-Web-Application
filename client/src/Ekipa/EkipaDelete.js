@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function EkipaDelete() {
-    const params = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [ekipa, setEkipa] = useState(null);
     const [isLoading, setLoading] = useState(false);
+    const [ekipa, setEkipa] = useState(null);
 
     useEffect(() => {
         fetchEkipa();
@@ -15,12 +15,12 @@ function EkipaDelete() {
     const fetchEkipa = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:5178/api/Ekipa/${params.id}`);
+            const response = await axios.get(`http://localhost:5178/api/Ekipa/${id}`);
             setEkipa(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Failed to fetch ekipa data', error);
             navigate("/ekipa-list");  // Redirect if the fetch fails
-        } finally {
             setLoading(false);
         }
     };
@@ -30,11 +30,10 @@ function EkipaDelete() {
         if (confirmDelete) {
             setLoading(true);
             try {
-                await axios.delete(`http://localhost:5178/api/Ekipa/${params.id}`);
-                navigate("/ekipa-list");
+                await axios.delete(`http://localhost:5178/api/Ekipa/${id}`);
+                navigate("/portal/ekipa-list");
             } catch (error) {
                 console.error('Failed to delete ekipa', error);
-            } finally {
                 setLoading(false);
             }
         }
@@ -50,7 +49,7 @@ function EkipaDelete() {
 
     return (
         <>
-            <h3>Delete Ekipa - ID: {params.id}</h3>
+            <h3>Delete Ekipa - ID: {id}</h3>
             <div className='container'>
                 <div>
                     <p>Are you sure you want to delete the following ekipa?</p>

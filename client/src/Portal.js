@@ -53,6 +53,14 @@ import EkipaList from "./Ekipa/EkipaList";
 import EkipaCreate from "./Ekipa/EkipaCreate";
 import EkipaEdit from "./Ekipa/EkipaEdit";
 import EkipaDelete from "./Ekipa/EkipaDelete";
+import EkipaView from "./Ekipa/EkipaView";
+
+// Ensure unique import names
+import NdeshjaSuperligeList from "./NdeshjaSuperlige/NdeshjaList";
+import NdeshjaCreate from "./NdeshjaSuperlige/NdeshjaCreate";
+import NdeshjaEdit from "./NdeshjaSuperlige/NdeshjaEdit";
+import NdeshjaDelete from "./NdeshjaSuperlige/NdeshjaDelete";
+import NdeshjaView from "./NdeshjaSuperlige/NdeshjaView";
 
 function Portal() {
   return (
@@ -126,11 +134,19 @@ function Portal() {
               <Route path="ekipa" element={<EkipaList />} />
               <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
 
-               {/* Ekipa Routes */}
-               <Route path="ekipa" element={<EkipaList />} />
+              <Route path="ekipa" element={<EkipaList />} />
               <Route path="ekipa/create" element={<EkipaCreate />} />
               <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
               <Route path="ekipa/delete/:id" element={<EkipaDelete />} />
+              <Route path="ekipa/view/:id" element={<EkipaView />} />
+               
+       
+              <Route path="ndeshja-superlige-list" element={<NdeshjaSuperligeList />} />
+              <Route path="create-ndeshja-superlige" element={<NdeshjaCreate />} />
+              <Route path="edit-ndeshja-superlige/:id" element={<NdeshjaEdit />} />
+              <Route path="delete-ndeshja-superlige/:id" element={<NdeshjaDelete />} />
+              <Route path="view-ndeshja-superlige/:id" element={<NdeshjaView />} />
+
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
