@@ -6,5 +6,7 @@
         public string Emri { get; set; }
 
         public List<Ulesja> Uleset { get; set; }
+
+        public List<Bileta> Bileta { get; set; }
     }
 }

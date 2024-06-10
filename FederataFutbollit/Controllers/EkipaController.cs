@@ -1,7 +1,6 @@
 ﻿using FederataFutbollit.Data;
 using FederataFutbollit.DTOs;
 using FederataFutbollit.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -32,7 +31,7 @@ namespace FederataFutbollit.Controllers
         public async Task<ActionResult<Ekipa>> GetEkipaById(int id)
         {
             var ekipa = await _context.Ekipa.Include(e => e.Superliga)
-                                .FirstOrDefaultAsync(e => e.Id == id);
+                                             .FirstOrDefaultAsync(e => e.Id == id);
             if (ekipa == null)
                 return NotFound("Ekipa nuk u gjet");
 
@@ -47,7 +46,8 @@ namespace FederataFutbollit.Controllers
                 EmriKlubit = ekipaDto.EmriKlubit,
                 Trajneri = ekipaDto.Trajneri,
                 VitiThemelimit = ekipaDto.VitiThemelimit,
-                NrTitujve = ekipaDto.NrTitujve
+                NrTitujve = ekipaDto.NrTitujve,
+                SuperligaId = ekipaDto.SuperligaId
             };
 
             _context.Ekipa.Add(ekipa);
@@ -56,16 +56,17 @@ namespace FederataFutbollit.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEkipa(int id, Ekipa ekipaUpdate)
+        public async Task<IActionResult> UpdateEkipa(int id, [FromBody] EkipaDto ekipaDto)
         {
             var ekipa = await _context.Ekipa.FindAsync(id);
             if (ekipa == null)
-                return NotFound("Ekipa not found");
+                return NotFound("Ekipa nuk u gjet");
 
-            ekipa.EmriKlubit = ekipaUpdate.EmriKlubit;
-            ekipa.Trajneri = ekipaUpdate.Trajneri;
-            ekipa.VitiThemelimit = ekipaUpdate.VitiThemelimit;
-            ekipa.NrTitujve = ekipaUpdate.NrTitujve;
+            ekipa.EmriKlubit = ekipaDto.EmriKlubit;
+            ekipa.Trajneri = ekipaDto.Trajneri;
+            ekipa.VitiThemelimit = ekipaDto.VitiThemelimit;
+            ekipa.NrTitujve = ekipaDto.NrTitujve;
+            ekipa.SuperligaId = ekipaDto.SuperligaId;
 
             await _context.SaveChangesAsync();
             return NoContent();

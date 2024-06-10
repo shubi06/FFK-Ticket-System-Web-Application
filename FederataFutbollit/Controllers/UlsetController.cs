@@ -139,24 +139,25 @@ namespace FederataFutbollit.Controllers
 
             return NoContent();
         }
+[HttpPost("addSeats")]
+public async Task<IActionResult> AddSeats(int sektorId, int numberOfSeats, int stadiumiId, double Cmimi)
+{
+    var maxNumri = _context.Uleset.Any() ? _context.Uleset.Max(s => s.Numri) : 0;
 
-        [HttpPost("addSeats")]
-        public async Task<IActionResult> AddSeats(int sektorId, int numberOfSeats, int stadiumiId)
-        {
-            var maxNumri = _context.Uleset.Any() ? _context.Uleset.Max(s => s.Numri) : 0;
+    var seats = Enumerable.Range(1, numberOfSeats).Select(i => new Ulesja
+    {
+        Numri = maxNumri + i,
+        IsAvailable = true,
+        SektoriUlseveID = sektorId,
+        StadiumiId = stadiumiId,
+        Cmimi = Cmimi, 
+    }).ToList();
 
-            var seats = Enumerable.Range(1, numberOfSeats).Select(i => new Ulesja
-            {
-                Numri = maxNumri + i,
-                IsAvailable = true,
-                SektoriUlseveID = sektorId,
-                StadiumiId = stadiumiId
-            }).ToList();
+    _context.Uleset.AddRange(seats);
+    await _context.SaveChangesAsync();
 
-            _context.Uleset.AddRange(seats);
-            await _context.SaveChangesAsync();
+    return Ok(new { Message = $"{numberOfSeats} seats added to sector {sektorId} in stadium {stadiumiId}." });
+}
 
-            return Ok(new { Message = $"{numberOfSeats} seats added to sector {sektorId} in stadium {stadiumiId}." });
-        }
     }
 }

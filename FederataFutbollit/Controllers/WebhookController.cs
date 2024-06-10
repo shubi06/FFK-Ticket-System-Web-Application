@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -65,11 +66,15 @@ namespace FederataFutbollit.Controllers
                     }
 
                     // Find the user's cart
-                    var cart = await _context.Carts
-                        .Include(c => c.CartSeats)
-                        .FirstOrDefaultAsync(c => c.ApplicationUserId == userId);
+                    var cartSeats = await _context.CartSeats
+                        .Include(cs => cs.Cart)
+                        .Include(cs => cs.Ndeshja)
+                        .Include(cs => cs.Ulesja)
+                        .Include(cs => cs.SektoriUlseve)
+                        .Where(cs => cs.Cart.ApplicationUserId == userId)
+                        .ToListAsync();
 
-                    if (cart == null || !cart.CartSeats.Any())
+                    if (cartSeats == null || !cartSeats.Any())
                     {
                         _logger.LogError($"Cart is empty or not found for userId: {userId}");
                         return BadRequest("Cart is empty or not found");
@@ -81,10 +86,14 @@ namespace FederataFutbollit.Controllers
                         UserId = userId,
                         OrderDate = DateTime.UtcNow,
                         Status = "Completed",
-                        Seats = cart.CartSeats.ToList(),
                         FirstName = firstName,
                         LastName = lastName,
-                        City = city
+                        City = city,
+                        Cmimi = cartSeats.Sum(cs => cs.Cmimi * cs.Quantity),
+                        NdeshjaId = cartSeats.First().NdeshjaId,
+                        Quantity = cartSeats.Sum(cs => cs.Quantity),
+                        SektoriUlseveId = cartSeats.First().SektoriUlseveId,
+                        UlesjaId = cartSeats.First().UlesjaId,
                     };
 
                     _context.Orders.Add(order);
@@ -93,12 +102,57 @@ namespace FederataFutbollit.Controllers
                     // Log successful order creation
                     _logger.LogInformation($"Order created successfully for userId: {userId}, orderId: {order.Id}");
 
-                    // Clear the cart
-                    _context.CartSeats.RemoveRange(cart.CartSeats);
+                    // Create tickets for each seat in the cart
+                    foreach (var cartSeat in cartSeats)
+                    {
+                        // Check if the seat has already been sold
+                        var existingTicket = await _context.Biletat
+                            .AnyAsync(b => b.UlesjaID == cartSeat.UlesjaId);
+                        if (existingTicket)
+                        {
+                            _logger.LogError($"Seat with ID {cartSeat.UlesjaId} has already been sold.");
+                            continue; // Skip this seat
+                        }
+
+                        var bileta = new Bileta
+                        {
+                            FirstName = firstName,
+                            LastName = lastName,
+                            Cmimi = (int)cartSeat.Cmimi,
+                            OraBlerjes = DateTime.UtcNow,
+                            UlesjaID = cartSeat.UlesjaId,
+                            SektoriUlseveID = cartSeat.SektoriUlseveId,
+                            NdeshjaID = cartSeat.NdeshjaId,
+                            ApplicationUserID = userId
+                        };
+
+                        _context.Biletat.Add(bileta);
+
+                        // Mark the seat as unavailable
+                        var ulesja = await _context.Uleset.FindAsync(cartSeat.UlesjaId);
+                        if (ulesja != null)
+                        {
+                            ulesja.IsAvailable = false;
+                            _context.Uleset.Update(ulesja);
+                        }
+                        else
+                        {
+                            _logger.LogError($"Ulesja not found for ID: {cartSeat.UlesjaId}");
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+
+                    // Clear the cart seats
+                    _context.CartSeats.RemoveRange(cartSeats);
                     await _context.SaveChangesAsync();
                 }
 
                 return Ok();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                _logger.LogError($"Database update exception: {dbEx.InnerException?.Message}");
+                return BadRequest("Database update error occurred.");
             }
             catch (StripeException e)
             {

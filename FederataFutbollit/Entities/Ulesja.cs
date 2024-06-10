@@ -23,5 +23,7 @@ namespace FederataFutbollit.Entities
 
    [JsonIgnore]
 public CartSeat CartSeat { get; set; }
+
+public string SektoriUlses =>SektoriUlseve?.Emri;
     }
 }

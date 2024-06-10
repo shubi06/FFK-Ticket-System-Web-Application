@@ -67,7 +67,7 @@ namespace FederataFutbollit.Controllers
                 var service = new SessionService();
                 Session session = service.Create(options);
 
-                return Ok(new { sessionId = session.Id });
+                return Ok(new { sessionId = session.Id, userId = cart.ApplicationUserId });
             }
             catch (StripeException e)
             {

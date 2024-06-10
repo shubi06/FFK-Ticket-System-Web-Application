@@ -2,35 +2,35 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CartContext } from './Services/CartContext';
+import { AuthContext } from './Services/AuthContext'; // Import AuthContext
 import './seats.css';
 import { useNavigationProgress } from './Services/NavigationProgressContext';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 const Seats = () => {
-  const { sectorId, ndeshjaId } = useParams(); // Use useParams to get sectorId and ndeshjaId from URL
+  const { sectorId, ndeshjaId } = useParams();
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [unavailableSeat, setUnavailableSeat] = useState(null);
+  const [limitReached, setLimitReached] = useState(false);
   const { cart, addToCart, removeFromCart, getCart } = useContext(CartContext);
+  const { authData } = useContext(AuthContext); // Get authData from AuthContext
   const { isStepCompleted } = useNavigationProgress();
   const navigate = useNavigate();
+  const [sectorName, setSectorName] = useState('');
 
   useEffect(() => {
-    console.log("Step completed status:", isStepCompleted);
     if (!isStepCompleted) {
-      console.log("Step not completed. Redirecting to home.");
       navigate('/');
       return;
     }
   }, [isStepCompleted, navigate]);
 
   useEffect(() => {
-    console.log("sectorId:", sectorId);
-    console.log("ndeshjaId:", ndeshjaId);
-
     const fetchSeats = async () => {
       try {
-        console.log("Fetching seats for sector:", sectorId);
         const response = await axios.get(`http://localhost:5178/api/Ulesja/sector/${sectorId}`);
-        console.log("Seats data fetched:", response.data);
         setSeats(response.data);
       } catch (error) {
         console.error("There was an error fetching the seats data!", error);
@@ -41,21 +41,50 @@ const Seats = () => {
   }, [sectorId]);
 
   useEffect(() => {
+    const fetchSectorName = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5178/api/SektoriUlseve/${sectorId}`);
+        setSectorName(response.data.emri); // Assuming 'emri' is the name of the sector
+      } catch (error) {
+        console.error("There was an error fetching the sector name!", error);
+      }
+    };
+
+    fetchSectorName();
+  }, [sectorId]);
+
+  useEffect(() => {
     getCart();
   }, [getCart]);
 
   useEffect(() => {
     if (cart && cart.cartSeats) {
       const cartSeatIds = cart.cartSeats.map(seat => seat.ulesjaId);
-      console.log("Cart seat IDs:", cartSeatIds);
       setSelectedSeats(cartSeatIds);
     }
   }, [cart]);
 
-  const handleSeatClick = (seat) => {
-    console.log("Seat clicked:", seat);
-    const seatWithSector = { ...seat, sectorId, ndeshjaId }; // Ensure ndeshjaId is passed here
-    console.log("Seat with sector and match ID:", seatWithSector);
+  const checkTicketLimit = async () => {
+    try {
+      const response = await axios.post('http://localhost:5178/api/Bileta/check-ticket-limit', {}, {
+        params: {
+          userId: authData.userId, // Use dynamic userId from authData
+          ndeshjaId: ndeshjaId
+        }
+      });
+      return response.data;
+    } catch (error) {
+      return error.response?.data || null; // Return the error message
+    }
+  };
+
+  const handleSeatClick = async (seat) => {
+    if (!seat.isAvailable) {
+      setUnavailableSeat(seat);
+      return;
+    }
+
+    const seatWithSector = { ...seat, sectorId, ndeshjaId };
     const isSeatSelected = selectedSeats.includes(seat.id);
 
     if (isSeatSelected) {
@@ -63,16 +92,20 @@ const Seats = () => {
 
       const cartSeat = cart.cartSeats.find(cartSeat => cartSeat.ulesjaId === seat.id);
       if (cartSeat) {
-        console.log("Removing seat from cart:", cartSeat);
         removeFromCart(cartSeat.id);
       } else {
         console.error('Seat not found in cart:', seat.id);
       }
     } else {
+      const ticketLimitResponse = await checkTicketLimit();
+      if (ticketLimitResponse === "You have reached the maximum limit of 4 tickets for this match.") {
+        setLimitReached(true);
+        return;
+      }
+
       const totalSelectedSeats = selectedSeats.length + cart.cartSeats.filter(cs => !selectedSeats.includes(cs.ulesjaId)).length;
       if (totalSelectedSeats < 4) {
         setSelectedSeats([...selectedSeats, seat.id]);
-        console.log("Adding seat to cart:", seatWithSector);
         addToCart(seatWithSector);
       } else {
         alert('You cannot select more than 4 seats.');
@@ -96,7 +129,7 @@ const Seats = () => {
 
   return (
     <div className="seats-wrapper">
-      <h1>Seats in Sector {sectorId}</h1>
+      <h1>Seats in Sector {sectorName}</h1>
       {rows.map((row, rowIndex) => (
         <div key={rowIndex} className="seats-grid">
           {row.map(seat => (
@@ -121,9 +154,46 @@ const Seats = () => {
       <div className="continue-button-wrapper">
         <button onClick={handleContinueClick} className="continue-button">Proceed to Cart</button>
       </div>
+
+      {/* Modal për ulsën e padisponueshme */}
+      <Modal
+        show={!!unavailableSeat}
+        onHide={() => setUnavailableSeat(null)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Unavailable Seat</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>The selected seat is not available. Please choose another seat.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setUnavailableSeat(null)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal për limitin e arritur */}
+      <Modal
+        show={limitReached}
+        onHide={() => setLimitReached(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Limit Reached</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>You have reached the maximum limit of 4 tickets for this match.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setLimitReached(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
 
 export default Seats;
-

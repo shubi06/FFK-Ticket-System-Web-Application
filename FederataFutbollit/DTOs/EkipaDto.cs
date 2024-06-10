@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FederataFutbollit.Entities
+namespace FederataFutbollit.DTOs
 {
     public class EkipaDto
     {
@@ -20,7 +20,5 @@ namespace FederataFutbollit.Entities
 
         [Required]
         public int SuperligaId { get; set; }
-
-        public IFormFile Logo { get; set; }
     }
 }

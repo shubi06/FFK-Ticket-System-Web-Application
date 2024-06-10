@@ -35,6 +35,18 @@ namespace FederataFutbollit.Controllers
             return stadiumi;
         }
 
+        [HttpGet("Match/{matchId}")]
+        public async Task<ActionResult<Stadiumi>> GetStadiumByMatchId(int matchId)
+        {
+            var match = await _context.Ndeshja.Include(n => n.Stadiumi).FirstOrDefaultAsync(n => n.Id == matchId);
+            if (match == null || match.Stadiumi == null)
+            {
+                return NotFound($"No match found with ID {matchId} or match does not have an associated stadium.");
+            }
+
+            return match.Stadiumi;
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Stadiumi>>> Create(StadiumiCreateDto request)
         {

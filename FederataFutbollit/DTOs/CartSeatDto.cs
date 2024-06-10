@@ -9,4 +9,5 @@ public class CartSeatDto
     public int SektoriUlseveId { get; set; }
    public int NdeshjaId { get; set; } 
     public string ApplicationUserId { get; set; }
+
 }
