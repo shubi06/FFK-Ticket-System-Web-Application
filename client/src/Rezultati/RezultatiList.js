@@ -9,7 +9,6 @@ function RezultatList() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    // On component load, fetch Rezultat data
     fetchRezultati();
   }, []);
 
@@ -28,7 +27,7 @@ function RezultatList() {
     if (confirmDelete) {
       try {
         await axios.delete(`http://localhost:5178/api/Rezultati/${id}`);
-        fetchRezultati();  // Refresh the list after delete
+        fetchRezultati();
       } catch (error) {
         console.log("Failed to delete rezultat", error);
       }
@@ -39,7 +38,7 @@ function RezultatList() {
     <>
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 className="h3 mb-0 text-gray-800">Rezultat List</h1>
-        <Link to="/rezultat-create" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <Link to="/portal/rezultati-create" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
           <FontAwesomeIcon icon={faSoccerBall} className="text-white-50" /> Add New Rezultat
         </Link>
       </div>
@@ -62,7 +61,8 @@ function RezultatList() {
                     <th>Emri Klubit</th>
                     <th>Kundershtari</th>
                     <th>Data Ndeshjes</th>
-                    <th>Rezultati</th>
+                    <th>Golat Ekipi 1</th>
+                    <th>Golat Ekipi 2</th>
                     <th>Aksionet</th>
                   </tr>
                 </thead>
@@ -73,12 +73,13 @@ function RezultatList() {
                       <td>{rezultat.emriKlubit}</td>
                       <td>{rezultat.kundershtari}</td>
                       <td>{rezultat.dataNdeshjes}</td>
-                      <td>{rezultat.rezultati}</td>
+                      <td>{rezultat.golatEkipi1}</td>
+                      <td>{rezultat.golatEkipi2}</td>
                       <td>
                         <Link to={`/rezultat-view/${rezultat.id}`} className="btn btn-primary btn-sm mr-1">
                           View
                         </Link>
-                        <Link to={`/rezultat-edit/${rezultat.id}`} className="btn btn-info btn-sm mr-1">
+                        <Link to={`/portal/rezultati/edit/${rezultat.id}`} className="btn btn-info btn-sm mr-1">
                           Edit
                         </Link>
                         <button onClick={() => handleDelete(rezultat.id)} className="btn btn-danger btn-sm">

@@ -19,7 +19,7 @@ function RezultatDelete() {
             setRezultat(response.data);
         } catch (error) {
             console.error('Failed to fetch rezultat data', error);
-            navigate("/rezultati-list");  // Redirect if the fetch fails
+            navigate("/portal/rezultati-list");  // Redirect if the fetch fails
         } finally {
             setLoading(false);
         }
@@ -31,7 +31,7 @@ function RezultatDelete() {
             setLoading(true);
             try {
                 await axios.delete(`http://localhost:5178/api/Rezultati/${params.id}`);
-                navigate("/rezultati-list");
+                navigate("/portal/rezultati-list");
             } catch (error) {
                 console.error('Failed to delete rezultat', error);
             } finally {

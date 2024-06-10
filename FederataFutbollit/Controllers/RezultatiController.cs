@@ -1,7 +1,8 @@
-﻿/*using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FederataFutbollit.Entities; // Për të përdorur klasën Rezultati
+using FederataFutbollit.Entities;
+using FederataFutbollit.DTOs; // Import the DTO namespace
 using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,8 +37,17 @@ namespace FederataFutbollit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Rezultati>>> CreateRezultati(Rezultati rezultati)
+        public async Task<ActionResult<List<Rezultati>>> CreateRezultati(RezultatiDTO rezultatiDto)
         {
+            var rezultati = new Rezultati
+            {
+                EmriKlubit = rezultatiDto.EmriKlubit,
+                Kundershtari = rezultatiDto.Kundershtari,
+                DataNdeshjes = rezultatiDto.DataNdeshjes,
+                GolatEkipi1 = rezultatiDto.GolatEkipi1,
+                GolatEkipi2 = rezultatiDto.GolatEkipi2
+            };
+
             _context.Rezultati.Add(rezultati);
             await _context.SaveChangesAsync();
 
@@ -45,14 +55,17 @@ namespace FederataFutbollit.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRezultati(int id, Rezultati rezultati)
+        public async Task<IActionResult> UpdateRezultati(int id, RezultatiDTO rezultatiDto)
         {
             var existingRezultati = await _context.Rezultati.FindAsync(id);
             if (existingRezultati == null)
                 return NotFound("Rezultati nuk u gjet.");
 
-            existingRezultati.GolatEkipi1 = rezultati.GolatEkipi1;
-            existingRezultati.GolatEkipi2 = rezultati.GolatEkipi2;
+            existingRezultati.EmriKlubit = rezultatiDto.EmriKlubit;
+            existingRezultati.Kundershtari = rezultatiDto.Kundershtari;
+            existingRezultati.DataNdeshjes = rezultatiDto.DataNdeshjes;
+            existingRezultati.GolatEkipi1 = rezultatiDto.GolatEkipi1;
+            existingRezultati.GolatEkipi2 = rezultatiDto.GolatEkipi2;
 
             _context.Rezultati.Update(existingRezultati);
             await _context.SaveChangesAsync();
@@ -74,4 +87,3 @@ namespace FederataFutbollit.Controllers
         }
     }
 }
-*/
