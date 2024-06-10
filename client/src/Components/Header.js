@@ -2,12 +2,8 @@ import React, { useContext } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import "./Header.css";
-import Login from "./Login";
-import Register from "./Register";
-import Player from "./Player";
-import Logo from "../Assets/Logo.png";
 import { AuthContext } from "../Services/AuthContext";
-import "./Header.css";
+import Logo from "../Assets/Logo.png";
 
 const Header = () => {
   const { authData, logout } = useContext(AuthContext);
@@ -17,7 +13,7 @@ const Header = () => {
       <Container>
         <Navbar.Brand href="/" className="navbar-brand">
           <img
-            src={Logo} // Replace with your logo path
+            src={Logo}
             height="40"
             alt="lo"
             className="d-inline-block align-top"
@@ -46,8 +42,8 @@ const Header = () => {
               <Nav.Link>Contact</Nav.Link>
             </LinkContainer>
 
-            {authData && authData.role === "Admin" && (
-              <LinkContainer to="/portal/dashboard">
+            {authData && authData.role === 'Admin' && (
+              <LinkContainer to="/dashboard">
                 <Nav.Link>Dashboard</Nav.Link>
               </LinkContainer>
             )}

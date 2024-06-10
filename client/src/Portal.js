@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
@@ -48,11 +48,23 @@ import ContactList from "./Contact/ContactList";
 import ContactView from "./Contact/ContactView";
 import ContactEdit from "./Contact/ContactEdit";
 
-// Ekipa components
 import EkipaList from "./Ekipa/EkipaList";
 import EkipaCreate from "./Ekipa/EkipaCreate";
 import EkipaEdit from "./Ekipa/EkipaEdit";
 import EkipaDelete from "./Ekipa/EkipaDelete";
+
+import ReferiList from "./Referi/ReferiList"
+import ReferiCreate from "./Referi/ReferiCreate"
+import ReferiEdit from "./Referi/ReferiEdit"
+import ReferiDelete from "./Referi/ReferiDelete"
+
+import RezultatiList from "./Rezultati/RezultatiList"
+import RezultatiCreate from "./Rezultati/RezultatiCreate"
+import RezultatiEdit from "./Rezultati/RezultatiEdit"
+import RezultatiDelete from "./Rezultati/RezultatiDelete";
+
+
+
 
 function Portal() {
   return (
@@ -124,13 +136,21 @@ function Portal() {
               <Route path="contact/view/:id" element={<ContactView />} />
 
               <Route path="ekipa" element={<EkipaList />} />
-              <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
-
-               {/* Ekipa Routes */}
-               <Route path="ekipa" element={<EkipaList />} />
               <Route path="ekipa/create" element={<EkipaCreate />} />
               <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
               <Route path="ekipa/delete/:id" element={<EkipaDelete />} />
+
+
+              <Route path="referi-list"  element={<ReferiList />} />
+              <Route path="referi/create"  element={<ReferiCreate />} />
+              <Route path="referi/edit/:id"  element={<ReferiEdit />} />
+              <Route path="referi/delete/:id"  element={<ReferiDelete />} />
+
+              <Route path="rezultati-list" element={<RezultatiList />} />
+              <Route path="rezultati-create" element={<RezultatiCreate />} />
+              <Route path="rezultati/edit/:id" element={<RezultatiEdit />} />
+              <Route path="rezultati/delete/:id" element={<RezultatiDelete />} />
+
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
