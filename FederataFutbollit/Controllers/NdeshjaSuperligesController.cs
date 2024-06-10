@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FederataFutbollit.Data;
 using FederataFutbollit.Entities;
+using FederataFutbollit.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,35 +15,36 @@ namespace FederataFutbollit.Controllers
     {
         private readonly DataContext _context;
 
-        public NdeshjaSuperligesController(DataContext context)
-        {
-            _context = context;
-        }
+        public NdeshjaSuperligesController(DataContext context) => _context = context;
 
         // GET: api/NdeshjaSuperliges
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NdeshjaSuperliges>>> GetAllNdeshjet()
         {
-            return await _context.NdeshjetESuperliges.Include(n => n.Statusi).ToListAsync();
+            return await _context.NdeshjaSuperliges.Include(n => n.Statusi).Include(n => n.Superliga).ToListAsync();
         }
 
         // GET: api/NdeshjaSuperliges/5
         [HttpGet("{id}")]
         public async Task<ActionResult<NdeshjaSuperliges>> GetNdeshjaById(int id)
         {
-            var ndeshja = await _context.NdeshjetESuperliges.Include(n => n.Statusi).FirstOrDefaultAsync(n => n.Id == id);
+            var ndeshja = await _context.NdeshjaSuperliges
+                                        .Include(n => n.Statusi)
+                                        .Include(n => n.Superliga)
+                                        .FirstOrDefaultAsync(n => n.Id == id);
             if (ndeshja == null)
             {
-                return NotFound();
+                return NotFound("Ndeshja nuk u gjet.");
             }
             return ndeshja;
         }
+
 
         // GET: api/NdeshjaSuperliges/ByStatus/1
         [HttpGet("ByStatus/{statusId}")]
         public async Task<ActionResult<IEnumerable<NdeshjaSuperliges>>> GetNdeshjeByStatus(int statusId)
         {
-            var ndeshjet = await _context.NdeshjetESuperliges.Where(n => n.StatusiId == statusId).Include(n => n.Statusi).ToListAsync();
+            var ndeshjet = await _context.NdeshjaSuperliges.Where(n => n.StatusiId == statusId).Include(n => n.Statusi).Include(n => n.Superliga).ToListAsync();
             if (ndeshjet == null || !ndeshjet.Any())
             {
                 return NotFound("Asnjë ndeshje me këtë status nuk u gjet.");
@@ -52,53 +54,82 @@ namespace FederataFutbollit.Controllers
 
         // POST: api/NdeshjaSuperliges
         [HttpPost]
-        public async Task<ActionResult<NdeshjaSuperliges>> CreateNdeshja([FromBody] NdeshjaSuperliges ndeshja)
+        public async Task<ActionResult<NdeshjaSuperliges>> CreateNdeshja([FromBody] NdeshjaSuperligesCreateDto request)
         {
-            _context.NdeshjetESuperliges.Add(ndeshja);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetNdeshjaById", new { id = ndeshja.Id }, ndeshja);
-        }
-
-        // PUT: api/NdeshjaSuperliges/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNdeshja(int id, [FromBody] NdeshjaSuperliges ndeshja)
-        {
-            if (id != ndeshja.Id)
+            var ndeshja = new NdeshjaSuperliges
             {
-                return BadRequest();
-            }
+                Ekipa1 = request.Ekipa1,
+                Ekipa2 = request.Ekipa2,
+                DataENdeshjes = request.DataENdeshjes,
+                StatusiId = request.StatusiId,
+                SuperligaId = request.SuperligaId,
+                EkipaId = request.EkipaId
+            };
 
-            _context.Entry(ndeshja).State = EntityState.Modified;
+            _context.NdeshjaSuperliges.Add(ndeshja);
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateException ex)
             {
-                if (!_context.NdeshjetESuperliges.Any(n => n.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(new { message = "Failed to create match. Database update exception.", error = ex.InnerException?.Message, ex.StackTrace });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to create match.", error = ex.Message, ex.StackTrace });
+            }
+
+            return CreatedAtAction("GetNdeshjaById", new { id = ndeshja.Id }, ndeshja);
+        }
+
+
+
+        // PUT: api/NdeshjaSuperliges/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateNdeshja(int id, [FromBody] NdeshjaSuperligesUpdateDto request)
+        {
+            var ndeshja = await _context.NdeshjaSuperliges.FindAsync(id);
+            if (ndeshja == null)
+            {
+                return NotFound("Ndeshja nuk u gjet.");
+            }
+
+            ndeshja.Ekipa1 = request.Ekipa1;
+            ndeshja.Ekipa2 = request.Ekipa2;
+            ndeshja.DataENdeshjes = request.DataENdeshjes;
+            ndeshja.StatusiId = request.StatusiId;
+            ndeshja.SuperligaId = request.SuperligaId;
+            ndeshja.EkipaId = request.EkipaId;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest(new { message = "Failed to update match. Database update exception.", error = ex.InnerException?.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to update match.", error = ex.Message });
             }
 
             return NoContent();
         }
 
+
         // DELETE: api/NdeshjaSuperliges/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNdeshja(int id)
         {
-            var ndeshja = await _context.NdeshjetESuperliges.FindAsync(id);
+            var ndeshja = await _context.NdeshjaSuperliges.FindAsync(id);
             if (ndeshja == null)
             {
-                return NotFound();
+                return NotFound("Ndeshja nuk u gjet.");
             }
 
-            _context.NdeshjetESuperliges.Remove(ndeshja);
+            _context.NdeshjaSuperliges.Remove(ndeshja);
             await _context.SaveChangesAsync();
             return NoContent();
         }
