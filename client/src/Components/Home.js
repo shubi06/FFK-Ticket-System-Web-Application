@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Slider from './Slider';
-import './Home.css';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Slider from "./Slider";
+import "./Home.css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [matches, setMatches] = useState([]);
@@ -10,10 +10,10 @@ const Home = () => {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const response = await axios.get('http://localhost:5178/api/Ndeshja');
+        const response = await axios.get("http://localhost:5178/api/Ndeshja");
         setMatches(response.data);
       } catch (error) {
-        console.error('Error fetching matches:', error);
+        console.error("Error fetching matches:", error);
       }
     };
 
@@ -30,7 +30,9 @@ const Home = () => {
             {matches.length > 0 ? (
               matches.map((match) => (
                 <div key={match.id} className="match-item">
-                  <h3>{match.kombetarjaEmri} vs {match.ekipiKundershtar}</h3>
+                  <h3>
+                    {match.kombetarjaEmri} vs {match.ekipiKundershtar}
+                  </h3>
                   <p>Date: {new Date(match.data).toLocaleDateString()}</p>
                   <p>Time: {new Date(match.data).toLocaleTimeString()}</p>
                   <p>Location: {match.stadiumiEmri}</p>

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CartContext } from './Services/CartContext';
+import { AuthContext } from './Services/AuthContext'; // Import AuthContext
 import './seats.css';
 import { useNavigationProgress } from './Services/NavigationProgressContext';
 import Modal from 'react-bootstrap/Modal';
@@ -11,10 +12,13 @@ const Seats = () => {
   const { sectorId, ndeshjaId } = useParams();
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [unavailableSeat, setUnavailableSeat] = useState(null); // Shto gjendjen për të mbajtur informacionin për ulsën e padisponueshme
+  const [unavailableSeat, setUnavailableSeat] = useState(null);
+  const [limitReached, setLimitReached] = useState(false);
   const { cart, addToCart, removeFromCart, getCart } = useContext(CartContext);
+  const { authData } = useContext(AuthContext); // Get authData from AuthContext
   const { isStepCompleted } = useNavigationProgress();
   const navigate = useNavigate();
+  const [sectorName, setSectorName] = useState('');
 
   useEffect(() => {
     if (!isStepCompleted) {
@@ -37,6 +41,19 @@ const Seats = () => {
   }, [sectorId]);
 
   useEffect(() => {
+    const fetchSectorName = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5178/api/SektoriUlseve/${sectorId}`);
+        setSectorName(response.data.emri); // Assuming 'emri' is the name of the sector
+      } catch (error) {
+        console.error("There was an error fetching the sector name!", error);
+      }
+    };
+
+    fetchSectorName();
+  }, [sectorId]);
+
+  useEffect(() => {
     getCart();
   }, [getCart]);
 
@@ -47,10 +64,24 @@ const Seats = () => {
     }
   }, [cart]);
 
-  const handleSeatClick = (seat) => {
+  const checkTicketLimit = async () => {
+    try {
+      const response = await axios.post('http://localhost:5178/api/Bileta/check-ticket-limit', {}, {
+        params: {
+          userId: authData.userId, // Use dynamic userId from authData
+          ndeshjaId: ndeshjaId
+        }
+      });
+      return response.data;
+    } catch (error) {
+      return error.response?.data || null; // Return the error message
+    }
+  };
+
+  const handleSeatClick = async (seat) => {
     if (!seat.isAvailable) {
-      setUnavailableSeat(seat); // Vendos ulsën e padisponueshme
-      return; // Mos lejo zgjedhjen e ulsës së padisponueshme
+      setUnavailableSeat(seat);
+      return;
     }
 
     const seatWithSector = { ...seat, sectorId, ndeshjaId };
@@ -66,6 +97,12 @@ const Seats = () => {
         console.error('Seat not found in cart:', seat.id);
       }
     } else {
+      const ticketLimitResponse = await checkTicketLimit();
+      if (ticketLimitResponse === "You have reached the maximum limit of 4 tickets for this match.") {
+        setLimitReached(true);
+        return;
+      }
+
       const totalSelectedSeats = selectedSeats.length + cart.cartSeats.filter(cs => !selectedSeats.includes(cs.ulesjaId)).length;
       if (totalSelectedSeats < 4) {
         setSelectedSeats([...selectedSeats, seat.id]);
@@ -92,7 +129,7 @@ const Seats = () => {
 
   return (
     <div className="seats-wrapper">
-      <h1>Seats in Sector {sectorId}</h1>
+      <h1>Seats in Sector {sectorName}</h1>
       {rows.map((row, rowIndex) => (
         <div key={rowIndex} className="seats-grid">
           {row.map(seat => (
@@ -120,7 +157,7 @@ const Seats = () => {
 
       {/* Modal për ulsën e padisponueshme */}
       <Modal
-        show={!!unavailableSeat} // Shfaq modalin vetëm kur ka një ulsë të padisponueshme
+        show={!!unavailableSeat}
         onHide={() => setUnavailableSeat(null)}
         centered
       >
@@ -132,6 +169,25 @@ const Seats = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setUnavailableSeat(null)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal për limitin e arritur */}
+      <Modal
+        show={limitReached}
+        onHide={() => setLimitReached(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Limit Reached</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>You have reached the maximum limit of 4 tickets for this match.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setLimitReached(false)}>
             Close
           </Button>
         </Modal.Footer>

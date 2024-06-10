@@ -131,6 +131,18 @@ function Sidebar() {
           <span>REFERI</span>
         </Link>
       </li>
+
+
+
+   {/* <!-- Nav Item - Order --> */}
+   <li className="nav-item active">
+        <Link className="nav-link" to="/portal/order-list">
+          <span>Order</span>
+        </Link>
+      </li>
+
+
+
     </ul>
   );
 }
