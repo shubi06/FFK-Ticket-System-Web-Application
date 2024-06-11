@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FederataFutbollit.Entities
+namespace FederataFutbollit.Models
 {
     public class Referi
     {
@@ -9,11 +8,16 @@ namespace FederataFutbollit.Entities
         public int Referi_ID { get; set; }
 
         [Required]
-        [MaxLength(50)]
         public string Emri { get; set; }
 
         [Required]
-        [MaxLength(50)]
         public string Mbiemri { get; set; }
+
+        [Required]
+        public string Kombesia { get; set; }
+
+        [Required]
+        public int Mosha { get; set; }
+
     }
 }

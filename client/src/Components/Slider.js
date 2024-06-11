@@ -39,3 +39,4 @@ export default Slider;
 /*<Link className="nav-link" to="/portal/list-users">
           <span>USERS</span>
         </Link>*/
+        

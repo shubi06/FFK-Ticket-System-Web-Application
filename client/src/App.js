@@ -1,4 +1,3 @@
-// App.js or a similar top-level component
 import React from "react";
 import {
   BrowserRouter,
@@ -12,8 +11,6 @@ import { UserProvider } from "./Services/UserContext";
 import { CartProvider } from "./Services/CartContext";
 import { NavigationProgressProvider } from "./Services/NavigationProgressContext";
 import PrivateRoute from "./Services/PrivateRoute";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 
 import Login from "./Components/Login";
 import Register from "./Components/Register";
@@ -21,27 +18,23 @@ import Portal from "./Portal";
 import Home from "./Components/Home";
 import Player from "./Components/Player";
 import Header from "./Components/Header";
-import Footer from "./Components/Footer";
 import Slider from "./Components/Slider";
 import Stadium from "./Stadium";
 import Cart from "./Components/Cart";
 import Seats from "./Seats";
 import About from "./Components/About";
-
 import Contact from "./Components/ContactForm";
-
 import SuperligaTable from "./Components/SuperligaTable";
-
 import ForgotPassword from "./Components/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword";
-
-import TermsOfService from "./Components/TermsOfService";
-import PrivacyPolicy from "./Components/PrivacyPolicy";
+import Dashboard from "./Components/Dashboard";
+import Sidebar from "./Sidebar";
+import RezultatiView from "./Rezultati/RezultatiView";
+import ReferiView from "./Referi/ReferiView";
 
 import "./App.css";
 import "./sb-admin-2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Success from "./Success";
 
 const App = () => {
   return (
@@ -62,21 +55,9 @@ const App = () => {
 const AppContent = () => {
   const location = useLocation();
 
-  // Vendosni rrugët ku dëshironi të fshehni Header
+  // Determine whether to show header or not
   const hideHeaderPaths = ["/portal"];
-  const hideFooterPaths = [
-    "/login",
-    "/register",
-    "/portal",
-    "/stadium",
-    "/seats",
-    "/cart",
-  ];
-
   const shouldShowHeader = !hideHeaderPaths.some((path) =>
-    location.pathname.startsWith(path)
-  );
-  const shouldShowFooter = !hideFooterPaths.some((path) =>
     location.pathname.startsWith(path)
   );
 
@@ -86,44 +67,33 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/player" element={<Player />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/header" element={<Header />} />
-        <Route path="/footer" element={<Footer />} />
-        <Route path="/slider" element={<Slider />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/stadium" element={<Stadium />} />
-        <Route path="/stadium/:matchId" element={<Stadium />} />
-        <Route path="/stadium/:sectorId/:matchId" element={<Stadium />} />
-        <Route path="/seats/:sectorId/:ndeshjaId" element={<Seats />} />
-        <Route path="/success" element={<Success />} />
-
+        <Route path="/seats/:sectorId" element={<Seats />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-
         <Route path="/superliga" element={<SuperligaTable />} />
-
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-
-        <Route path="/termsofservice" element={<TermsOfService />} />
-        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-
+        <Route path="/rezultat-view/:id" element={<RezultatiView />} /> {/* Add RezultatiView route */}
+        <Route path="/referi-view/:id" element={<ReferiView />} /> {/* Add ReferiView route */}
         <Route
           path="/portal/*"
           element={
-            <PrivateRoute allowedRoles={["Admin"]}>
+            <>
               <Portal />
-            </PrivateRoute>
+              {/* <Sidebar /> */}
+            </>
           }
         />
+        <Route path="*" element={<div>Page Not Found</div>} />
       </Routes>
-      {shouldShowFooter && <Footer />}
     </>
   );
 };
-
-// Create a new component to wrap CheckoutForm with Elements
 
 export default App;

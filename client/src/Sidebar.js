@@ -111,32 +111,24 @@ function Sidebar() {
           <span>EKIPA E SUPERLIGES</span>
         </Link>
       </li>
-
-      {/* <!-- Nav Item - Rezultati --> */}
+     
+      <hr className="sidebar-divider my-0" />
       <li className="nav-item active">
-        <Link className="nav-link" to="/portal/rezultat-list">
-          <span>REZULTATI</span>
+        <Link className="nav-link" to="/portal/ndeshja-list">
+          <span>NDESHJET E SUPERLIGES</span>
         </Link>
       </li>
 
-       {/* <!-- Nav Item - Referi --> */}
-       <li className="nav-item active">
-        <Link className="nav-link" to="/portal/rferi-list">
-          <span>REFERI</span>
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/referi-list">
+          <span>Referi</span>
         </Link>
       </li>
-
-
-
-   {/* <!-- Nav Item - Order --> */}
-   <li className="nav-item active">
-        <Link className="nav-link" to="/portal/order-list">
-          <span>Order</span>
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/rezultati-list">
+          <span>Rezultati</span>
         </Link>
       </li>
-
-
-
     </ul>
   );
 }

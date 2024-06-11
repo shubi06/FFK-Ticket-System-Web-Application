@@ -1,7 +1,9 @@
 ﻿using FederataFutbollit.Entities;
+using FederataFutbollit.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace FederataFutbollit.Data
 {
@@ -36,6 +38,10 @@ namespace FederataFutbollit.Data
         
         public DbSet<Shpenzimet> Shpenzimet { get; set; }
         public DbSet<Kontabiliteti> Kontabiliteti { get; set; }
+
+        public DbSet<Rezultati> Rezultati { get; set; }
+
+        public DbSet<Referi> Referi { get; set; }
 
 
 
