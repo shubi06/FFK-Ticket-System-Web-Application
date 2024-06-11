@@ -112,11 +112,13 @@ function Sidebar() {
         </Link>
       </li>
      
+      
       <hr className="sidebar-divider my-0" />
       <li className="nav-item active">
-        <Link className="nav-link" to="/portal/ndeshja-list">
-          <span>NDESHJET E SUPERLIGES</span>
+        <Link className="nav-link" to="/portal/ndeshja-superlige-list">
+          <span>NDESHJA SUPERLIGE</span>
         </Link>
+      
       </li>
 
       <li className="nav-item active">
