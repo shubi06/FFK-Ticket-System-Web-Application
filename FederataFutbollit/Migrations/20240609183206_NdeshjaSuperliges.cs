@@ -37,11 +37,11 @@ namespace FederataFutbollit.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_NdeshjaSuperliges_Ekipat_EkipaId",
+                        name: "FK_NdeshjaSuperliges_Ekipa_EkipaId",
                         column: x => x.EkipaId,
-                        principalTable: "Ekipat",
+                        principalTable: "Ekipa",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(

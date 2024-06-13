@@ -90,7 +90,7 @@ namespace FederataFutbollit.Data
                 .HasOne(n => n.Ekipa)
                 .WithMany(e => e.NdeshjaSuperliges)
                 .HasForeignKey(n => n.EkipaId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<NdeshjaSuperliges>()
                 .HasOne(n => n.Statusi)
