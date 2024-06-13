@@ -1,8 +1,9 @@
+// src/components/Home.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Slider from './Slider';
 import './Home.css';
 import { Link } from 'react-router-dom';
+import SoccerBall from './SoccerBall';
 
 const Home = () => {
   const [matches, setMatches] = useState([]);
@@ -22,7 +23,13 @@ const Home = () => {
 
   return (
     <div>
-      <Slider />
+      <div className="hero-section">
+        <SoccerBall />
+        <div className="hero-content">
+          <h1>Soccer in the Next Millennium</h1>
+          <p>Experience the ultimate evolution of soccer with our futuristic 3D model. Dive into a world beyond your imagination, where the game transcends time and space.</p>
+        </div>
+      </div>
       <div className="content-container">
         <section className="matches-section">
           <h2>Upcoming Matches</h2>
@@ -70,3 +77,4 @@ const Home = () => {
 };
 
 export default Home;
+
