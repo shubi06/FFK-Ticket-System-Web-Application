@@ -111,7 +111,7 @@ namespace FederataFutbollit.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AboutSections", (string)null);
-                });
+                };
 
             modelBuilder.Entity("FederataFutbollit.Entities.Bileta", b =>
                 {
