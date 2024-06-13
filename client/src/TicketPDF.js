@@ -1,6 +1,7 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import Logo from "./Logo.png";
+import Background from "./stadiumifv.jpg";
 
 // Styling for the PDF
 const styles = StyleSheet.create({
@@ -59,20 +60,33 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 10,
     alignSelf: 'center',
-  }
+  },
+  note: {
+    marginTop: 10,
+    fontSize: 10,
+    textAlign: 'center',
+    color: '#555',
+  },
+  imageBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    opacity: 0.1,
+    zIndex: -1,
+  },
 });
 
 const TicketPDF = ({ tickets }) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Payment Successful!</Text>
-        <Text style={styles.subtitle}>Your Football Match Tickets</Text>
-      </View>
+      
       <View>
         {tickets.length > 0 ? (
           tickets.map(ticket => (
             <View key={ticket.id} style={styles.section}>
+              <Image style={styles.imageBackground} src={Background} />
               <View style={styles.ticketHeader}>
                 <Text>Ticket for Kosova vs {ticket.ekipiKundershtar}</Text>
               </View>
@@ -84,6 +98,10 @@ const TicketPDF = ({ tickets }) => (
                 <Text style={styles.ticketDetail}><Text style={{ fontWeight: 'bold' }}>Sector:</Text> {ticket.sektoriUlses}</Text>
                 <Text style={styles.ticketDetail}><Text style={{ fontWeight: 'bold' }}>Price:</Text> {ticket.cmimi} EUR</Text>
                 <Text style={styles.ticketDetail}><Text style={{ fontWeight: 'bold' }}>Purchase Time:</Text> {new Date(ticket.oraBlerjes).toLocaleString()}</Text>
+
+                <Text style={styles.note}>
+              NUK MBAJME PERGJEGJESI PER MOS PRINTIMIN JO TE RREGULLT OSE DEMTIMIN E BILETES TUAJ
+            </Text>
               </View>
             </View>
           ))

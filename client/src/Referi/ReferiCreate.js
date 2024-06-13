@@ -1,88 +1,119 @@
-import axios from 'axios';
-import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import axios from 'axios';
 
 function ReferiCreate() {
     const [isLoading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
-            emri: "",
-            mbiemri: ""
+            Emri: '',
+            Mbiemri: '',
+            Kombesia: '',
+            Mosha: '' // Added Mosha field
         },
-        validate: (values) => {
-            let errors = {};
-
-            if (!values.emri) {
-                errors.emri = "Please enter the first name";
-            } else if (values.emri.length < 3) {
-                errors.emri = "First name should be at least 3 characters long";
-            } else if (values.emri.length > 50) {
-                errors.emri = "First name should not exceed 50 characters";
+        validate: values => {
+            const errors = {};
+            if (!values.Emri) {
+                errors.Emri = 'Please enter the first name';
+            } else if (values.Emri.length < 3) {
+                errors.Emri = 'First name should be at least 3 characters long';
+            } else if (values.Emri.length > 50) {
+                errors.Emri = 'First name should not exceed 50 characters';
             }
 
-            if (!values.mbiemri) {
-                errors.mbiemri = "Please enter the last name";
-            } else if (values.mbiemri.length < 3) {
-                errors.mbiemri = "Last name should be at least 3 characters long";
-            } else if (values.mbiemri.length > 50) {
-                errors.mbiemri = "Last name should not exceed 50 characters";
+            if (!values.Mbiemri) {
+                errors.Mbiemri = 'Please enter the last name';
+            } else if (values.Mbiemri.length < 3) {
+                errors.Mbiemri = 'Last name should be at least 3 characters long';
+            } else if (values.Mbiemri.length > 50) {
+                errors.Mbiemri = 'Last name should not exceed 50 characters';
+            }
+
+            if (!values.Kombesia) {
+                errors.Kombesia = 'Please enter the nationality';
+            }
+
+            if (!values.Mosha) {
+                errors.Mosha = 'Please enter the age';
+            } else if (isNaN(values.Mosha)) {
+                errors.Mosha = 'Age must be a number';
             }
 
             return errors;
         },
-        onSubmit: async (values) => {
+        onSubmit: async (values, { resetForm }) => {
             setLoading(true);
             try {
-                await axios.post("http://localhost:5178/api/Referi", values);
-                navigate("/referi-list");
+                await axios.post("http://localhost:5178/api/Referi", {
+                    Emri: values.Emri,
+                    Mbiemri: values.Mbiemri,
+                    Kombesia: values.Kombesia,
+                    Mosha: values.Mosha // Added Mosha field
+                });
+                resetForm();
+                alert('Referee created successfully!');
             } catch (error) {
-                console.error("Submission failed", error);
-                alert("Failed to create the referee");
+                console.error('Submission failed', error.response ? error.response.data : error.message);
+                alert('Failed to create referee. Please try again.');
             } finally {
                 setLoading(false);
             }
-        }
+        },
     });
 
     return (
-        <div className='container'>
-            <form onSubmit={formik.handleSubmit}>
-                <div className='row'>
-                    <div className="col-lg-6">
-                        <label>First Name</label>
-                        <input
-                            name='emri'
-                            value={formik.values.emri}
-                            onChange={formik.handleChange}
-                            type="text"
-                            className={`form-control ${formik.errors.emri ? "is-invalid" : ""}`}
-                        />
-                        <div className="invalid-feedback">{formik.errors.emri}</div>
-                    </div>
-
-                    <div className="col-lg-6">
-                        <label>Last Name</label>
-                        <input
-                            name='mbiemri'
-                            value={formik.values.mbiemri}
-                            onChange={formik.handleChange}
-                            type="text"
-                            className={`form-control ${formik.errors.mbiemri ? "is-invalid" : ""}`}
-                        />
-                        <div className="invalid-feedback">{formik.errors.mbiemri}</div>
-                    </div>
-
-                    <div className='col-lg-12 mt-3'>
-                        <button type="submit" disabled={isLoading} className='btn btn-primary'>
-                            {isLoading ? "Submitting..." : "Create"}
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
+        <form onSubmit={formik.handleSubmit}>
+            <div className="form-group">
+                <label htmlFor="Emri">First Name</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    id="Emri"
+                    name="Emri"
+                    value={formik.values.Emri}
+                    onChange={formik.handleChange}
+                />
+                {formik.errors.Emri && <div className="text-danger">{formik.errors.Emri}</div>}
+            </div>
+            <div className="form-group">
+                <label htmlFor="Mbiemri">Last Name</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    id="Mbiemri"
+                    name="Mbiemri"
+                    value={formik.values.Mbiemri}
+                    onChange={formik.handleChange}
+                />
+                {formik.errors.Mbiemri && <div className="text-danger">{formik.errors.Mbiemri}</div>}
+            </div>
+            <div className="form-group">
+                <label htmlFor="Kombesia">Nationality</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    id="Kombesia"
+                    name="Kombesia"
+                    value={formik.values.Kombesia}
+                    onChange={formik.handleChange}
+                />
+                {formik.errors.Kombesia && <div className="text-danger">{formik.errors.Kombesia}</div>}
+            </div>
+            <div className="form-group">
+                <label htmlFor="Mosha">Age</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    id="Mosha"
+                    name="Mosha"
+                    value={formik.values.Mosha}
+                    onChange={formik.handleChange}
+                />
+                {formik.errors.Mosha && <div className="text-danger">{formik.errors.Mosha}</div>}
+            </div>
+            <button type="submit" className="btn btn-primary" disabled={isLoading}>Create Referee</button>
+        </form>
     );
 }
 

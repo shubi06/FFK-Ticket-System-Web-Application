@@ -1,0 +1,54 @@
+.footer {
+  background: linear-gradient(
+    90deg,
+    rgba(33, 33, 33, 1) 0%,
+    rgba(63, 81, 181, 1) 100%
+  );
+  padding: 2rem 0;
+  color: #ffffff;
+  text-align: center;
+  margin-top: auto;
+  position: absolute;
+
+  width: 100%;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-logo {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.footer-logo img {
+  height: 40px;
+}
+
+.footer-links,
+.footer-social {
+  display: inline-block; /* Vendos elementin si një bllok të pavarur, por në të njëjtën linjë me tekstin dhe elementet tjera inline-block */
+}
+
+.footer-links a,
+.footer-social a {
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: 1rem; /* Hapësira e djathtë e margin-it */
+}
+
+.footer-links a:hover,
+.footer-social a:hover {
+  color: #ffeb3b;
+}
+
+.footer-credit {
+  font-size: 0.875rem;
+}

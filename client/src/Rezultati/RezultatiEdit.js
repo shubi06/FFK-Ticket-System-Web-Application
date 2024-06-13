@@ -26,7 +26,8 @@ function RezultatEdit() {
             emriKlubit: "",
             kundershtari: "",
             dataNdeshjes: "",
-            rezultati: ""
+            golatEkipi1: "", // Updated property name
+            golatEkipi2: "" // Updated property name
         },
         validate: (values) => {
             let errors = {};
@@ -53,8 +54,12 @@ function RezultatEdit() {
                 errors.dataNdeshjes = "Please enter a valid date (YYYY-MM-DD)";
             }
 
-            if (!values.rezultati) {
-                errors.rezultati = "Please enter the result";
+            if (!values.golatEkipi1) {
+                errors.golatEkipi1 = "Please enter the result for Ekipi 1";
+            }
+
+            if (!values.golatEkipi2) {
+                errors.golatEkipi2 = "Please enter the result for Ekipi 2";
             }
 
             return errors;
@@ -63,7 +68,7 @@ function RezultatEdit() {
             setLoading(true);
             try {
                 await axios.put(`http://localhost:5178/api/Rezultati/${params.id}`, values);
-                navigate("/rezultati-list");
+                navigate("/portal/rezultati-list");
             } catch (error) {
                 console.error("Failed to update the result", error);
                 alert("Update failed");
@@ -116,20 +121,37 @@ function RezultatEdit() {
                         </div>
 
                         <div className="col-lg-6">
-                            <label>Result</label>
+                            <label>Result for Ekipi 1</label>
                             <input
-                                name='rezultati'
-                                value={formik.values.rezultati}
+                                name='golatEkipi1'
+                                value={formik.values.golatEkipi1}
                                 onChange={formik.handleChange}
                                 type="text"
-                                className={`form-control ${formik.errors.rezultati ? "is-invalid" : ""}`}
+                                className={`form-control ${formik.errors.golatEkipi1 ? "is-invalid" : ""}`}
                             />
-                            <span style={{ color: "red" }}>{formik.errors.rezultati}</span>
+                            <span style={{ color: "red" }}>{formik.errors.golatEkipi1}</span>
                         </div>
 
-                        <div className='col-lg-4 mt-3'>
-                            <input disabled={isLoading} type="submit" value={isLoading ? "Updating..." : "Update"} className='btn btn-primary' />
+                        <div className="col-lg-6">
+                            <label>Result for Ekipi 2</label>
+                            <input
+                                name='golatEkipi2'
+                                value={formik.values.golatEkipi2}
+                                onChange={formik.handleChange}
+                                type="text"
+                                className={`form-control ${formik.errors.golatEkipi2 ? "is-invalid" : ""}`}
+                            />
+                            <span style={{ color: "red" }}>{formik.errors.golatEkipi2}</span>
                         </div>
+                    </div>
+
+                    <div className='col-lg-6 mt-3'>
+                        <input
+                            type="submit"
+                            value={isLoading ? "Updating..." : "Update"}
+                            className="btn btn-primary"
+                            disabled={isLoading}
+                        />
                     </div>
                 </form>
             </div>

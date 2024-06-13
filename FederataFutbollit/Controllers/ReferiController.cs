@@ -1,10 +1,12 @@
-﻿/*using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FederataFutbollit.Entities;
+using FederataFutbollit.DTOs;
 using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
+using FederataFutbollit.Models;
 
 namespace FederataFutbollit.Controllers
 {
@@ -13,10 +15,12 @@ namespace FederataFutbollit.Controllers
     public class ReferiController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly ILogger<ReferiController> _logger;
 
-        public ReferiController(DataContext context)
+        public ReferiController(DataContext context, ILogger<ReferiController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -37,24 +41,53 @@ namespace FederataFutbollit.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Referi>>> CreateReferi(Referi referi)
+        public async Task<ActionResult<List<Referi>>> CreateReferi(ReferiCreateDto referiDto)
         {
-            _context.Referi.Add(referi);
-            await _context.SaveChangesAsync();
+            var referi = new Referi
+            {
+                Emri = referiDto.Emri,
+                Mbiemri = referiDto.Mbiemri,
+                Kombesia = referiDto.Kombesia,
+                Mosha = referiDto.Mosha
+                // Add other necessary fields here
+            };
 
-            return await GetAllReferet();
+            try
+            {
+                _context.Referi.Add(referi);
+                await _context.SaveChangesAsync();
+                return await GetAllReferet();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log the detailed error
+                _logger.LogError(ex, "An error occurred while creating the referee.");
+
+                // Return a more detailed error message
+                return StatusCode(500, new { message = "An error occurred while creating the referee.", details = ex.InnerException?.Message });
+            }
+            catch (Exception ex)
+            {
+                // Log the detailed error
+                _logger.LogError(ex, "An unexpected error occurred.");
+
+                // Return a more detailed error message
+                return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateReferi(int id, Referi referi)
+        public async Task<IActionResult> UpdateReferi(int id, ReferiCreateDto referiDto)
         {
             var existingReferi = await _context.Referi.FindAsync(id);
             if (existingReferi == null)
                 return NotFound("Referi nuk u gjet.");
 
-            existingReferi.Emri = referi.Emri;
-            existingReferi.Mbiemri = referi.Mbiemri;
-
+            existingReferi.Emri = referiDto.Emri;
+            existingReferi.Mbiemri = referiDto.Mbiemri;
+            existingReferi.Kombesia = referiDto.Kombesia;
+            existingReferi.Mosha = referiDto.Mosha;
+            // Update other necessary fields here
 
             _context.Referi.Update(existingReferi);
             await _context.SaveChangesAsync();
@@ -76,5 +109,3 @@ namespace FederataFutbollit.Controllers
         }
     }
 }
-
-*/

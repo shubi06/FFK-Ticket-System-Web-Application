@@ -9,7 +9,6 @@ function ReferiList() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    // On component load, fetch Referee data
     fetchReferis();
   }, []);
 
@@ -39,7 +38,7 @@ function ReferiList() {
     <>
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 className="h3 mb-0 text-gray-800">Referee List</h1>
-        <Link to="/referi-create" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <Link to="/portal/referi/create" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
           <FontAwesomeIcon icon={faUser} className="text-white-50" /> Add New Referee
         </Link>
       </div>
@@ -61,23 +60,27 @@ function ReferiList() {
                     <th>ID</th>
                     <th>First Name</th>
                     <th>Last Name</th>
+                    <th>Nationality</th>
+                    <th>Age</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {referiList.map((referi) => (
-                    <tr key={referi.id}>
-                      <td>{referi.id}</td>
+                    <tr key={referi.referi_ID}>
+                      <td>{referi.referi_ID}</td>
                       <td>{referi.emri}</td>
                       <td>{referi.mbiemri}</td>
+                      <td>{referi.kombesia}</td>
+                      <td>{referi.mosha}</td>
                       <td>
-                        <Link to={`/referi-view/${referi.id}`} className="btn btn-primary btn-sm mr-1">
+                        <Link to={`/referi-view/${referi.referi_ID}`} className="btn btn-primary btn-sm mr-1">
                           View
                         </Link>
-                        <Link to={`/referi-edit/${referi.id}`} className="btn btn-info btn-sm mr-1">
+                        <Link to={`/portal/referi/edit/${referi.referi_ID}`} className="btn btn-info btn-sm mr-1">
                           Edit
                         </Link>
-                        <button onClick={() => handleDelete(referi.id)} className="btn btn-danger btn-sm">
+                        <button onClick={() => handleDelete(referi.referi_ID)} className="btn btn-danger btn-sm">
                           Delete
                         </button>
                       </td>

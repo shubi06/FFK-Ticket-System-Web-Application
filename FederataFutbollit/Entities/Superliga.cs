@@ -8,7 +8,7 @@
         public int NumriSkuadrave { get; set; }
         
         public ICollection<Ekipa>? Ekipa { get; set; } = new List<Ekipa>();
-        public ICollection<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
+        public ICollection<NdeshjaSuperliges> NdeshjaSuperliges { get; set; }
 
     }
 }

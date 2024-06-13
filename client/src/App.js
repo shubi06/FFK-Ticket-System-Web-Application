@@ -1,4 +1,3 @@
-// App.js or a similar top-level component
 import React from "react";
 import {
   BrowserRouter,

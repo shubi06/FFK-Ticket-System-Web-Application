@@ -526,3 +526,4 @@ yarn-error.log*
 
 .FederataFutbollit/bin/Debug/net8.0/
 
+.vs/FederataFutbollit/DesignTimeBuild/.dtbcache.v2

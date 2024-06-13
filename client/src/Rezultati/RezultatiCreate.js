@@ -12,7 +12,8 @@ function RezultatCreate() {
             emriKlubit: "",
             kundershtari: "",
             dataNdeshjes: "",
-            rezultati: ""
+            golatEkipi1: "", // Updated property name
+            golatEkipi2: "" // Updated property name
         },
         validate: (values) => {
             let errors = {};
@@ -39,8 +40,12 @@ function RezultatCreate() {
                 errors.dataNdeshjes = "Please enter a valid date (YYYY-MM-DD)";
             }
 
-            if (!values.rezultati) {
-                errors.rezultati = "Please enter the result";
+            if (!values.golatEkipi1) {
+                errors.golatEkipi1 = "Please enter the result for Ekipi 1";
+            }
+
+            if (!values.golatEkipi2) {
+                errors.golatEkipi2 = "Please enter the result for Ekipi 2";
             }
 
             return errors;
@@ -48,11 +53,11 @@ function RezultatCreate() {
         onSubmit: async (values) => {
             setLoading(true);
             try {
-                await axios.post("http://localhost:5178/api/Rezultati", values);
-                navigate("/rezultati-list");
+                await axios.post('http://localhost:5178/api/Rezultati', values);
+                navigate("/portal/rezultati-list");
             } catch (error) {
-                console.error("Submission failed", error);
-                alert("Failed to create the result");
+                console.error("Failed to create new result", error);
+                alert("Creation failed");
             } finally {
                 setLoading(false);
             }
@@ -60,65 +65,83 @@ function RezultatCreate() {
     });
 
     return (
-        <div className='container'>
-            <form onSubmit={formik.handleSubmit}>
-                <div className='row'>
-                    <div className="col-lg-6">
-                        <label>Club Name</label>
-                        <input
-                            name='emriKlubit'
-                            value={formik.values.emriKlubit}
-                            onChange={formik.handleChange}
-                            type="text"
-                            className={`form-control ${formik.errors.emriKlubit ? "is-invalid" : ""}`}
-                        />
-                        <div className="invalid-feedback">{formik.errors.emriKlubit}</div>
+        <>
+            <h3>Create New Rezultat</h3>
+            <div className='container'>
+                <form onSubmit={formik.handleSubmit}>
+                    <div className='row'>
+                        <div className="col-lg-6">
+                            <label>Club Name</label>
+                            <input
+                                name='emriKlubit'
+                                value={formik.values.emriKlubit}
+                                onChange={formik.handleChange}
+                                type="text"
+                                className={`form-control ${formik.errors.emriKlubit ? "is-invalid" : ""}`}
+                            />
+                            <span style={{ color: "red" }}>{formik.errors.emriKlubit}</span>
+                        </div>
+
+                        <div className="col-lg-6">
+                            <label>Opponent's Name</label>
+                            <input
+                                name='kundershtari'
+                                value={formik.values.kundershtari}
+                                onChange={formik.handleChange}
+                                type="text"
+                                className={`form-control ${formik.errors.kundershtari ? "is-invalid" : ""}`}
+                            />
+                            <span style={{ color: "red" }}>{formik.errors.kundershtari}</span>
+                        </div>
+
+                        <div className="col-lg-6">
+                            <label>Match Date</label>
+                            <input
+                                name='dataNdeshjes'
+                                value={formik.values.dataNdeshjes}
+                                onChange={formik.handleChange}
+                                type="date"
+                                className={`form-control ${formik.errors.dataNdeshjes ? "is-invalid" : ""}`}
+                            />
+                            <span style={{ color: "red" }}>{formik.errors.dataNdeshjes}</span>
+                        </div>
+
+                        <div className="col-lg-6">
+                            <label>Result for Ekipi 1</label>
+                            <input
+                                name='golatEkipi1'
+                                value={formik.values.golatEkipi1}
+                                onChange={formik.handleChange}
+                                type="text"
+                                className={`form-control ${formik.errors.golatEkipi1 ? "is-invalid" : ""}`}
+                            />
+                            <span style={{ color: "red" }}>{formik.errors.golatEkipi1}</span>
+                        </div>
+
+                        <div className="col-lg-6">
+                            <label>Result for Ekipi 2</label>
+                            <input
+                                name='golatEkipi2'
+                                value={formik.values.golatEkipi2}
+                                onChange={formik.handleChange}
+                                type="text"
+                                className={`form-control ${formik.errors.golatEkipi2 ? "is-invalid" : ""}`}
+                            />
+                            <span style={{ color: "red" }}>{formik.errors.golatEkipi2}</span>
+                        </div>
                     </div>
 
-                    <div className="col-lg-6">
-                        <label>Opponent's Name</label>
+                    <div className='col-lg-6 mt-3'>
                         <input
-                            name='kundershtari'
-                            value={formik.values.kundershtari}
-                            onChange={formik.handleChange}
-                            type="text"
-                            className={`form-control ${formik.errors.kundershtari ? "is-invalid" : ""}`}
+                            type="submit"
+                            value={isLoading ? "Creating..." : "Create"}
+                            className="btn btn-primary"
+                            disabled={isLoading}
                         />
-                        <div className="invalid-feedback">{formik.errors.kundershtari}</div>
                     </div>
-
-                    <div className="col-lg-6">
-                        <label>Match Date</label>
-                        <input
-                            name='dataNdeshjes'
-                            value={formik.values.dataNdeshjes}
-                            onChange={formik.handleChange}
-                            type="date"
-                            className={`form-control ${formik.errors.dataNdeshjes ? "is-invalid" : ""}`}
-                        />
-                        <div className="invalid-feedback">{formik.errors.dataNdeshjes}</div>
-                    </div>
-
-                    <div className="col-lg-6">
-                        <label>Result</label>
-                        <input
-                            name='rezultati'
-                            value={formik.values.rezultati}
-                            onChange={formik.handleChange}
-                            type="text"
-                            className={`form-control ${formik.errors.rezultati ? "is-invalid" : ""}`}
-                        />
-                        <div className="invalid-feedback">{formik.errors.rezultati}</div>
-                    </div>
-
-                    <div className='col-lg-12 mt-3'>
-                        <button type="submit" disabled={isLoading} className='btn btn-primary'>
-                            {isLoading ? "Submitting..." : "Create"}
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
+        </>
     );
 }
 
