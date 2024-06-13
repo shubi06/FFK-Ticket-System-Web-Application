@@ -114,7 +114,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AboutSections");
+                    b.ToTable("AboutSections", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Bileta", b =>
@@ -163,7 +163,7 @@ namespace FederataFutbollit.Migrations
                     b.HasIndex("UlesjaID")
                         .IsUnique();
 
-                    b.ToTable("Biletat");
+                    b.ToTable("Biletat", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Cart", b =>
@@ -182,7 +182,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.CartSeat", b =>
@@ -235,7 +235,7 @@ namespace FederataFutbollit.Migrations
                     b.HasIndex("UlesjaId")
                         .IsUnique();
 
-                    b.ToTable("CartSeats");
+                    b.ToTable("CartSeats", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Contact", b =>
@@ -260,7 +260,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contacts", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Ekipa", b =>
@@ -292,7 +292,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("SuperligaId");
 
-                    b.ToTable("Ekipa");
+                    b.ToTable("Ekipa", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Kombetarja", b =>
@@ -315,7 +315,7 @@ namespace FederataFutbollit.Migrations
                     b.HasIndex("ShtetiID")
                         .IsUnique();
 
-                    b.ToTable("Kombetarja");
+                    b.ToTable("Kombetarja", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Kompeticionet", b =>
@@ -332,7 +332,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Kompeticionet");
+                    b.ToTable("Kompeticionet", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Kontabiliteti", b =>
@@ -361,7 +361,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("StafiId");
 
-                    b.ToTable("Kontabiliteti");
+                    b.ToTable("Kontabiliteti", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Lojtaret", b =>
@@ -407,7 +407,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("KombetarjaID");
 
-                    b.ToTable("Lojtaret");
+                    b.ToTable("Lojtaret", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.LojtaretSuperlige", b =>
@@ -453,7 +453,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("SuperligaID");
 
-                    b.ToTable("LojtaretSuperlige");
+                    b.ToTable("LojtaretSuperlige", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Ndeshja", b =>
@@ -499,7 +499,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("StatusiId");
 
-                    b.ToTable("Ndeshja");
+                    b.ToTable("Ndeshja", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.NdeshjaSuperliges", b =>
@@ -538,7 +538,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("SuperligaId");
 
-                    b.ToTable("NdeshjaSuperliges");
+                    b.ToTable("NdeshjetESuperliges", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Order", b =>
@@ -591,37 +591,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("FederataFutbollit.Entities.Rezultati", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DataNdeshjes")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmriKlubit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GolatEkipi1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GolatEkipi2")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Kundershtari")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Rezultati");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Roli", b =>
@@ -638,7 +608,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roli");
+                    b.ToTable("Roli", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.SektoriUlseve", b =>
@@ -655,7 +625,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SektoriUlseve");
+                    b.ToTable("SektoriUlseve", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Selektori", b =>
@@ -692,7 +662,7 @@ namespace FederataFutbollit.Migrations
                     b.HasIndex("KombetarjaID")
                         .IsUnique();
 
-                    b.ToTable("Selektort");
+                    b.ToTable("Selektort", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Shpenzimet", b =>
@@ -712,7 +682,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shpenzimet");
+                    b.ToTable("Shpenzimet", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Shteti", b =>
@@ -729,7 +699,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shteti");
+                    b.ToTable("Shteti", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Stadiumi", b =>
@@ -757,7 +727,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("KombetarjaID");
 
-                    b.ToTable("Stadiumi");
+                    b.ToTable("Stadiumi", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Stafi", b =>
@@ -798,7 +768,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("RoliID");
 
-                    b.ToTable("Stafi");
+                    b.ToTable("Stafi", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Statusi", b =>
@@ -815,7 +785,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statusi");
+                    b.ToTable("Statusi", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Superliga", b =>
@@ -839,7 +809,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Superligat");
+                    b.ToTable("Superligat", (string)null);
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Ulesja", b =>
@@ -871,35 +841,7 @@ namespace FederataFutbollit.Migrations
 
                     b.HasIndex("StadiumiId");
 
-                    b.ToTable("Uleset");
-                });
-
-            modelBuilder.Entity("FederataFutbollit.Models.Referi", b =>
-                {
-                    b.Property<int>("Referi_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Referi_ID"));
-
-                    b.Property<string>("Emri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Kombesia")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mbiemri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Mosha")
-                        .HasColumnType("int");
-
-                    b.HasKey("Referi_ID");
-
-                    b.ToTable("Referi");
+                    b.ToTable("Uleset", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1221,19 +1163,19 @@ namespace FederataFutbollit.Migrations
             modelBuilder.Entity("FederataFutbollit.Entities.NdeshjaSuperliges", b =>
                 {
                     b.HasOne("FederataFutbollit.Entities.Ekipa", "Ekipa")
-                        .WithMany("NdeshjaSuperliges")
+                        .WithMany("NdeshjetESuperliges")
                         .HasForeignKey("EkipaId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FederataFutbollit.Entities.Statusi", "Statusi")
-                        .WithMany("NdeshjaSuperliges")
+                        .WithMany("NdeshjetESuperliges")
                         .HasForeignKey("StatusiId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("FederataFutbollit.Entities.Superliga", "Superliga")
-                        .WithMany("NdeshjaSuperliges")
+                        .WithMany("NdeshjetESuperliges")
                         .HasForeignKey("SuperligaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1381,7 +1323,7 @@ namespace FederataFutbollit.Migrations
 
             modelBuilder.Entity("FederataFutbollit.Entities.Ekipa", b =>
                 {
-                    b.Navigation("NdeshjaSuperliges");
+                    b.Navigation("NdeshjetESuperliges");
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Kombetarja", b =>
@@ -1442,16 +1384,16 @@ namespace FederataFutbollit.Migrations
 
             modelBuilder.Entity("FederataFutbollit.Entities.Statusi", b =>
                 {
-                    b.Navigation("NdeshjaSuperliges");
-
                     b.Navigation("Ndeshjet");
+
+                    b.Navigation("NdeshjetESuperliges");
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Superliga", b =>
                 {
                     b.Navigation("Ekipa");
 
-                    b.Navigation("NdeshjaSuperliges");
+                    b.Navigation("NdeshjetESuperliges");
                 });
 
             modelBuilder.Entity("FederataFutbollit.Entities.Ulesja", b =>
