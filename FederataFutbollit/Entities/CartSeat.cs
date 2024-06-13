@@ -23,6 +23,9 @@ namespace FederataFutbollit.Entities
            public int NdeshjaId { get; set; }
          public Ndeshja Ndeshja { get; set; }
 
+           public string SeatFirstName { get; set; }
+    public string SeatLastName { get; set; }
+
      
     }
 }

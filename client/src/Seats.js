@@ -2,11 +2,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CartContext } from './Services/CartContext';
-import { AuthContext } from './Services/AuthContext'; // Import AuthContext
+import { AuthContext } from './Services/AuthContext';
+import { useNavigationProgress } from './Services/NavigationProgressContext'; // Importimi i saktë
 import './seats.css';
-import { useNavigationProgress } from './Services/NavigationProgressContext';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { useTimer } from './Services/TimerContext';
 
 const Seats = () => {
   const { sectorId, ndeshjaId } = useParams();
@@ -15,10 +16,11 @@ const Seats = () => {
   const [unavailableSeat, setUnavailableSeat] = useState(null);
   const [limitReached, setLimitReached] = useState(false);
   const { cart, addToCart, removeFromCart, getCart } = useContext(CartContext);
-  const { authData } = useContext(AuthContext); // Get authData from AuthContext
-  const { isStepCompleted } = useNavigationProgress();
+  const { authData } = useContext(AuthContext);
+  const { isStepCompleted } = useNavigationProgress(); // Përdorimi i saktë
   const navigate = useNavigate();
   const [sectorName, setSectorName] = useState('');
+  const { timerStarted, setTimerStarted } = useTimer();
 
   useEffect(() => {
     if (!isStepCompleted) {
@@ -44,7 +46,7 @@ const Seats = () => {
     const fetchSectorName = async () => {
       try {
         const response = await axios.get(`http://localhost:5178/api/SektoriUlseve/${sectorId}`);
-        setSectorName(response.data.emri); // Assuming 'emri' is the name of the sector
+        setSectorName(response.data.emri);
       } catch (error) {
         console.error("There was an error fetching the sector name!", error);
       }
@@ -68,13 +70,14 @@ const Seats = () => {
     try {
       const response = await axios.post('http://localhost:5178/api/Bileta/check-ticket-limit', {}, {
         params: {
-          userId: authData.userId, // Use dynamic userId from authData
+          userId: authData.userId,
           ndeshjaId: ndeshjaId
         }
       });
       return response.data;
     } catch (error) {
-      return error.response?.data || null; // Return the error message
+      console.error('Error checking ticket limit:', error);
+      return null;
     }
   };
 
@@ -84,12 +87,10 @@ const Seats = () => {
       return;
     }
 
-    const seatWithSector = { ...seat, sectorId, ndeshjaId };
     const isSeatSelected = selectedSeats.includes(seat.id);
 
     if (isSeatSelected) {
       setSelectedSeats(selectedSeats.filter(id => id !== seat.id));
-
       const cartSeat = cart.cartSeats.find(cartSeat => cartSeat.ulesjaId === seat.id);
       if (cartSeat) {
         removeFromCart(cartSeat.id);
@@ -97,18 +98,23 @@ const Seats = () => {
         console.error('Seat not found in cart:', seat.id);
       }
     } else {
-      const ticketLimitResponse = await checkTicketLimit();
-      if (ticketLimitResponse === "You have reached the maximum limit of 4 tickets for this match.") {
+      const ticketData = await checkTicketLimit();
+      if (!ticketData || ticketData.limitReached) {
         setLimitReached(true);
         return;
       }
 
-      const totalSelectedSeats = selectedSeats.length + cart.cartSeats.filter(cs => !selectedSeats.includes(cs.ulesjaId)).length;
-      if (totalSelectedSeats < 4) {
-        setSelectedSeats([...selectedSeats, seat.id]);
-        addToCart(seatWithSector);
-      } else {
-        alert('You cannot select more than 4 seats.');
+      const totalSelectedSeats = selectedSeats.length + ticketData.ticketCount;
+      if (totalSelectedSeats >= 4) {
+        setLimitReached(true);
+        return;
+      }
+
+      setSelectedSeats([...selectedSeats, seat.id]);
+      addToCart({ ...seat, sectorId, ndeshjaId });
+
+      if (!timerStarted) {
+        setTimerStarted(true);
       }
     }
   };

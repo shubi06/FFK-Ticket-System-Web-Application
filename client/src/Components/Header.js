@@ -56,9 +56,7 @@ const Header = () => {
           <Nav className="ml-auto right-nav">
             {authData ? (
               <>
-                <LinkContainer to="/myaccount">
-                  <Nav.Link>My Account</Nav.Link>
-                </LinkContainer>
+               
                 <Nav.Link onClick={logout}>Logout</Nav.Link>
               </>
             ) : (

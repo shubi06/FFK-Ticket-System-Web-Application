@@ -74,26 +74,27 @@ namespace FederataFutbollit.Controllers
             }
         }
 
-        [HttpPost("check-ticket-limit")]
-        public async Task<ActionResult> CheckTicketLimit(string userId, int ndeshjaId)
-        {
-            _logger.LogInformation("Checking ticket limit for user {UserId} and match {NdeshjaId}", userId, ndeshjaId);
-            
-            var ticketCount = await _context.Biletat
-                .Where(b => b.ApplicationUserID == userId && b.NdeshjaID == ndeshjaId)
-                .CountAsync();
-            
-            _logger.LogInformation("User {UserId} has {TicketCount} tickets for match {NdeshjaId}", userId, ticketCount, ndeshjaId);
+    [HttpPost("check-ticket-limit")]
+public async Task<ActionResult> CheckTicketLimit(string userId, int ndeshjaId)
+{
+    _logger.LogInformation("Checking ticket limit for user {UserId} and match {NdeshjaId}", userId, ndeshjaId);
+    
+    var ticketCount = await _context.Biletat
+        .Where(b => b.ApplicationUserID == userId && b.NdeshjaID == ndeshjaId)
+        .CountAsync();
+    
+    _logger.LogInformation("User {UserId} has {TicketCount} tickets for match {NdeshjaId}", userId, ticketCount, ndeshjaId);
 
-            if (ticketCount >= 4)
-            {
-                _logger.LogWarning("User {UserId} has reached the maximum limit of 4 tickets for match {NdeshjaId}", userId, ndeshjaId);
-                return BadRequest("You have reached the maximum limit of 4 tickets for this match.");
-            }
+    if (ticketCount >= 4)
+    {
+        _logger.LogWarning("User {UserId} has reached the maximum limit of 4 tickets for match {NdeshjaId}", userId, ndeshjaId);
+        return Ok(new { limitReached = true, ticketCount });
+    }
 
-            _logger.LogInformation("User {UserId} can purchase more tickets for match {NdeshjaId}", userId, ndeshjaId);
-            return Ok("You can purchase tickets.");
-        }
+    _logger.LogInformation("User {UserId} can purchase more tickets for match {NdeshjaId}", userId, ndeshjaId);
+    return Ok(new { limitReached = false, ticketCount });
+}
+
 
         [HttpPost]
         public async Task<ActionResult<List<Bileta>>> Create(BiletaCreateDto request)

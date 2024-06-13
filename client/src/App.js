@@ -38,6 +38,7 @@ import "./App.css";
 import "./sb-admin-2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Success from "./Success";
+import { TimerProvider } from './Services/TimerContext';
 
 const App = () => {
   return (
@@ -45,9 +46,11 @@ const App = () => {
       <UserProvider>
         <CartProvider>
           <NavigationProgressProvider>
-            <BrowserRouter>
-              <AppContent />
-            </BrowserRouter>
+            <TimerProvider>
+              <BrowserRouter>
+                <AppContent />
+              </BrowserRouter>
+            </TimerProvider>
           </NavigationProgressProvider>
         </CartProvider>
       </UserProvider>
@@ -58,7 +61,7 @@ const App = () => {
 const AppContent = () => {
   const location = useLocation();
 
-  // Vendosni rrugët ku dëshironi të fshehni Header
+  
   const hideHeaderPaths = ["/portal"];
 
   const shouldShowHeader = !hideHeaderPaths.some((path) =>

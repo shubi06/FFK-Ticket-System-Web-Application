@@ -25,6 +25,7 @@ namespace FederataFutbollit.Entities
         public string LastName { get; set; }
         public string City { get; set; }
 
+
   
     }
 }

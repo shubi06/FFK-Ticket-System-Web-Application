@@ -61,77 +61,81 @@ namespace FederataFutbollit.Controllers
             return Ok(cartDto);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<CartDto>> AddToCart([FromBody] CartSeatDto cartSeatDto)
+[HttpPost]
+public async Task<ActionResult<CartDto>> AddToCart([FromBody] CartSeatDto cartSeatDto)
+{
+    _logger.LogInformation($"Received AddToCart request for user {cartSeatDto.ApplicationUserId} with NdeshjaId {cartSeatDto.NdeshjaId}");
+
+    var ulesja = await _context.Uleset.FindAsync(cartSeatDto.UlesjaId);
+    if (ulesja == null) return NotFound("Ulesja not found");
+
+    var sektoriUlseve = await _context.SektoriUlseve.FindAsync(cartSeatDto.SektoriUlseveId);
+    if (sektoriUlseve == null) return NotFound("Sektori not found");
+
+    var ndeshja = await _context.Set<Ndeshja>().FindAsync(cartSeatDto.NdeshjaId);
+    if (ndeshja == null) 
+    {
+        _logger.LogWarning($"Ndeshja with ID {cartSeatDto.NdeshjaId} not found");
+        return NotFound("Ndeshja not found");
+    }
+
+    var cart = await _context.Carts
+        .Include(c => c.CartSeats)
+        .FirstOrDefaultAsync(c => c.ApplicationUserId == cartSeatDto.ApplicationUserId);
+
+    if (cart == null)
+    {
+        cart = new Cart
         {
-            _logger.LogInformation($"Received AddToCart request for user {cartSeatDto.ApplicationUserId} with NdeshjaId {cartSeatDto.NdeshjaId}");
+            ApplicationUserId = cartSeatDto.ApplicationUserId,
+            CartSeats = new List<CartSeat>()
+        };
+        _context.Carts.Add(cart);
+    }
 
-            var ulesja = await _context.Uleset.FindAsync(cartSeatDto.UlesjaId);
-            if (ulesja == null) return NotFound("Ulesja not found");
+    var existingSeat = cart.CartSeats.FirstOrDefault(cs => cs.UlesjaId == cartSeatDto.UlesjaId);
+    if (existingSeat != null)
+    {
+        existingSeat.Quantity += cartSeatDto.Quantity;
+        existingSeat.Cmimi = ulesja.Cmimi;
+    }
+    else
+    {
+        cart.CartSeats.Add(new CartSeat
+        {
+            UlesjaId = cartSeatDto.UlesjaId,
+            Quantity = cartSeatDto.Quantity,
+            CartId = cart.Id,
+            SektoriUlseveId = cartSeatDto.SektoriUlseveId,
+            Cmimi = ulesja.Cmimi,
+            NdeshjaId = cartSeatDto.NdeshjaId,
+            SeatFirstName = cartSeatDto.SeatFirstName,
+            SeatLastName = cartSeatDto.SeatLastName
+        });
+    }
 
-            var sektoriUlseve = await _context.SektoriUlseve.FindAsync(cartSeatDto.SektoriUlseveId);
-            if (sektoriUlseve == null) return NotFound("Sektori not found");
+    await _context.SaveChangesAsync();
 
-            // Find Ndeshja from Ulesja's NdeshjaId
-            var ndeshja = await _context.Set<Ndeshja>().FindAsync(cartSeatDto.NdeshjaId);
-            if (ndeshja == null) 
-            {
-                _logger.LogWarning($"Ndeshja with ID {cartSeatDto.NdeshjaId} not found");
-                return NotFound("Ndeshja not found");
-            }
+    var cartDto = new CartDto
+    {
+        Id = cart.Id,
+        ApplicationUserId = cart.ApplicationUserId,
+        CartSeats = cart.CartSeats.Select(cs => new CartSeatDto
+        {
+            Id = cs.Id,
+            UlesjaId = cs.UlesjaId,
+            Quantity = cs.Quantity,
+            SektoriUlseveId = cs.SektoriUlseveId,
+            Cmimi = cs.Cmimi,
+            NdeshjaId = cs.NdeshjaId,
+            SeatFirstName = cs.SeatFirstName,
+            SeatLastName = cs.SeatLastName
+        }).ToList()
+    };
 
-            var cart = await _context.Carts
-                .Include(c => c.CartSeats)
-                .FirstOrDefaultAsync(c => c.ApplicationUserId == cartSeatDto.ApplicationUserId);
+    return Ok(cartDto);
+}
 
-            if (cart == null)
-            {
-                cart = new Cart
-                {
-                    ApplicationUserId = cartSeatDto.ApplicationUserId,
-                    CartSeats = new List<CartSeat>()
-                };
-                _context.Carts.Add(cart);
-            }
-
-            var existingSeat = cart.CartSeats.FirstOrDefault(cs => cs.UlesjaId == cartSeatDto.UlesjaId);
-            if (existingSeat != null)
-            {
-                existingSeat.Quantity += cartSeatDto.Quantity;
-                existingSeat.Cmimi = ulesja.Cmimi;
-            }
-            else
-            {
-                cart.CartSeats.Add(new CartSeat
-                {
-                    UlesjaId = cartSeatDto.UlesjaId,
-                    Quantity = cartSeatDto.Quantity,
-                    CartId = cart.Id,
-                    SektoriUlseveId = cartSeatDto.SektoriUlseveId,
-                    Cmimi = ulesja.Cmimi,
-                    NdeshjaId = cartSeatDto.NdeshjaId
-                });
-            }
-
-            await _context.SaveChangesAsync();
-
-            var cartDto = new CartDto
-            {
-                Id = cart.Id,
-                ApplicationUserId = cart.ApplicationUserId,
-                CartSeats = cart.CartSeats.Select(cs => new CartSeatDto
-                {
-                    Id = cs.Id,
-                    UlesjaId = cs.UlesjaId,
-                    Quantity = cs.Quantity,
-                    SektoriUlseveId = cs.SektoriUlseveId,
-                    Cmimi = cs.Cmimi,
-                    NdeshjaId = cs.NdeshjaId
-                }).ToList()
-            };
-
-            return Ok(cartDto);
-        }
 
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateCartSeat(string userId, [FromBody] CartSeat cartSeat)

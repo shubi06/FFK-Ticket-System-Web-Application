@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useCallback } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 import { AuthContext } from './AuthContext';
@@ -43,43 +43,44 @@ export const CartProvider = ({ children }) => {
     }
   }, [token]);
 
+  useEffect(() => {
+    getCart();
+  }, [getCart]);
+
   const addToCart = useCallback(async (seat) => {
     if (!token) {
       console.error('Token is not available');
       return;
     }
-
+  
     try {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-
+  
       if (!userId) {
         console.error('User ID is not available');
         return;
       }
-
-      console.log('Adding to cart:', {
+  
+      const payload = {
         ulesjaId: seat.id,
         quantity: 1,
         cmimi: seat.cmimi,
         sektoriUlseveId: seat.sectorId,
         ndeshjaId: seat.ndeshjaId,
-        applicationUserId: userId // Ensure the applicationUserId is included
-      });
-
-      const response = await axios.post('http://localhost:5178/api/Cart', {
-        ulesjaId: seat.id,
-        quantity: 1,
-        cmimi: seat.cmimi,
-        sektoriUlseveId: seat.sectorId,
-        ndeshjaId: seat.ndeshjaId,
-        applicationUserId: userId
-      }, {
+        applicationUserId: userId,
+        seatFirstName: seat.seatFirstName || '',
+        seatLastName: seat.seatLastName || ''
+      };
+  
+      console.log('Adding to cart:', payload);
+  
+      const response = await axios.post('http://localhost:5178/api/Cart', payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       console.log('Cart data after adding seat:', response.data);
       setCart(response.data);
     } catch (error) {
@@ -91,6 +92,7 @@ export const CartProvider = ({ children }) => {
       }
     }
   }, [token]);
+  
 
   const removeFromCart = useCallback(async (seatId) => {
     if (!token) {
@@ -136,8 +138,12 @@ export const CartProvider = ({ children }) => {
     }
   }, [token, cart]);
 
+  const updateSeatMetadata = (updatedCart) => {
+    setCart(updatedCart);
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, getCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, getCart, updateSeatMetadata }}>
       {children}
     </CartContext.Provider>
   );
