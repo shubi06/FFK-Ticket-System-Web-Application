@@ -43,7 +43,7 @@ const Header = () => {
             </LinkContainer>
 
             {authData && authData.role === 'Admin' && (
-              <LinkContainer to="/dashboard">
+              <LinkContainer to="portal/dashboard">
                 <Nav.Link>Dashboard</Nav.Link>
               </LinkContainer>
             )}

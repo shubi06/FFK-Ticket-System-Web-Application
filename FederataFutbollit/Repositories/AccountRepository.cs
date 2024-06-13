@@ -149,7 +149,7 @@ namespace FederataFutbollit.Repositories
         issuer: config["Jwt:Issuer"],
         audience: config["Jwt:Audience"],
         claims: userClaims,
-        expires: DateTime.UtcNow.AddMinutes(1),
+        expires: DateTime.UtcNow.AddMinutes(59),
         signingCredentials: credentials
     );
 
