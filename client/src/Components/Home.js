@@ -21,21 +21,27 @@ const Home = () => {
     fetchMatches();
   }, []);
 
+  // Filter matches that are upcoming
+  const upcomingMatches = matches.filter(match => match.statusiId === 1); // Assuming statusiId 1 is "Do të Zhvillohet"
+  
+  // Filter matches that have been played
+  const playedMatches = matches.filter(match => match.statusiId === 2); // Assuming statusiId 2 is "Zhvilluar"
+
   return (
     <div>
       <div className="hero-section">
         <SoccerBall />
         <div className="hero-content">
-          <h1>Soccer in the Next Millennium</h1>
-          <p>Experience the ultimate evolution of soccer with our futuristic 3D model. Dive into a world beyond your imagination, where the game transcends time and space.</p>
+          <h1>Federata e Futbollit të Kosovës</h1>
+          <p>Prezantojmë me krenari ndeshjet e ardhshme të Kombëtares, ku talenti dhe përkushtimi i lojtarëve tanë do të shkëlqejë në fushë. Përgatituni të përjetoni emocione të pashlyeshme teksa kombëtarja jonë përballet me përfaqësueset më të forta, duke sjellë përpara gjithë pasionin dhe shpirtin garues që na karakterizon.</p>
         </div>
       </div>
       <div className="content-container">
         <section className="matches-section">
           <h2>Upcoming Matches</h2>
           <div className="matches-content">
-            {matches.length > 0 ? (
-              matches.map((match) => (
+            {upcomingMatches.length > 0 ? (
+              upcomingMatches.map((match) => (
                 <div key={match.id} className="match-item">
                   <h3>
                     {match.kombetarjaEmri} vs {match.ekipiKundershtar}
@@ -56,21 +62,17 @@ const Home = () => {
         <section className="results-section">
           <h2>Recent Results</h2>
           <div className="results-content">
-            <div className="result-item">
-              <h3>Team A 2-1 Team B</h3>
-              <p>Date: May 10, 2024</p>
-              <p>Location: Stadium 1</p>
-            </div>
-            <div className="result-item">
-              <h3>Team C 3-0 Team D</h3>
-              <p>Date: May 15, 2024</p>
-              <p>Location: Stadium 2</p>
-            </div>
-            <div className="result-item">
-              <h3>Team E 1-1 Team F</h3>
-              <p>Date: May 20, 2024</p>
-              <p>Location: Stadium 3</p>
-            </div>
+            {playedMatches.length > 0 ? (
+              playedMatches.map((match) => (
+                <div key={match.id} className="result-item">
+                  <h3>{match.kombetarjaEmri} {match.golaEkipiJone} - {match.golaEkipiKundershtar} {match.ekipiKundershtar}</h3>
+                  <p>Date: {new Date(match.data).toLocaleDateString()}</p>
+                  <p>Location: {match.stadiumiEmri}</p>
+                </div>
+              ))
+            ) : (
+              <p>No recent results available.</p>
+            )}
           </div>
         </section>
       </div>
@@ -79,4 +81,3 @@ const Home = () => {
 };
 
 export default Home;
-

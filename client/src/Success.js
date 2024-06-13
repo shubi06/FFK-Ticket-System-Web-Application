@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import TicketPDF from './TicketPDF'; // Importo komponentin që krijuam më parë
+import TicketPDF from './TicketPDF'; // Import the component that we created earlier
+import './Success.css'; // Import the CSS file for styling
 
 const Success = () => {
   const [tickets, setTickets] = useState([]);
@@ -39,28 +40,42 @@ const Success = () => {
       <h1>Payment Successful!</h1>
       <h2>Your Tickets</h2>
       {tickets.length > 0 ? (
-        <>
-          <ul>
+        <div>
+          <ul className="ticket-list">
             {tickets.map(ticket => (
-              <li key={ticket.id}>
-                <div>{ticket.firstName} {ticket.lastName}</div>
-                <div>Ndeshja: Kosova vs {ticket.ekipiKundershtar}</div>
-                <div>Numri Uleses: {ticket.numriUlses }</div>
-                <div>Sektori: {ticket.sektoriUlses }</div>
-                <div>Cmimi: {ticket.cmimi} EUR</div>
-                <div>Ora e Blerjes: {new Date(ticket.oraBlerjes).toLocaleString()}</div>
+              <li key={ticket.id} className="ticket-item">
+                <div className="ticket-info">
+                  <div><strong>{ticket.firstName} {ticket.lastName}</strong></div>
+                  <div>Ndeshja: <strong>Kosova vs {ticket.ekipiKundershtar}</strong></div>
+                  <div>Numri Uleses: <strong>{ticket.numriUlses}</strong></div>
+                  <div>Sektori: <strong>{ticket.sektoriUlses}</strong></div>
+                  <div>Cmimi: <strong>{ticket.cmimi} EUR</strong></div>
+                  <div>Ora e Blerjes: <strong>{new Date(ticket.oraBlerjes).toLocaleString()}</strong></div>
+                </div>
+                <PDFDownloadLink
+                  document={<TicketPDF tickets={[ticket]} />}
+                  fileName={`ticket-${ticket.id}.pdf`}
+                  className="download-link"
+                >
+                  {({ blob, url, loading, error }) =>
+                    loading ? 'Loading document...' : 'Download Ticket'
+                  }
+                </PDFDownloadLink>
               </li>
             ))}
           </ul>
-          <PDFDownloadLink
-            document={<TicketPDF tickets={tickets} />}
-            fileName="tickets.pdf"
-          >
-            {({ blob, url, loading, error }) =>
-              loading ? 'Loading document...' : 'Download Tickets as PDF'
-            }
-          </PDFDownloadLink>
-        </>
+          <div className="download-all">
+            <PDFDownloadLink
+              document={<TicketPDF tickets={tickets} />}
+              fileName="all-tickets.pdf"
+              className="download-link"
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? 'Loading document...' : 'Download All Tickets'
+              }
+            </PDFDownloadLink>
+          </div>
+        </div>
       ) : (
         <p>No tickets found</p>
       )}
