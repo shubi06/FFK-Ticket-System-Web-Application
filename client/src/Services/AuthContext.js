@@ -11,9 +11,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData, token) => {
     try {
-      const decodedToken = jwtDecode(token);
-      console.log("Decoded Token:", decodedToken);
-
       setAuthData(userData);
       setToken(token);
       setIsManualLogout(false);
@@ -46,23 +43,22 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      const decodedToken = jwtDecode(token);
-      const expirationTime = decodedToken.exp * 1000;
-      const currentTime = Date.now();
+        const decodedToken = jwtDecode(token);
+        const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
+        const currentTime = Date.now();
+        const timeUntilRefresh = expirationTime - currentTime - 60000; // Refresh 1 minute before expiration
 
-      const timeUntilRefresh = expirationTime - currentTime - 60000;
+        if (timeUntilRefresh <= 0) {
+            refreshAuthToken();
+        } else {
+            const timer = setTimeout(() => {
+                refreshAuthToken();
+            }, timeUntilRefresh);
 
-      if (timeUntilRefresh <= 0) {
-        refreshAuthToken();
-      } else {
-        const timer = setTimeout(() => {
-          refreshAuthToken();
-        }, timeUntilRefresh);
-
-        return () => clearTimeout(timer);
-      }
+            return () => clearTimeout(timer);
+        }
     }
-  }, [token]);
+}, [token]);
 
   const handleManualLogout = () => {
     setIsManualLogout(true);
@@ -71,37 +67,41 @@ export const AuthProvider = ({ children }) => {
 
   const refreshAuthToken = async () => {
     try {
-      console.log('Sending refresh token request...');
-      const response = await axios.post(
-        'http://localhost:5178/api/account/refresh-token',
-        {},
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+        const response = await axios.post(
+            'http://localhost:5178/api/account/refresh-token',
+            {},
+            {
+                withCredentials: true,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const newToken = response.data.token;
+        const decodedToken = jwtDecode(newToken);
+
+        const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+        if (!userId) {
+            throw new Error('User ID not found in token.');
         }
-      );
-      console.log('Refresh token response:', response.data);
 
-      const newToken = response.data.token;
-      const decodedToken = jwtDecode(newToken);
+        const userData = {
+            userId,
+            name: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+            email: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+            role: decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+        };
 
-      const userData = {
-        userId: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
-        name: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
-        email: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
-        role: decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-      };
-
-      login(userData, newToken);
+        login(userData, newToken);
     } catch (error) {
-      console.error('Error refreshing token:', error.response ? error.response.data : error.message);
-      if (error.response && error.response.status === 401) {
-        logout(true);
-      }
+        console.error('Error refreshing token:', error.response ? error.response.data : error.message);
+        if (error.response && error.response.status === 401) {
+            logout(true);
+        }
     }
-  };
+};
+
 
   return (
     <AuthContext.Provider value={{ authData, login, logout: handleManualLogout, token }}>

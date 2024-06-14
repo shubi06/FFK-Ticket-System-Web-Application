@@ -68,6 +68,7 @@ import RezultatiList from "./Rezultati/RezultatiList"
 import RezultatiCreate from "./Rezultati/RezultatiCreate"
 import RezultatiEdit from "./Rezultati/RezultatiEdit"
 import RezultatiDelete from "./Rezultati/RezultatiDelete";
+import BiletatList from "./Biletat/BiletaList";
 
 
 
@@ -162,6 +163,8 @@ function Portal() {
               <Route path="rezultati/edit/:id" element={<RezultatiEdit />} />
               <Route path="rezultati/delete/:id" element={<RezultatiDelete />} />
 
+
+              <Route path="bileta-list" element={<BiletatList />} />
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>

@@ -39,6 +39,12 @@ function Sidebar() {
       {/* <!-- Nav Item - Users --> */}
 
       <li className="nav-item active">
+        <Link className="nav-link" to="/portal/bileta-list">
+          <span>BILETAT</span>
+        </Link>
+      </li>
+
+      <li className="nav-item active">
         <Link className="nav-link" to="/portal/shteti-list">
           <span>SHTETI</span>
         </Link>

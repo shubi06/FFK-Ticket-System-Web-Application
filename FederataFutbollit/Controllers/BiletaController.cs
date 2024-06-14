@@ -29,7 +29,8 @@ namespace FederataFutbollit.Controllers
             return await _context.Biletat
                 .Include(b => b.Ulesja)
                 .Include(b => b.Ndeshja)
-                .Include(b => b.ApplicationUser)
+                 .Include(b => b.ApplicationUser)
+
                 .ToListAsync();
         }
 
@@ -74,7 +75,7 @@ namespace FederataFutbollit.Controllers
             }
         }
 
-    [HttpPost("check-ticket-limit")]
+      [HttpPost("check-ticket-limit")]
 public async Task<ActionResult> CheckTicketLimit(string userId, int ndeshjaId)
 {
     _logger.LogInformation("Checking ticket limit for user {UserId} and match {NdeshjaId}", userId, ndeshjaId);

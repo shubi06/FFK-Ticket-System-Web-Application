@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; // Fixed import here
 import { AuthContext } from './AuthContext';
 
 export const CartContext = createContext();
@@ -8,6 +8,10 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
   const { token } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log('Token in CartProvider:', token); // Log token to debug
+  }, [token]);
 
   const getCart = useCallback(async () => {
     if (!token) {
@@ -52,16 +56,16 @@ export const CartProvider = ({ children }) => {
       console.error('Token is not available');
       return;
     }
-  
+
     try {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-  
+
       if (!userId) {
         console.error('User ID is not available');
         return;
       }
-  
+
       const payload = {
         ulesjaId: seat.id,
         quantity: 1,
@@ -72,15 +76,15 @@ export const CartProvider = ({ children }) => {
         seatFirstName: seat.seatFirstName || '',
         seatLastName: seat.seatLastName || ''
       };
-  
+
       console.log('Adding to cart:', payload);
-  
+
       const response = await axios.post('http://localhost:5178/api/Cart', payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       console.log('Cart data after adding seat:', response.data);
       setCart(response.data);
     } catch (error) {
@@ -92,7 +96,6 @@ export const CartProvider = ({ children }) => {
       }
     }
   }, [token]);
-  
 
   const removeFromCart = useCallback(async (seatId) => {
     if (!token) {
