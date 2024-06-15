@@ -25,8 +25,11 @@ namespace FederataFutbollit.Entities
         [Required]
         public int SuperligaId { get; set; }
 
+
         [JsonIgnore]
         public Superliga Superliga { get; set; }
+
+        public List<Lojtaret> Lojtaret { get; set; }
 
         [JsonIgnore]
         public ICollection<NdeshjaSuperliges> NdeshjaSuperliges { get; set; }
