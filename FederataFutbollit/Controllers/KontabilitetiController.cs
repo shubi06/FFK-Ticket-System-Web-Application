@@ -54,7 +54,8 @@ namespace FederataFutbollit.Controllers
 
             var shpenzimet = new Shpenzimet
             {
-                Pershkrimi = kontabilitetiDto.ShpenzimetPershkrimi
+                Pershkrimi = kontabilitetiDto.ShpenzimetPershkrimi,
+                Shuma = kontabilitetiDto.ShumaTotale
             };
 
             var kontabiliteti = new Kontabiliteti
@@ -86,6 +87,7 @@ namespace FederataFutbollit.Controllers
 
             kontabiliteti.StafiId = kontabilitetiDto.StafiId;
             kontabiliteti.Shpenzimet.Pershkrimi = kontabilitetiDto.ShpenzimetPershkrimi;
+            kontabiliteti.Shpenzimet.Shuma = kontabilitetiDto.ShumaTotale;
             kontabiliteti.Data = kontabilitetiDto.Data;
             kontabiliteti.ShumaTotale = kontabilitetiDto.ShumaTotale;
 

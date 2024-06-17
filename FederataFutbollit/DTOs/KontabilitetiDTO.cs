@@ -5,6 +5,6 @@
         public int StafiId { get; set; }
         public string ShpenzimetPershkrimi { get; set; }
         public DateTime Data { get; set; }
-        public int ShumaTotale { get; set; }
+        public decimal ShumaTotale { get; set; }
     }
 }
