@@ -23,20 +23,24 @@ namespace FederataFutbollit.Controllers
         [HttpGet]
         public async Task<ActionResult<List<LojtaretSuperlige>>> Get()
         {
-
-
-            return await _context.LojtaretSuperlige.ToListAsync();
+            return await _context.LojtaretSuperlige
+                .Include(ls => ls.Ekipa) // Përfshini ekipën
+                .ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<LojtaretSuperlige>> GetLojtariSuperligeById(int id)
         {
-            var lojtariSuperlige = await _context.LojtaretSuperlige.FindAsync(id);
+            var lojtariSuperlige = await _context.LojtaretSuperlige
+                .Include(ls => ls.Ekipa) // Përfshini ekipën
+                .FirstOrDefaultAsync(ls => ls.Id == id);
+
             if (lojtariSuperlige == null)
             {
                 return NotFound();
             }
-            return lojtariSuperlige;
+
+            return Ok(lojtariSuperlige);
         }
 
 
@@ -45,7 +49,11 @@ namespace FederataFutbollit.Controllers
         {
             var superliga = await _context.Superligat.FindAsync(request.SuperligaID);
             if (superliga == null)
-                return NotFound();
+                return NotFound("Superliga nuk u gjet");
+
+            var ekipa = await _context.Ekipa.FindAsync(request.EkipaId);
+            if (ekipa == null)
+                return NotFound("Ekipa nuk u gjet");
 
             var newLojtariSuperlige = new LojtaretSuperlige
             {
@@ -57,7 +65,8 @@ namespace FederataFutbollit.Controllers
                 Asiste = request.Asiste,
                 NrFaneles = request.NrFaneles,
                 SuperligaID = request.SuperligaID,
-                FotoPath = "" // Initialize with an empty string or handle appropriately
+                EkipaId = request.EkipaId,
+                FotoPath = ""
             };
 
             if (file != null && file.Length > 0)
@@ -83,7 +92,7 @@ namespace FederataFutbollit.Controllers
             _context.LojtaretSuperlige.Add(newLojtariSuperlige);
             await _context.SaveChangesAsync();
 
-            return await Get();
+            return await _context.LojtaretSuperlige.ToListAsync();
         }
 
 
@@ -148,21 +157,6 @@ namespace FederataFutbollit.Controllers
 
             return Ok(new { path = lojtariSuperlige.FotoPath });
         }
-
-        [HttpGet("report")]
-public IActionResult GetPlayersReport()
-{
-    var playersReport = _context.LojtaretSuperlige.Select(p => new 
-    {
-        p.Emri,
-        p.Mbiemri,
-        p.Gola,
-        p.Asiste
-    }).ToList();
-
-    return Ok(playersReport);
-}
-
 
     }
 }

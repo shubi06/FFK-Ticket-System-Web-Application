@@ -117,14 +117,12 @@ function Sidebar() {
           <span>EKIPA E SUPERLIGES</span>
         </Link>
       </li>
-     
-      
+
       <hr className="sidebar-divider my-0" />
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/ndeshja-superlige-list">
           <span>NDESHJA SUPERLIGE</span>
         </Link>
-      
       </li>
 
       <li className="nav-item active">
@@ -135,6 +133,12 @@ function Sidebar() {
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/rezultati-list">
           <span>Rezultati</span>
+        </Link>
+      </li>
+
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/kontabiliteti-list">
+          <span>KONTABILITETI</span>
         </Link>
       </li>
     </ul>

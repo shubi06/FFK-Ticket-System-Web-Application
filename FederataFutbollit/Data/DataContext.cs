@@ -102,6 +102,8 @@ namespace FederataFutbollit.Data
             .HasOne(cs => cs.Ndeshja)
             .WithMany(n => n.CartSeats)
             .HasForeignKey(cs => cs.NdeshjaId);
+
+           
         }
     }
 }

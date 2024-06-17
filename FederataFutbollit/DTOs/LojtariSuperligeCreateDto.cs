@@ -11,6 +11,8 @@
         public int Asiste { get; set; }
         public int NrFaneles { get; set; }
         public int SuperligaID { get; set; }
+        public int EkipaId { get; set; }
+
         public string FotoPath { get; set; } = string.Empty;
 
     }
