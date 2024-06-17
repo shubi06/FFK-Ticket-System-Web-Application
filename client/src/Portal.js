@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
@@ -59,19 +59,21 @@ import NdeshjaEdit from "./NdeshjaSuperlige/NdeshjaEdit";
 import NdeshjaDelete from "./NdeshjaSuperlige/NdeshjaDelete";
 import NdeshjaView from "./NdeshjaSuperlige/NdeshjaView";
 
-import ReferiList from "./Referi/ReferiList"
-import ReferiCreate from "./Referi/ReferiCreate"
-import ReferiEdit from "./Referi/ReferiEdit"
-import ReferiDelete from "./Referi/ReferiDelete"
+import ReferiList from "./Referi/ReferiList";
+import ReferiCreate from "./Referi/ReferiCreate";
+import ReferiEdit from "./Referi/ReferiEdit";
+import ReferiDelete from "./Referi/ReferiDelete";
 
-import RezultatiList from "./Rezultati/RezultatiList"
-import RezultatiCreate from "./Rezultati/RezultatiCreate"
-import RezultatiEdit from "./Rezultati/RezultatiEdit"
+import RezultatiList from "./Rezultati/RezultatiList";
+import RezultatiCreate from "./Rezultati/RezultatiCreate";
+import RezultatiEdit from "./Rezultati/RezultatiEdit";
 import RezultatiDelete from "./Rezultati/RezultatiDelete";
 import BiletatList from "./Biletat/BiletaList";
 
-
-
+import KontabilitetiList from "./Kontabiliteti/KontabilitetiList";
+import KontabilitetiCreate from "./Kontabiliteti/KontabilitetiCreate";
+import KontabilitetiEdit from "./Kontabiliteti/KontabilitetiEdit";
+import KontabilitetiView from "./Kontabiliteti/KontabilitetiView";
 
 function Portal() {
   return (
@@ -147,24 +149,58 @@ function Portal() {
               <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
               <Route path="ekipa/delete/:id" element={<EkipaDelete />} />
 
-              <Route path="ndeshja-superlige-list" element={<NdeshjaSuperligeList />} />
-              <Route path="create-ndeshja-superlige" element={<NdeshjaCreate />} />
-              <Route path="edit-ndeshja-superlige/:id" element={<NdeshjaEdit />} />
-              <Route path="delete-ndeshja-superlige/:id" element={<NdeshjaDelete />} />
-              <Route path="view-ndeshja-superlige/:id" element={<NdeshjaView />} />
+              <Route
+                path="ndeshja-superlige-list"
+                element={<NdeshjaSuperligeList />}
+              />
+              <Route
+                path="create-ndeshja-superlige"
+                element={<NdeshjaCreate />}
+              />
+              <Route
+                path="edit-ndeshja-superlige/:id"
+                element={<NdeshjaEdit />}
+              />
+              <Route
+                path="delete-ndeshja-superlige/:id"
+                element={<NdeshjaDelete />}
+              />
+              <Route
+                path="view-ndeshja-superlige/:id"
+                element={<NdeshjaView />}
+              />
 
-              <Route path="referi-list"  element={<ReferiList />} />
-              <Route path="referi/create"  element={<ReferiCreate />} />
-              <Route path="referi/edit/:id"  element={<ReferiEdit />} />
-              <Route path="referi/delete/:id"  element={<ReferiDelete />} />
+              <Route path="referi-list" element={<ReferiList />} />
+              <Route path="referi/create" element={<ReferiCreate />} />
+              <Route path="referi/edit/:id" element={<ReferiEdit />} />
+              <Route path="referi/delete/:id" element={<ReferiDelete />} />
 
               <Route path="rezultati-list" element={<RezultatiList />} />
               <Route path="rezultati-create" element={<RezultatiCreate />} />
               <Route path="rezultati/edit/:id" element={<RezultatiEdit />} />
-              <Route path="rezultati/delete/:id" element={<RezultatiDelete />} />
-
+              <Route
+                path="rezultati/delete/:id"
+                element={<RezultatiDelete />}
+              />
 
               <Route path="bileta-list" element={<BiletatList />} />
+
+              <Route
+                path="kontabiliteti-list"
+                element={<KontabilitetiList />}
+              />
+              <Route
+                path="kontabiliteti-create"
+                element={<KontabilitetiCreate />}
+              />
+              <Route
+                path="kontabiliteti-edit/:id"
+                element={<KontabilitetiEdit />}
+              />
+              <Route
+                path="kontabiliteti-view/:id"
+                element={<KontabilitetiView />}
+              />
 
               <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
