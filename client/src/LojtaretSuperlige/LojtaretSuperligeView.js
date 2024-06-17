@@ -41,6 +41,11 @@ function LojtaretSuperligeView() {
           <p className="card-text">Gola: {lojtaretSuperlige.gola}</p>
           <p className="card-text">Asiste: {lojtaretSuperlige.asiste}</p>
           <p className="card-text">NrFaneles: {lojtaretSuperlige.nrFaneles}</p>
+          {lojtaretSuperlige.ekipa && (
+            <p className="card-text">
+              Ekipi: {lojtaretSuperlige.ekipa.emriKlubit}
+            </p>
+          )}
           {lojtaretSuperlige.fotoPath && (
             <div className="card-img">
               <p className="card-text">Foto:</p>

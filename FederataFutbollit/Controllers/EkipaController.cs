@@ -23,7 +23,10 @@ namespace FederataFutbollit.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Ekipa>>> GetAllEkipat()
         {
-            var ekipa = await _context.Ekipa.Include(e => e.Superliga).ToListAsync();
+            var ekipa = await _context.Ekipa
+                .Include(e => e.Superliga)
+                .Include(e => e.Lojtaret) // Përfshini lojtarët në query
+                .ToListAsync();
             return Ok(ekipa);
         }
 
@@ -31,6 +34,7 @@ namespace FederataFutbollit.Controllers
         public async Task<ActionResult<Ekipa>> GetEkipaById(int id)
         {
             var ekipa = await _context.Ekipa.Include(e => e.Superliga)
+                                             .Include(e => e.Lojtaret) // Përfshini lojtarët në query
                                              .FirstOrDefaultAsync(e => e.Id == id);
             if (ekipa == null)
                 return NotFound("Ekipa nuk u gjet");
