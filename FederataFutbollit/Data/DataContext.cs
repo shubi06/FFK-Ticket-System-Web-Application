@@ -99,11 +99,22 @@ namespace FederataFutbollit.Data
                 .OnDelete(DeleteBehavior.Restrict);
                 
                  modelBuilder.Entity<CartSeat>()
-            .HasOne(cs => cs.Ndeshja)
-            .WithMany(n => n.CartSeats)
-            .HasForeignKey(cs => cs.NdeshjaId);
+                .HasOne(cs => cs.Ndeshja)
+                .WithMany(n => n.CartSeats)
+                .HasForeignKey(cs => cs.NdeshjaId);
 
-           
+            modelBuilder.Entity<Kontabiliteti>(entity =>
+            {
+                entity.Property(e => e.BuxhetiVjetor).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.ShumaTotale).HasColumnType("decimal(18,2)");
+            });
+
+            modelBuilder.Entity<Shpenzimet>(entity =>
+            {
+                entity.Property(e => e.Shuma).HasColumnType("decimal(18,2)");
+            });
+
+
         }
     }
 }

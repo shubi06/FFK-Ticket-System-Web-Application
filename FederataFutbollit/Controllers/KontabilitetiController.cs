@@ -1,5 +1,4 @@
-﻿// Controllers/KontabilitetiController.cs
-using FederataFutbollit.Entities;
+﻿using FederataFutbollit.Entities;
 using FederataFutbollit.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -63,7 +62,8 @@ namespace FederataFutbollit.Controllers
                 Stafi = stafi,
                 Shpenzimet = shpenzimet,
                 Data = kontabilitetiDto.Data,
-                ShumaTotale = kontabilitetiDto.ShumaTotale
+                ShumaTotale = kontabilitetiDto.ShumaTotale,
+                BuxhetiVjetor = kontabilitetiDto.BuxhetiVjetor - kontabilitetiDto.ShumaTotale // Zvogëlimi i buxhetit me shpenzimin
             };
 
             _context.Kontabiliteti.Add(kontabiliteti);
@@ -72,6 +72,7 @@ namespace FederataFutbollit.Controllers
             return CreatedAtAction(nameof(GetKontabilitetiById), new { id = kontabiliteti.Id }, kontabiliteti);
         }
 
+        // Kontrolloni dhe sigurohuni që kjo është vetëm metoda `UpdateKontabiliteti`
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateKontabiliteti(int id, KontabilitetiDTO kontabilitetiDto)
         {
@@ -90,6 +91,7 @@ namespace FederataFutbollit.Controllers
             kontabiliteti.Shpenzimet.Shuma = kontabilitetiDto.ShumaTotale;
             kontabiliteti.Data = kontabilitetiDto.Data;
             kontabiliteti.ShumaTotale = kontabilitetiDto.ShumaTotale;
+            kontabiliteti.BuxhetiVjetor = kontabilitetiDto.BuxhetiVjetor - kontabilitetiDto.ShumaTotale; // Zvogëlimi i buxhetit me shpenzimin
 
             _context.Entry(kontabiliteti).State = EntityState.Modified;
 
@@ -111,6 +113,9 @@ namespace FederataFutbollit.Controllers
 
             return NoContent();
         }
+
+        // Kontrolloni për ndonjë metodë tjetër `UpdateKontabiliteti` dhe largojeni ose ndryshoni emrin nëse është e nevojshme
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteKontabiliteti(int id)
         {
