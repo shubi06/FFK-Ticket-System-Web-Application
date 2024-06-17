@@ -7,7 +7,7 @@ const Player = () => {
   const [superligaPlayers, setSuperligaPlayers] = useState([]);
   const [kombetarjaPlayers, setKombetarjaPlayers] = useState([]);
   const [ekipaList, setEkipaList] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Kombetarja");
   const [selectedEkipa, setSelectedEkipa] = useState("");
   const [allPlayers, setAllPlayers] = useState([]);
 
@@ -72,9 +72,7 @@ const Player = () => {
       )
     : selectedCategory === "Superliga"
     ? superligaPlayers
-    : selectedCategory === "Kombetarja"
-    ? kombetarjaPlayers
-    : allPlayers;
+    : kombetarjaPlayers;
 
   return (
     <>
@@ -88,9 +86,8 @@ const Player = () => {
               value={selectedCategory}
               onChange={handleCategoryChange}
             >
-              <option value="">Të gjithë lojtarët</option>
-              <option value="Superliga">Superliga</option>
               <option value="Kombetarja">Kombëtarja</option>
+              <option value="Superliga">Superliga</option>
             </Form.Control>
           </Form.Group>
 
