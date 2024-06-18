@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Card, Container, Row, Col, Form } from "react-bootstrap";
+import { Card, Container, Row, Col, Form, Button } from "react-bootstrap";
 import "./Player.css";
 import Header from "./Header"; // Duke supozuar që Header duhet të shfaqet këtu gjithashtu
 
 const Player = () => {
   const [superligaPlayers, setSuperligaPlayers] = useState([]);
   const [kombetarjaPlayers, setKombetarjaPlayers] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [ekipaList, setEkipaList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("Kombetarja");
+  const [selectedEkipa, setSelectedEkipa] = useState("");
   const [allPlayers, setAllPlayers] = useState([]);
 
   useEffect(() => {
@@ -35,8 +37,19 @@ const Player = () => {
       }
     };
 
+    const fetchEkipaList = async () => {
+      try {
+        const response = await fetch("http://localhost:5178/api/Ekipa");
+        const data = await response.json();
+        setEkipaList(data);
+      } catch (error) {
+        console.error("Error fetching Ekipa list:", error);
+      }
+    };
+
     fetchSuperligaPlayers();
     fetchKombetarjaPlayers();
+    fetchEkipaList();
   }, []);
 
   useEffect(() => {
@@ -45,14 +58,21 @@ const Player = () => {
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
+    setSelectedEkipa(""); // Reset selected ekipa when category changes
   };
 
-  const filteredPlayers =
-    selectedCategory === "Superliga"
-      ? superligaPlayers
-      : selectedCategory === "Kombetarja"
-      ? kombetarjaPlayers
-      : allPlayers;
+  const handleEkipaChange = (e) => {
+    setSelectedEkipa(e.target.value);
+  };
+
+  const filteredPlayers = selectedEkipa
+    ? superligaPlayers.filter(
+        (player) =>
+          player.ekipaId && player.ekipaId.toString() === selectedEkipa
+      )
+    : selectedCategory === "Superliga"
+    ? superligaPlayers
+    : kombetarjaPlayers;
 
   return (
     <>
@@ -66,20 +86,37 @@ const Player = () => {
               value={selectedCategory}
               onChange={handleCategoryChange}
             >
-              <option value="">Të gjithë lojtarët</option>
-              <option value="Superliga">Superliga</option>
               <option value="Kombetarja">Kombëtarja</option>
+              <option value="Superliga">Superliga</option>
             </Form.Control>
           </Form.Group>
+
+          {selectedCategory === "Superliga" && (
+            <Form.Group controlId="ekipaSelect">
+              <Form.Label>Zgjidh ekipën</Form.Label>
+              <Form.Control
+                as="select"
+                value={selectedEkipa}
+                onChange={handleEkipaChange}
+              >
+                <option value="">Të gjithë ekipet</option>
+                {ekipaList.map((ekipa) => (
+                  <option key={ekipa.id} value={ekipa.id}>
+                    {ekipa.emriKlubit}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          )}
         </Form>
-        <div className="space-between"></div> {/* Hapsira midis pjesëve */}
+        <div className="space-between"></div>
         <Row>
           {filteredPlayers.map((player, index) => (
             <Col key={index} md={3}>
               <Card className="player-card">
                 <Card.Img
                   variant="top"
-                  src={`http://localhost:5178${player.fotoPath}`} // Sigurohuni që rruga është e saktë
+                  src={`http://localhost:5178${player.fotoPath}`}
                   className="player-card-img-top"
                 />
                 <Card.Body className="player-card-body">
@@ -97,9 +134,9 @@ const Player = () => {
                     <br />
                     <strong>Nr. Faneles:</strong> {player.nrFaneles}
                     <br />
-                    {player.superligaID && (
+                    {player.ekipa && (
                       <>
-                        <strong>Superliga ID:</strong> {player.superligaID}
+                        <strong>Ekipa:</strong> {player.ekipa.emriKlubit}
                         <br />
                       </>
                     )}

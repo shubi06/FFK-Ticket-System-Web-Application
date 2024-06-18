@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 function LojtaretSuperligeCreate() {
   const [isLoading, setLoading] = useState(false);
   const [superligaList, setSuperligaList] = useState([]);
+  const [ekipaList, setEkipaList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,6 +19,16 @@ function LojtaretSuperligeCreate() {
       }
     };
     fetchSuperliga();
+
+    const fetchEkipa = async () => {
+      try {
+        const response = await axios.get("http://localhost:5178/api/Ekipa");
+        setEkipaList(response.data);
+      } catch (error) {
+        console.error("Failed to fetch Ekipa", error);
+      }
+    };
+    fetchEkipa();
   }, []);
 
   const formik = useFormik({
@@ -30,6 +41,7 @@ function LojtaretSuperligeCreate() {
       asiste: "",
       nrFaneles: "",
       superligaID: "",
+      ekipaId: "",
       foto: null,
     },
     validate: (values) => {
@@ -46,7 +58,8 @@ function LojtaretSuperligeCreate() {
       if (!values.nrFaneles)
         errors.nrFaneles = "Ju lutem shkruani nrFaneles se lojtarit";
       if (!values.superligaID)
-        errors.superligaID = "Ju lutem zgjidhni një kombetare";
+        errors.superligaID = "Ju lutem zgjidhni një superliga";
+      if (!values.ekipaId) errors.ekipaId = "Ju lutem zgjidhni një ekip";
       if (!values.foto) errors.foto = "Ju lutem ngarkoni një foto";
       return errors;
     },
@@ -54,17 +67,11 @@ function LojtaretSuperligeCreate() {
       try {
         setLoading(true);
         const formData = new FormData();
-        formData.append("Emri", values.emri);
-        formData.append("Mbiemri", values.mbiemri);
-        formData.append("Mosha", values.mosha);
-        formData.append("Pozicioni", values.pozicioni);
-        formData.append("Gola", values.gola);
-        formData.append("Asiste", values.asiste);
-        formData.append("NrFaneles", values.nrFaneles);
-        formData.append("SuperligaID", values.superligaID);
-        formData.append("file", values.foto);
+        Object.keys(values).forEach((key) => {
+          formData.append(key, values[key]);
+        });
 
-        console.log("Form Data: ", formData); // Debug log to check formData
+        formData.append("file", values.foto); // Shtoni këtë linjë për të përfshirë skedarin
 
         const response = await axios.post(
           "http://localhost:5178/api/LojtaretSuperlige",
@@ -76,14 +83,13 @@ function LojtaretSuperligeCreate() {
           }
         );
 
-        console.log("Server Response: ", response); // Debug log to check server response
-
-        navigate("/portal/lojtaretSuperlige-list");
+        setLoading(false);
+        navigate("/portal/lojtaret-superlige-list"); // Rruga e saktë për ridrejtim
       } catch (error) {
         console.error("Error during form submission:", error);
         if (error.response) {
-          console.error("Server Error Response: ", error.response); // Debug log to check server error response
-          console.error("Error Data: ", error.response.data); // Log the error data from the server
+          console.error("Server Error Response: ", error.response);
+          console.error("Error Data: ", error.response.data);
           alert(
             "Failed to create Lojtari: " + JSON.stringify(error.response.data)
           );
@@ -203,7 +209,7 @@ function LojtaretSuperligeCreate() {
               id="superligaID"
               name="superligaID"
               onChange={formik.handleChange}
-              value={formik.values.kombetarjaID}
+              value={formik.values.superligaID}
               className={`form-control ${
                 formik.errors.superligaID ? "is-invalid" : ""
               }`}
@@ -219,6 +225,29 @@ function LojtaretSuperligeCreate() {
               <div className="invalid-feedback">
                 {formik.errors.superligaID}
               </div>
+            ) : null}
+          </div>
+
+          <div className="col-lg-6">
+            <label htmlFor="ekipaId">Ekipi</label>
+            <select
+              id="ekipaId"
+              name="ekipaId"
+              onChange={formik.handleChange}
+              value={formik.values.ekipaId}
+              className={`form-control ${
+                formik.errors.ekipaId ? "is-invalid" : ""
+              }`}
+            >
+              <option value="">Select Ekipi</option>
+              {ekipaList.map((ekipa) => (
+                <option key={ekipa.id} value={ekipa.id}>
+                  {ekipa.emriKlubit}
+                </option>
+              ))}
+            </select>
+            {formik.errors.ekipaId ? (
+              <div className="invalid-feedback">{formik.errors.ekipaId}</div>
             ) : null}
           </div>
 

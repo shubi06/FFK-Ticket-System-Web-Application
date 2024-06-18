@@ -78,12 +78,7 @@ function ContactList() {
                           >
                             View
                           </Link>
-                          <Link
-                            to={`/portal/contact/edit/${contact.id}`}
-                            className="btn btn-info btn-sm mr-1"
-                          >
-                            Edit
-                          </Link>
+
                           <button
                             onClick={() => handleDelete(contact.id)}
                             className="btn btn-danger btn-sm mr-1"

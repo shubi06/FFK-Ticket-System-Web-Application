@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 function LojtaretSuperligeEdit() {
   const params = useParams();
   const [superligaList, setSuperligaList] = useState([]);
+  const [ekipaList, setEkipaList] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -17,6 +18,15 @@ function LojtaretSuperligeEdit() {
         setSuperligaList(response.data);
       } catch (error) {
         console.error("Error fetching Superliga data:", error);
+      }
+    };
+
+    const fetchEkipa = async () => {
+      try {
+        const response = await axios.get("http://localhost:5178/api/Ekipa");
+        setEkipaList(response.data);
+      } catch (error) {
+        console.error("Error fetching Ekipa data:", error);
       }
     };
 
@@ -32,6 +42,7 @@ function LojtaretSuperligeEdit() {
     };
 
     fetchSuperliga();
+    fetchEkipa();
     fetchLojtaret();
   }, [id]);
 
@@ -45,6 +56,7 @@ function LojtaretSuperligeEdit() {
       asiste: "",
       nrFaneles: "",
       superligaID: "",
+      ekipaId: "", // Shtoni fushën për ekipën
     },
     validate: (values) => {
       let errors = {};
@@ -71,6 +83,9 @@ function LojtaretSuperligeEdit() {
       }
       if (!values.superligaID) {
         errors.superligaID = "Ju lutem zgjidhni një superligë";
+      }
+      if (!values.ekipaId) {
+        errors.ekipaId = "Ju lutem zgjidhni një ekip";
       }
 
       return errors;
@@ -196,7 +211,7 @@ function LojtaretSuperligeEdit() {
               <span style={{ color: "red" }}>{myFormik.errors.nrFaneles}</span>
             </div>
 
-            <div className="form-group">
+            <div className="col-lg-6">
               <label htmlFor="superligaID">Superliga</label>
               <select
                 id="superligaID"
@@ -217,6 +232,31 @@ function LojtaretSuperligeEdit() {
               {myFormik.errors.superligaID ? (
                 <div className="invalid-feedback">
                   {myFormik.errors.superligaID}
+                </div>
+              ) : null}
+            </div>
+
+            <div className="col-lg-6">
+              <label htmlFor="ekipaId">Ekipi</label>
+              <select
+                id="ekipaId"
+                name="ekipaId"
+                onChange={myFormik.handleChange}
+                value={myFormik.values.ekipaId}
+                className={`form-control ${
+                  myFormik.errors.ekipaId ? "is-invalid" : ""
+                }`}
+              >
+                <option value="">Select Ekipi</option>
+                {ekipaList.map((ekipa) => (
+                  <option key={ekipa.id} value={ekipa.id}>
+                    {ekipa.emriKlubit}
+                  </option>
+                ))}
+              </select>
+              {myFormik.errors.ekipaId ? (
+                <div className="invalid-feedback">
+                  {myFormik.errors.ekipaId}
                 </div>
               ) : null}
             </div>

@@ -18,6 +18,8 @@ namespace FederataFutbollit.Entities
         [JsonIgnore]
         public Superliga Superliga { get; set; }
         public int SuperligaID { get; set; }
+        public Ekipa Ekipa { get; set; }
+        public int EkipaId { get; set; }
         public string FotoPath { get; set; }
 
 

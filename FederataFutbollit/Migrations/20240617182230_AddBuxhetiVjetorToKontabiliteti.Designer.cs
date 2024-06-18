@@ -4,6 +4,7 @@ using FederataFutbollit.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FederataFutbollit.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240617182230_AddBuxhetiVjetorToKontabiliteti")]
+    partial class AddBuxhetiVjetorToKontabiliteti
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -534,16 +537,7 @@ namespace FederataFutbollit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EkipaId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GolaEkipa1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GolaEkipa2")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReferiId")
+                    b.Property<int>("EkipaId")
                         .HasColumnType("int");
 
                     b.Property<int>("StatusiId")
@@ -555,8 +549,6 @@ namespace FederataFutbollit.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EkipaId");
-
-                    b.HasIndex("ReferiId");
 
                     b.HasIndex("StatusiId");
 
@@ -1256,14 +1248,10 @@ namespace FederataFutbollit.Migrations
 
             modelBuilder.Entity("FederataFutbollit.Entities.NdeshjaSuperliges", b =>
                 {
-                    b.HasOne("FederataFutbollit.Entities.Ekipa", null)
+                    b.HasOne("FederataFutbollit.Entities.Ekipa", "Ekipa")
                         .WithMany("NdeshjaSuperliges")
-                        .HasForeignKey("EkipaId");
-
-                    b.HasOne("FederataFutbollit.Models.Referi", "Referi")
-                        .WithMany()
-                        .HasForeignKey("ReferiId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("EkipaId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FederataFutbollit.Entities.Statusi", "Statusi")
@@ -1278,7 +1266,7 @@ namespace FederataFutbollit.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Referi");
+                    b.Navigation("Ekipa");
 
                     b.Navigation("Statusi");
 
