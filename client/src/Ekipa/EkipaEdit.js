@@ -50,7 +50,7 @@ function EkipaEdit() {
             }
         };
         fetchEkipaData();
-    }, [id, navigate, formik]);
+    }, [id, navigate]);
 
     return (
         <div className='container'>
@@ -119,7 +119,9 @@ function EkipaEdit() {
                         <div className="invalid-feedback">{formik.errors.superligaId}</div>
                     ) : null}
                 </div>
-                <button type="submit" className="btn btn-primary">Update</button>
+                <button type="submit" className="btn btn-primary" disabled={isLoading}>
+                    {isLoading ? 'Updating...' : 'Update'}
+                </button>
             </form>
         </div>
     );

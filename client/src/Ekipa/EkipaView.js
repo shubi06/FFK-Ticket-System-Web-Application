@@ -57,7 +57,7 @@ function EkipaView() {
                                                 <td>{ekipa.trajneri}</td>
                                                 <td>{ekipa.vitiThemelimit}</td>
                                                 <td>{ekipa.nrTitujve}</td>
-                                                <td>{ekipa.superliga ? ekipa.superliga.emri : 'N/A'}</td>
+                                                <td>{ekipa.superligaId}</td>
                                             </tr>
                                         </tbody>
                                     </table>
