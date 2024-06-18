@@ -17,29 +17,28 @@ namespace FederataFutbollit.Controllers
 
         public NdeshjaSuperligesController(DataContext context) => _context = context;
 
-        // GET: api/NdeshjaSuperliges
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NdeshjaSuperliges>>> GetAllNdeshjet()
         {
             return await _context.NdeshjaSuperliges.Include(n => n.Statusi).Include(n => n.Superliga).ToListAsync();
         }
-
-        // GET: api/NdeshjaSuperliges/5
         [HttpGet("{id}")]
         public async Task<ActionResult<NdeshjaSuperliges>> GetNdeshjaById(int id)
         {
             var ndeshja = await _context.NdeshjaSuperliges
-                                        .Include(n => n.Statusi)
-                                        .Include(n => n.Superliga)
-                                        .FirstOrDefaultAsync(n => n.Id == id);
+                .Include(n => n.Statusi)
+                .Include(n => n.Superliga)
+                .FirstOrDefaultAsync(n => n.Id == id);
+
             if (ndeshja == null)
             {
                 return NotFound("Ndeshja nuk u gjet.");
             }
+
             return ndeshja;
         }
 
-        // GET: api/NdeshjaSuperliges/ByStatus/1
+
         [HttpGet("ByStatus/{statusId}")]
         public async Task<ActionResult<IEnumerable<NdeshjaSuperliges>>> GetNdeshjeByStatus(int statusId)
         {
@@ -51,7 +50,12 @@ namespace FederataFutbollit.Controllers
             return ndeshjet;
         }
 
-        // POST: api/NdeshjaSuperliges
+        [HttpGet("Ekipa")]
+        public async Task<ActionResult<IEnumerable<Ekipa>>> GetAllEkipet()
+        {
+            return await _context.Ekipa.ToListAsync();
+        }
+
         [HttpPost]
         public async Task<ActionResult<NdeshjaSuperliges>> CreateNdeshja([FromBody] NdeshjaSuperligesCreateDto request)
         {
@@ -62,7 +66,9 @@ namespace FederataFutbollit.Controllers
                 DataENdeshjes = request.DataENdeshjes,
                 StatusiId = request.StatusiId,
                 SuperligaId = request.SuperligaId,
-                EkipaId = request.EkipaId
+                ReferiId = request.ReferiId,
+                GolaEkipa1 = request.GolaEkipa1,
+                GolaEkipa2 = request.GolaEkipa2
             };
 
             _context.NdeshjaSuperliges.Add(ndeshja);
@@ -82,7 +88,6 @@ namespace FederataFutbollit.Controllers
             return CreatedAtAction("GetNdeshjaById", new { id = ndeshja.Id }, ndeshja);
         }
 
-        // PUT: api/NdeshjaSuperliges/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNdeshja(int id, [FromBody] NdeshjaSuperligesUpdateDto request)
         {
@@ -97,7 +102,9 @@ namespace FederataFutbollit.Controllers
             ndeshja.DataENdeshjes = request.DataENdeshjes;
             ndeshja.StatusiId = request.StatusiId;
             ndeshja.SuperligaId = request.SuperligaId;
-            ndeshja.EkipaId = request.EkipaId;
+            ndeshja.ReferiId = request.ReferiId;
+            ndeshja.GolaEkipa1 = request.GolaEkipa1;
+            ndeshja.GolaEkipa2 = request.GolaEkipa2;
 
             try
             {
@@ -115,7 +122,6 @@ namespace FederataFutbollit.Controllers
             return NoContent();
         }
 
-        // DELETE: api/NdeshjaSuperliges/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNdeshja(int id)
         {

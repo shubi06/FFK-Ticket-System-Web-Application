@@ -1,9 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function NdeshjaCreate() {
     const [isLoading, setLoading] = useState(false);
+    const [ekipat, setEkipat] = useState([]);
+    const [statuset, setStatuset] = useState([]);
+    const [superligat, setSuperligat] = useState([]);
+    const [referet, setReferet] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [ekipaRes, statusiRes, superligaRes, referiRes] = await Promise.all([
+                    axios.get('http://localhost:5178/api/Ekipa'),
+                    axios.get('http://localhost:5178/api/Statusi'),
+                    axios.get('http://localhost:5178/api/Superliga'),
+                    axios.get('http://localhost:5178/api/Referi')
+                ]);
+
+                console.log('Fetched teams:', ekipaRes.data);
+                console.log('Fetched statuses:', statusiRes.data);
+                console.log('Fetched superligas:', superligaRes.data);
+                console.log('Fetched referees:', referiRes.data);
+
+                setEkipat(ekipaRes.data);
+                setStatuset(statusiRes.data);
+                setSuperligat(superligaRes.data);
+                setReferet(referiRes.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setEkipat([]);
+                setStatuset([]);
+                setSuperligat([]);
+                setReferet([]);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const formik = useFormik({
         initialValues: {
@@ -12,16 +49,18 @@ function NdeshjaCreate() {
             DataENdeshjes: '',
             StatusiId: '',
             SuperligaId: '',
-            EkipaId: ''
+            ReferiId: '',
+            GolaEkipa1: '',
+            GolaEkipa2: ''
         },
         validate: values => {
             const errors = {};
             if (!values.Ekipa1) {
-                errors.Ekipa1 = 'Please enter the first team';
+                errors.Ekipa1 = 'Please select the first team';
             }
 
             if (!values.Ekipa2) {
-                errors.Ekipa2 = 'Please enter the second team';
+                errors.Ekipa2 = 'Please select the second team';
             }
 
             if (!values.DataENdeshjes) {
@@ -29,15 +68,20 @@ function NdeshjaCreate() {
             }
 
             if (!values.StatusiId) {
-                errors.StatusiId = 'Please enter the status ID';
+                errors.StatusiId = 'Please select the status';
             }
 
             if (!values.SuperligaId) {
-                errors.SuperligaId = 'Please enter the Superliga ID';
+                errors.SuperligaId = 'Please select the Superliga';
             }
 
-            if (!values.EkipaId) {
-                errors.EkipaId = 'Please enter the team ID';
+            if (!values.ReferiId) {
+                errors.ReferiId = 'Please select the referee';
+            }
+
+            if (values.StatusiId === '1' && (!values.GolaEkipa1 || !values.GolaEkipa2)) {
+                errors.GolaEkipa1 = 'Please enter the goals for the first team';
+                errors.GolaEkipa2 = 'Please enter the goals for the second team';
             }
 
             return errors;
@@ -45,10 +89,9 @@ function NdeshjaCreate() {
         onSubmit: async (values, { resetForm }) => {
             setLoading(true);
             try {
-                console.log('Submitting form with values:', values); // Debugging line
                 await axios.post("http://localhost:5178/api/NdeshjaSuperliges", values);
                 resetForm();
-                alert('Match created successfully!');
+                navigate("/portal/ndeshja-superlige-list");
             } catch (error) {
                 console.error('Submission failed', error.response ? error.response.data : error.message);
                 alert('Failed to create match. Please try again.');
@@ -58,30 +101,45 @@ function NdeshjaCreate() {
         },
     });
 
+    const filteredEkipat = ekipat.filter(ekip => ekip.id !== parseInt(formik.values.Ekipa1));
+
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className="form-group">
                 <label htmlFor="Ekipa1">Ekipa 1</label>
-                <input
-                    type="text"
+                <select
                     className="form-control"
                     id="Ekipa1"
                     name="Ekipa1"
                     value={formik.values.Ekipa1}
                     onChange={formik.handleChange}
-                />
+                >
+                    <option value="">Select Team 1</option>
+                    {ekipat.map(ekip => (
+                        <option key={ekip.id} value={ekip.id}>
+                            {ekip.emriKlubit}
+                        </option>
+                    ))}
+                </select>
                 {formik.errors.Ekipa1 && <div className="text-danger">{formik.errors.Ekipa1}</div>}
             </div>
             <div className="form-group">
                 <label htmlFor="Ekipa2">Ekipa 2</label>
-                <input
-                    type="text"
+                <select
                     className="form-control"
                     id="Ekipa2"
                     name="Ekipa2"
                     value={formik.values.Ekipa2}
                     onChange={formik.handleChange}
-                />
+                    disabled={!formik.values.Ekipa1}
+                >
+                    <option value="">Select Team 2</option>
+                    {filteredEkipat.map(ekip => (
+                        <option key={ekip.id} value={ekip.id}>
+                            {ekip.emriKlubit}
+                        </option>
+                    ))}
+                </select>
                 {formik.errors.Ekipa2 && <div className="text-danger">{formik.errors.Ekipa2}</div>}
             </div>
             <div className="form-group">
@@ -97,41 +155,87 @@ function NdeshjaCreate() {
                 {formik.errors.DataENdeshjes && <div className="text-danger">{formik.errors.DataENdeshjes}</div>}
             </div>
             <div className="form-group">
-                <label htmlFor="StatusiId">Status ID</label>
-                <input
-                    type="number"
+                <label htmlFor="StatusiId">Statusi</label>
+                <select
                     className="form-control"
                     id="StatusiId"
                     name="StatusiId"
                     value={formik.values.StatusiId}
                     onChange={formik.handleChange}
-                />
+                >
+                    <option value="">Select Status</option>
+                    {statuset.map(status => (
+                        <option key={status.id} value={status.id}>
+                            {status.emri}
+                        </option>
+                    ))}
+                </select>
                 {formik.errors.StatusiId && <div className="text-danger">{formik.errors.StatusiId}</div>}
             </div>
             <div className="form-group">
-                <label htmlFor="SuperligaId">Superliga ID</label>
-                <input
-                    type="number"
+                <label htmlFor="SuperligaId">Superliga</label>
+                <select
                     className="form-control"
                     id="SuperligaId"
                     name="SuperligaId"
                     value={formik.values.SuperligaId}
                     onChange={formik.handleChange}
-                />
+                >
+                    <option value="">Select Superliga</option>
+                    {superligat.map(superliga => (
+                        <option key={superliga.id} value={superliga.id}>
+                            {superliga.emri}
+                        </option>
+                    ))}
+                </select>
                 {formik.errors.SuperligaId && <div className="text-danger">{formik.errors.SuperligaId}</div>}
             </div>
             <div className="form-group">
-                <label htmlFor="EkipaId">Ekipa ID</label>
-                <input
-                    type="number"
+                <label htmlFor="ReferiId">Referi</label>
+                <select
                     className="form-control"
-                    id="EkipaId"
-                    name="EkipaId"
-                    value={formik.values.EkipaId}
+                    id="ReferiId"
+                    name="ReferiId"
+                    value={formik.values.ReferiId}
                     onChange={formik.handleChange}
-                />
-                {formik.errors.EkipaId && <div className="text-danger">{formik.errors.EkipaId}</div>}
+                >
+                    <option value="">Select Referee</option>
+                    {referet.map(referi => (
+                        <option key={referi.referi_ID} value={referi.referi_ID}>
+                            {referi.emri} {referi.mbiemri}
+                        </option>
+                    ))}
+                </select>
+                {formik.errors.ReferiId && <div className="text-danger">{formik.errors.ReferiId}</div>}
             </div>
+            {formik.values.StatusiId === '1' && (
+                <>
+                    <div className="form-group">
+                        <label htmlFor="GolaEkipa1">Golat e Ekipës 1</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            id="GolaEkipa1"
+                            name="GolaEkipa1"
+                            value={formik.values.GolaEkipa1}
+                            onChange={formik.handleChange}
+                        />
+                        {formik.errors.GolaEkipa1 && <div className="text-danger">{formik.errors.GolaEkipa1}</div>}
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="GolaEkipa2">Golat e Ekipës 2</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            id="GolaEkipa2"
+                            name="GolaEkipa2"
+                            value={formik.values.GolaEkipa2}
+                            onChange={formik.handleChange}
+                        />
+                        {formik.errors.GolaEkipa2 && <div className="text-danger">{formik.errors.GolaEkipa2}</div>}
+                    </div>
+                </>
+            )}
             <button type="submit" className="btn btn-primary" disabled={isLoading}>
                 {isLoading ? "Creating..." : "Create Match"}
             </button>

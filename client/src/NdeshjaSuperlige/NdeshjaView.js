@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -47,6 +46,8 @@ function NdeshjaView() {
                                                 <th>Data e Ndeshjes</th>
                                                 <th>Statusi</th>
                                                 <th>Superliga</th>
+                                                <th>Golat e Ekipës 1</th>
+                                                <th>Golat e Ekipës 2</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -55,8 +56,10 @@ function NdeshjaView() {
                                                 <td>{ndeshja.ekipa1}</td>
                                                 <td>{ndeshja.ekipa2}</td>
                                                 <td>{new Date(ndeshja.dataENdeshjes).toLocaleDateString()}</td>
-                                                <td>{ndeshja.statusi ? ndeshja.statusi.emri : 'N/A'}</td>
-                                                <td>{ndeshja.superliga ? ndeshja.superliga.emri : 'N/A'}</td>
+                                                <td>{ndeshja.statusiId}</td>
+                                                <td>{ndeshja.superligaId}</td>
+                                                <td>{ndeshja.statusiId === 1 ? ndeshja.golaEkipa1 : 'N/A'}</td>
+                                                <td>{ndeshja.statusiId === 1 ? ndeshja.golaEkipa2 : 'N/A'}</td>
                                             </tr>
                                         </tbody>
                                     </table>

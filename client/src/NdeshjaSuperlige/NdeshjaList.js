@@ -69,9 +69,9 @@ function NdeshjaList() {
                     <th>Data E Ndeshjes</th>
                     <th>Statusi ID</th>
                     <th>Superliga ID</th>
-                    <th>Ekipa ID</th>
+                    <th>Golat e Ekipës 1</th>
+                    <th>Golat e Ekipës 2</th>
                     <th>Actions</th>
-
                   </tr>
                 </thead>
                 <tbody>
@@ -83,7 +83,8 @@ function NdeshjaList() {
                       <td>{ndeshja.dataENdeshjes}</td>
                       <td>{ndeshja.statusiId}</td>
                       <td>{ndeshja.superligaId}</td>
-                      <td>{ndeshja.ekipaId}</td>
+                      <td>{ndeshja.golaEkipa1}</td>
+                      <td>{ndeshja.golaEkipa2}</td>
                       <td>
                         <Link to={`/portal/view-ndeshja-superlige/${ndeshja.id}`} className="btn btn-primary btn-sm mr-1">
                           View

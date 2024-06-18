@@ -52,6 +52,7 @@ import EkipaList from "./Ekipa/EkipaList";
 import EkipaCreate from "./Ekipa/EkipaCreate";
 import EkipaEdit from "./Ekipa/EkipaEdit";
 import EkipaDelete from "./Ekipa/EkipaDelete";
+import EkipaView from "./Ekipa/EkipaView";
 
 import NdeshjaSuperligeList from "./NdeshjaSuperlige/NdeshjaList";
 import NdeshjaCreate from "./NdeshjaSuperlige/NdeshjaCreate";
@@ -146,6 +147,7 @@ function Portal() {
               <Route path="ekipa/create" element={<EkipaCreate />} />
               <Route path="ekipa/edit/:id" element={<EkipaEdit />} />
               <Route path="ekipa/delete/:id" element={<EkipaDelete />} />
+              <Route path="ekipa/view/:id" element={<EkipaView />} />
 
               <Route path="ndeshja-superlige-list" element={<NdeshjaSuperligeList />} />
               <Route path="create-ndeshja-superlige" element={<NdeshjaCreate />} />

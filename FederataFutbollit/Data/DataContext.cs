@@ -34,16 +34,12 @@ namespace FederataFutbollit.Data
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<NdeshjaSuperliges> NdeshjaSuperliges { get; set; }
         public DbSet<AboutSection> AboutSections { get; set; }
-         public DbSet<Order> Orders { get; set; }
-        
+        public DbSet<Order> Orders { get; set; }
+
         public DbSet<Shpenzimet> Shpenzimet { get; set; }
         public DbSet<Kontabiliteti> Kontabiliteti { get; set; }
-
         public DbSet<Rezultati> Rezultati { get; set; }
-
         public DbSet<Referi> Referi { get; set; }
-
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -87,18 +83,18 @@ namespace FederataFutbollit.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<NdeshjaSuperliges>()
-                .HasOne(n => n.Ekipa)
-                .WithMany(e => e.NdeshjaSuperliges)
-                .HasForeignKey(n => n.EkipaId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<NdeshjaSuperliges>()
                 .HasOne(n => n.Statusi)
                 .WithMany(s => s.NdeshjaSuperliges)
                 .HasForeignKey(n => n.StatusiId)
                 .OnDelete(DeleteBehavior.Restrict);
-                
-                 modelBuilder.Entity<CartSeat>()
+
+            modelBuilder.Entity<NdeshjaSuperliges>()
+             .HasOne(n => n.Referi)
+             .WithMany()
+             .HasForeignKey(n => n.ReferiId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CartSeat>()
             .HasOne(cs => cs.Ndeshja)
             .WithMany(n => n.CartSeats)
             .HasForeignKey(cs => cs.NdeshjaId);

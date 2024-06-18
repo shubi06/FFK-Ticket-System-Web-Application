@@ -7,7 +7,9 @@
         public DateTime DataENdeshjes { get; set; }
         public int StatusiId { get; set; }
         public int SuperligaId { get; set; }
-        public int EkipaId { get; set; }
+        public int ReferiId { get; set; }
+        public int? GolaEkipa1 { get; set; }
+        public int? GolaEkipa2 { get; set; }
     }
 
     public class NdeshjaSuperligesUpdateDto
@@ -17,6 +19,8 @@
         public DateTime DataENdeshjes { get; set; }
         public int StatusiId { get; set; }
         public int SuperligaId { get; set; }
-        public int EkipaId { get; set; }
+        public int ReferiId { get; set; }
+        public int? GolaEkipa1 { get; set; }
+        public int? GolaEkipa2 { get; set; }
     }
 }
