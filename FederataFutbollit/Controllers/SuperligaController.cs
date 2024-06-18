@@ -89,5 +89,7 @@ namespace FederataFutbollit.Controllers
         }
         public ICollection<NdeshjaSuperliges> NdeshjetESuperliges { get; set; }
 
+
+
     }
 }
