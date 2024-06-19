@@ -39,6 +39,12 @@ function KontabilitetiList() {
     }
   };
 
+  // Llogarit shumën totale të shumave totale të të gjitha rreshtave
+  let totalShumaTotale = 0;
+  kontabilitetiList.forEach((kontabiliteti) => {
+    totalShumaTotale += kontabiliteti.shumaTotale;
+  });
+
   return (
     <>
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
@@ -114,6 +120,14 @@ function KontabilitetiList() {
                     );
                   })}
                 </tbody>
+                {/* Shto rreshtin për shumën totale */}
+                <tfoot>
+                  <tr>
+                    <td colSpan="4">Totali i Shpenzimeve</td>
+                    <td>{totalShumaTotale}</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           )}
