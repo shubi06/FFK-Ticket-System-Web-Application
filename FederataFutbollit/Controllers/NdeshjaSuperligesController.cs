@@ -22,6 +22,7 @@ namespace FederataFutbollit.Controllers
         {
             return await _context.NdeshjaSuperliges.Include(n => n.Statusi).Include(n => n.Superliga).ToListAsync();
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<NdeshjaSuperliges>> GetNdeshjaById(int id)
         {
@@ -37,7 +38,6 @@ namespace FederataFutbollit.Controllers
 
             return ndeshja;
         }
-
 
         [HttpGet("ByStatus/{statusId}")]
         public async Task<ActionResult<IEnumerable<NdeshjaSuperliges>>> GetNdeshjeByStatus(int statusId)
@@ -59,6 +59,11 @@ namespace FederataFutbollit.Controllers
         [HttpPost]
         public async Task<ActionResult<NdeshjaSuperliges>> CreateNdeshja([FromBody] NdeshjaSuperligesCreateDto request)
         {
+            if (request.StatusiId == 1 && (request.GolaEkipa1 == null || request.GolaEkipa2 == null))
+            {
+                return BadRequest(new { message = "Goals are required for played matches." });
+            }
+
             var ndeshja = new NdeshjaSuperliges
             {
                 Ekipa1 = request.Ekipa1,
@@ -91,6 +96,11 @@ namespace FederataFutbollit.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNdeshja(int id, [FromBody] NdeshjaSuperligesUpdateDto request)
         {
+            if (request.StatusiId == 1 && (request.GolaEkipa1 == null || request.GolaEkipa2 == null))
+            {
+                return BadRequest(new { message = "Goals are required for played matches." });
+            }
+
             var ndeshja = await _context.NdeshjaSuperliges.FindAsync(id);
             if (ndeshja == null)
             {

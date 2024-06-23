@@ -79,7 +79,8 @@ function NdeshjaCreate() {
                 errors.ReferiId = 'Please select the referee';
             }
 
-            if (values.StatusiId === '1' && (!values.GolaEkipa1 || !values.GolaEkipa2)) {
+            // Only require goals if the match status is "Played" (StatusiId === 1)
+            if (values.StatusiId === '1' && (values.GolaEkipa1 === '' || values.GolaEkipa2 === '')) {
                 errors.GolaEkipa1 = 'Please enter the goals for the first team';
                 errors.GolaEkipa2 = 'Please enter the goals for the second team';
             }
@@ -87,9 +88,16 @@ function NdeshjaCreate() {
             return errors;
         },
         onSubmit: async (values, { resetForm }) => {
+            // Remove goal fields if the match is not played
+            const requestData = { ...values };
+            if (values.StatusiId !== '1') {
+                requestData.GolaEkipa1 = null;
+                requestData.GolaEkipa2 = null;
+            }
+
             setLoading(true);
             try {
-                await axios.post("http://localhost:5178/api/NdeshjaSuperliges", values);
+                await axios.post("http://localhost:5178/api/NdeshjaSuperliges", requestData);
                 resetForm();
                 navigate("/portal/ndeshja-superlige-list");
             } catch (error) {
