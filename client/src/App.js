@@ -1,3 +1,4 @@
+// App.js
 import React from "react";
 import {
   BrowserRouter,
@@ -29,6 +30,8 @@ import About from "./Components/About";
 import Contact from "./Components/ContactForm";
 
 import SuperligaTable from "./Components/SuperligaTable";
+import NdeshjaSuperligesTable from "./Components/NdeshjaSuperligesTable"; // Import the new component
+
 
 import ForgotPassword from "./Components/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword";
@@ -75,6 +78,7 @@ const AppContent = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/player" element={<Player />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/ndeshjet" element={<NdeshjaSuperligesTable />} /> {/* Use element instead of component */}
         <Route path="/header" element={<Header />} />
         <Route path="/slider" element={<Slider />} />
         <Route path="/login" element={<Login />} />
@@ -105,7 +109,5 @@ const AppContent = () => {
     </>
   );
 };
-
-// Create a new component to wrap CheckoutForm with Elements
 
 export default App;
