@@ -1,0 +1,92 @@
+#table-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #2c3e50;
+}
+
+.filter-buttons {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.filter-buttons button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: #ccc;
+  color: #333;
+  border-radius: 5px;
+}
+
+.filter-buttons .active {
+  background-color: #18334a;
+  color: white;
+}
+
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.match-card {
+  width: 80%;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.match-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.match-date {
+  font-size: 14px;
+  color: #555;
+}
+
+.teams {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.team {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.score {
+  font-size: 24px;
+  font-weight: bold;
+  color: #18334a;
+}
+
+.superliga-info {
+  font-size: 14px;
+  color: #777;
+}
+
+.team-logo {
+  width: 50px;
+  height: 50px;
+  margin: 0 20px;
+}
+
+.team-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

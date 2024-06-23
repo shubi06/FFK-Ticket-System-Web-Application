@@ -28,7 +28,7 @@ function EkipaEdit() {
             try {
                 setLoading(true);
                 await axios.put(`http://localhost:5178/api/Ekipa/${id}`, values);
-                navigate("/portal/ekipa-list");
+                navigate("/portal/ekipa");
             } catch (error) {
                 console.error("Failed to update the club", error);
                 alert("Update failed. Please try again.");

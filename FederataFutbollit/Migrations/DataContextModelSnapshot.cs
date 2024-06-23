@@ -275,6 +275,10 @@ namespace FederataFutbollit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("LogoPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("NrTitujve")
                         .HasColumnType("int");
 
