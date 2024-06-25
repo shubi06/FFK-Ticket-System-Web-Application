@@ -32,7 +32,6 @@ import Contact from "./Components/ContactForm";
 import SuperligaTable from "./Components/SuperligaTable";
 import NdeshjaSuperligesTable from "./Components/NdeshjaSuperligesTable"; // Import the new component
 
-
 import ForgotPassword from "./Components/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword";
 
@@ -40,7 +39,11 @@ import "./App.css";
 import "./sb-admin-2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Success from "./Success";
-import { TimerProvider } from './Services/TimerContext';
+import { TimerProvider } from "./Services/TimerContext";
+
+import Footer from "./Components/Footer";
+import TermsOfService from "./Components/TermsOfService";
+import PrivacyPolicy from "./Components/PrivacyPolicy";
 
 const App = () => {
   return (
@@ -63,10 +66,25 @@ const App = () => {
 const AppContent = () => {
   const location = useLocation();
 
-  
   const hideHeaderPaths = ["/portal"];
+  const hideFooterPaths = [
+    "/login",
+    "/register",
+    "/portal",
+    "/contact",
+    "/ndeshjet",
+    "/shop",
+    "/superliga",
+    "/player",
+    "/privacypolicy",
+    "/termsofservice",
+  ];
 
   const shouldShowHeader = !hideHeaderPaths.some((path) =>
+    location.pathname.startsWith(path)
+  );
+
+  const shouldShowFooter = !hideFooterPaths.some((path) =>
     location.pathname.startsWith(path)
   );
 
@@ -78,7 +96,8 @@ const AppContent = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/player" element={<Player />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/ndeshjet" element={<NdeshjaSuperligesTable />} /> {/* Use element instead of component */}
+        <Route path="/ndeshjet" element={<NdeshjaSuperligesTable />} />{" "}
+        {/* Use element instead of component */}
         <Route path="/header" element={<Header />} />
         <Route path="/slider" element={<Slider />} />
         <Route path="/login" element={<Login />} />
@@ -88,15 +107,14 @@ const AppContent = () => {
         <Route path="/stadium/:sectorId/:matchId" element={<Stadium />} />
         <Route path="/seats/:sectorId/:ndeshjaId" element={<Seats />} />
         <Route path="/success" element={<Success />} />
-
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-
         <Route path="/superliga" element={<SuperligaTable />} />
-
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-
+        <Route path="/footer" element={<Footer />} />
+        <Route path="/termsofservice" element={<TermsOfService />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
         <Route
           path="/portal/*"
           element={
@@ -106,6 +124,7 @@ const AppContent = () => {
           }
         />
       </Routes>
+      {shouldShowFooter && <Footer />}
     </>
   );
 };
