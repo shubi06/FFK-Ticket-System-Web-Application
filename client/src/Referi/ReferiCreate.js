@@ -1,16 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function ReferiCreate() {
     const [isLoading, setLoading] = useState(false);
+    const [superligaList, setSuperligaList] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchSuperligaList();
+    }, []);
+
+    const fetchSuperligaList = async () => {
+        try {
+            const response = await axios.get("http://localhost:5178/api/Superliga");
+            setSuperligaList(response.data);
+        } catch (error) {
+            console.error("Failed to fetch superliga list", error);
+        }
+    };
 
     const formik = useFormik({
         initialValues: {
             Emri: '',
             Mbiemri: '',
             Kombesia: '',
-            Mosha: '' // Added Mosha field
+            Mosha: '',
+            SuperligaId: '' // Added SuperligaId field
         },
         validate: values => {
             const errors = {};
@@ -40,6 +57,10 @@ function ReferiCreate() {
                 errors.Mosha = 'Age must be a number';
             }
 
+            if (!values.SuperligaId) {
+                errors.SuperligaId = 'Please select a Superliga';
+            }
+
             return errors;
         },
         onSubmit: async (values, { resetForm }) => {
@@ -49,10 +70,12 @@ function ReferiCreate() {
                     Emri: values.Emri,
                     Mbiemri: values.Mbiemri,
                     Kombesia: values.Kombesia,
-                    Mosha: values.Mosha // Added Mosha field
+                    Mosha: values.Mosha,
+                    SuperligaId: values.SuperligaId // Added SuperligaId field
                 });
                 resetForm();
                 alert('Referee created successfully!');
+                navigate('/portal/referi-list'); // Redirect to referi-list after creation
             } catch (error) {
                 console.error('Submission failed', error.response ? error.response.data : error.message);
                 alert('Failed to create referee. Please try again.');
@@ -111,6 +134,22 @@ function ReferiCreate() {
                     onChange={formik.handleChange}
                 />
                 {formik.errors.Mosha && <div className="text-danger">{formik.errors.Mosha}</div>}
+            </div>
+            <div className="form-group">
+                <label htmlFor="SuperligaId">Superliga</label>
+                <select
+                    className="form-control"
+                    id="SuperligaId"
+                    name="SuperligaId"
+                    value={formik.values.SuperligaId}
+                    onChange={formik.handleChange}
+                >
+                    <option value="">Select Superliga</option>
+                    {superligaList.map(s => (
+                        <option key={s.id} value={s.id}>{s.emri}</option>
+                    ))}
+                </select>
+                {formik.errors.SuperligaId && <div className="text-danger">{formik.errors.SuperligaId}</div>}
             </div>
             <button type="submit" className="btn btn-primary" disabled={isLoading}>Create Referee</button>
         </form>

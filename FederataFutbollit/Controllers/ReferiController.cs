@@ -48,8 +48,8 @@ namespace FederataFutbollit.Controllers
                 Emri = referiDto.Emri,
                 Mbiemri = referiDto.Mbiemri,
                 Kombesia = referiDto.Kombesia,
-                Mosha = referiDto.Mosha
-                // Add other necessary fields here
+                Mosha = referiDto.Mosha,
+                SuperligaId = referiDto.SuperligaId // Added SuperligaId field
             };
 
             try
@@ -60,18 +60,12 @@ namespace FederataFutbollit.Controllers
             }
             catch (DbUpdateException ex)
             {
-                // Log the detailed error
                 _logger.LogError(ex, "An error occurred while creating the referee.");
-
-                // Return a more detailed error message
                 return StatusCode(500, new { message = "An error occurred while creating the referee.", details = ex.InnerException?.Message });
             }
             catch (Exception ex)
             {
-                // Log the detailed error
                 _logger.LogError(ex, "An unexpected error occurred.");
-
-                // Return a more detailed error message
                 return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
             }
         }
@@ -87,7 +81,7 @@ namespace FederataFutbollit.Controllers
             existingReferi.Mbiemri = referiDto.Mbiemri;
             existingReferi.Kombesia = referiDto.Kombesia;
             existingReferi.Mosha = referiDto.Mosha;
-            // Update other necessary fields here
+            existingReferi.SuperligaId = referiDto.SuperligaId;
 
             _context.Referi.Update(existingReferi);
             await _context.SaveChangesAsync();

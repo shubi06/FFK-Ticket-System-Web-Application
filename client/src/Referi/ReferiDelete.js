@@ -56,6 +56,7 @@ function ReferiDelete() {
                     <p>Are you sure you want to delete the following referee?</p>
                     <p><strong>First Name:</strong> {referi.emri}</p>
                     <p><strong>Last Name:</strong> {referi.mbiemri}</p>
+                    <p><strong>Superliga:</strong> {referi.superliga ? referi.superliga.emri : 'N/A'}</p>
                     <button onClick={deleteReferi} className="btn btn-danger mr-2">
                         Delete
                     </button>

@@ -99,6 +99,11 @@ namespace FederataFutbollit.Data
             .WithMany(n => n.CartSeats)
             .HasForeignKey(cs => cs.NdeshjaId);
 
+            modelBuilder.Entity<Referi>()
+                .HasOne(r => r.Superliga)
+                .WithMany(s => s.Referi)
+                .HasForeignKey(r => r.SuperligaId);
+
             modelBuilder.Entity<Kontabiliteti>(entity =>
             {
                 entity.Property(e => e.BuxhetiVjetor)

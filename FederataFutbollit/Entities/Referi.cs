@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FederataFutbollit.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace FederataFutbollit.Models
 {
@@ -19,5 +20,10 @@ namespace FederataFutbollit.Models
         [Required]
         public int Mosha { get; set; }
 
+        // Foreign key for Superliga
+        public int SuperligaId { get; set; }
+
+        // Navigation property
+        public Superliga Superliga { get; set; }
     }
 }

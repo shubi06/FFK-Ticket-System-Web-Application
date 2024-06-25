@@ -41,6 +41,7 @@ function ReferiView() {
           <h5 className="card-title">Name: {referi.emri} {referi.mbiemri}</h5>
           <p className="card-text">Nationality: {referi.kombesia}</p>
           <p className="card-text">Age: {referi.mosha}</p>
+          <p className="card-text">Superliga: {referi.superligaEmri || referi.superligaId}</p>
           <Link to="/portal/referi-list" className="btn btn-primary">Back to List</Link>
         </div>
       </div>

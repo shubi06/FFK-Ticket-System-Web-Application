@@ -62,6 +62,7 @@ function ReferiList() {
                     <th>Last Name</th>
                     <th>Nationality</th>
                     <th>Age</th>
+                    <th>Superliga</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -73,8 +74,9 @@ function ReferiList() {
                       <td>{referi.mbiemri}</td>
                       <td>{referi.kombesia}</td>
                       <td>{referi.mosha}</td>
+                      <td>{referi.superligaEmri || referi.superligaId}</td>
                       <td>
-                        <Link to={`/referi-view/${referi.referi_ID}`} className="btn btn-primary btn-sm mr-1">
+                        <Link to={`/portal/referi-view/${referi.referi_ID}`} className="btn btn-primary btn-sm mr-1">
                           View
                         </Link>
                         <Link to={`/portal/referi/edit/${referi.referi_ID}`} className="btn btn-info btn-sm mr-1">
