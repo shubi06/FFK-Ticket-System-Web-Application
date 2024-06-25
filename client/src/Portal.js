@@ -64,17 +64,21 @@ import ReferiList from "./Referi/ReferiList";
 import ReferiCreate from "./Referi/ReferiCreate";
 import ReferiEdit from "./Referi/ReferiEdit";
 import ReferiDelete from "./Referi/ReferiDelete";
+import ReferiView from "./Referi/ReferiView";
 
 import RezultatiList from "./Rezultati/RezultatiList";
 import RezultatiCreate from "./Rezultati/RezultatiCreate";
 import RezultatiEdit from "./Rezultati/RezultatiEdit";
 import RezultatiDelete from "./Rezultati/RezultatiDelete";
+import RezultatiView from "./Rezultati/RezultatiView";
+
 import BiletatList from "./Biletat/BiletaList";
 
 import KontabilitetiList from "./Kontabiliteti/KontabilitetiList";
 import KontabilitetiCreate from "./Kontabiliteti/KontabilitetiCreate";
 import KontabilitetiEdit from "./Kontabiliteti/KontabilitetiEdit";
 import KontabilitetiView from "./Kontabiliteti/KontabilitetiView";
+
 
 function Portal() {
   return (
@@ -176,15 +180,14 @@ function Portal() {
               <Route path="referi/create" element={<ReferiCreate />} />
               <Route path="referi/edit/:id" element={<ReferiEdit />} />
               <Route path="referi/delete/:id" element={<ReferiDelete />} />
+              <Route path="referi-view/:id" element={<ReferiView />} />
 
               <Route path="rezultati-list" element={<RezultatiList />} />
               <Route path="rezultati-create" element={<RezultatiCreate />} />
               <Route path="rezultati/edit/:id" element={<RezultatiEdit />} />
-              <Route
-                path="rezultati/delete/:id"
-                element={<RezultatiDelete />}
-              />
-
+              <Route path="rezultati-view/:id" element={<RezultatiView />} />
+              <Route path="rezultati/delete/:id" element={<RezultatiDelete />} /> 
+           
               <Route path="bileta-list" element={<BiletatList />} />
 
               <Route

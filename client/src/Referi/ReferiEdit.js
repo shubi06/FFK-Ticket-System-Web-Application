@@ -6,11 +6,22 @@ import { useNavigate, useParams } from 'react-router-dom';
 function ReferiEdit() {
     const params = useParams();
     const [isLoading, setLoading] = useState(false);
+    const [superligaList, setSuperligaList] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
+        fetchSuperligaList();
         fetchReferiData();
     }, []);
+
+    const fetchSuperligaList = async () => {
+        try {
+            const response = await axios.get("http://localhost:5178/api/Superliga");
+            setSuperligaList(response.data);
+        } catch (error) {
+            console.error("Failed to fetch superliga list", error);
+        }
+    };
 
     const fetchReferiData = async () => {
         try {
@@ -26,7 +37,8 @@ function ReferiEdit() {
             Emri: "",
             Mbiemri: "",
             Kombesia: "",
-            Mosha: ""
+            Mosha: "",
+            SuperligaId: "" // Added SuperligaId field
         },
         validate: (values) => {
             let errors = {};
@@ -55,6 +67,10 @@ function ReferiEdit() {
                 errors.Mosha = "Please enter the age";
             } else if (isNaN(values.Mosha)) {
                 errors.Mosha = "Age must be a number";
+            }
+
+            if (!values.SuperligaId) {
+                errors.SuperligaId = 'Please select a Superliga';
             }
 
             return errors;
@@ -125,6 +141,22 @@ function ReferiEdit() {
                                 className={`form-control ${formik.errors.Mosha ? "is-invalid" : ""}`}
                             />
                             <span style={{ color: "red" }}>{formik.errors.Mosha}</span>
+                        </div>
+
+                        <div className="col-lg-6">
+                            <label>Superliga</label>
+                            <select
+                                name='SuperligaId'
+                                value={formik.values.SuperligaId}
+                                onChange={formik.handleChange}
+                                className={`form-control ${formik.errors.SuperligaId ? "is-invalid" : ""}`}
+                            >
+                                <option value="">Select Superliga</option>
+                                {superligaList.map(s => (
+                                    <option key={s.id} value={s.id}>{s.emri}</option>
+                                ))}
+                            </select>
+                            <span style={{ color: "red" }}>{formik.errors.SuperligaId}</span>
                         </div>
 
                         <div className='col-lg-4 mt-3'>
