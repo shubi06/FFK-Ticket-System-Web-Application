@@ -41,6 +41,7 @@ import "./sb-admin-2.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Success from "./Success";
 import { TimerProvider } from './Services/TimerContext';
+import MatchesAndResults from "./Components/MatchesAndResults";
 
 const App = () => {
   return (
@@ -91,6 +92,7 @@ const AppContent = () => {
 
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/matchesandresults" element={<MatchesAndResults />} />
 
         <Route path="/superliga" element={<SuperligaTable />} />
 

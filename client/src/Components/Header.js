@@ -26,15 +26,16 @@ const Header = () => {
             <LinkContainer to="/">
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
+            <LinkContainer to="/matchesandresults">
+              <Nav.Link>Biletat</Nav.Link>
+            </LinkContainer>
             <LinkContainer to="/player">
               <Nav.Link>Lojtaret</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/superliga">
               <Nav.Link>Tabela</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/shop">
-              <Nav.Link>Shop</Nav.Link>
-            </LinkContainer>
+          
             <LinkContainer to="/ndeshjet">
               <Nav.Link>Ndeshjet</Nav.Link>
             </LinkContainer>

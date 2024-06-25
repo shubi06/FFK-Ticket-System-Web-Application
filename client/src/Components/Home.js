@@ -1,9 +1,9 @@
 // src/components/Home.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Home.css';
-import { Link } from 'react-router-dom';
-import SoccerBall from './SoccerBall';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./Home.css";
+import { Link } from "react-router-dom";
+import SoccerBall from "./SoccerBall";
 
 const Home = () => {
   const [matches, setMatches] = useState([]);
@@ -22,10 +22,10 @@ const Home = () => {
   }, []);
 
   // Filter matches that are upcoming
-  const upcomingMatches = matches.filter(match => match.statusiId === 1); // Assuming statusiId 1 is "Do të Zhvillohet"
-  
+  const upcomingMatches = matches.filter((match) => match.statusiId === 1); // Assuming statusiId 1 is "Do të Zhvillohet"
+
   // Filter matches that have been played
-  const playedMatches = matches.filter(match => match.statusiId === 2); // Assuming statusiId 2 is "Zhvilluar"
+  const playedMatches = matches.filter((match) => match.statusiId === 2); // Assuming statusiId 2 is "Zhvilluar"
 
   return (
     <div>
@@ -33,7 +33,13 @@ const Home = () => {
         <SoccerBall />
         <div className="hero-content">
           <h1>Federata e Futbollit të Kosovës</h1>
-          <p>Prezantojmë me krenari ndeshjet e ardhshme të Kombëtares, ku talenti dhe përkushtimi i lojtarëve tanë do të shkëlqejë në fushë. Përgatituni të përjetoni emocione të pashlyeshme teksa kombëtarja jonë përballet me përfaqësueset më të forta, duke sjellë përpara gjithë pasionin dhe shpirtin garues që na karakterizon.</p>
+          <p>
+            Prezantojmë me krenari ndeshjet e ardhshme të Kombëtares, ku talenti
+            dhe përkushtimi i lojtarëve tanë do të shkëlqejë në fushë.
+            Përgatituni të përjetoni emocione të pashlyeshme teksa kombëtarja
+            jonë përballet me përfaqësueset më të forta, duke sjellë përpara
+            gjithë pasionin dhe shpirtin garues që na karakterizon.
+          </p>
         </div>
       </div>
       <div className="content-container">
@@ -66,7 +72,10 @@ const Home = () => {
             {playedMatches.length > 0 ? (
               playedMatches.map((match) => (
                 <div key={match.id} className="result-item">
-                  <h3>{match.kombetarjaEmri} {match.golaEkipiJone} - {match.golaEkipiKundershtar} {match.ekipiKundershtar}</h3>
+                  <h3>
+                    {match.kombetarjaEmri} {match.golaEkipiJone} -{" "}
+                    {match.golaEkipiKundershtar} {match.ekipiKundershtar}
+                  </h3>
                   <p>Data: {new Date(match.data).toLocaleDateString()}</p>
                   <p>Stadiumi: {match.stadiumiEmri}</p>
                   <p>Kompeticioni: {match.kompeticioniEmri}</p>
