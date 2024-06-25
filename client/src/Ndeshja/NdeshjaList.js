@@ -106,7 +106,7 @@ function NdeshjaList() {
                             View
                           </Link>
                           <Link
-                            to={`/portal/ndeshja-edit/${ndeshja.id}`}
+                            to={`/portal/edit-ndeshja/${ndeshja.id}`}
                             className="btn btn-info btn-sm mr-1"
                           >
                             Edit

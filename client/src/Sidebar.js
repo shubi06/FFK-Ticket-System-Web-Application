@@ -43,6 +43,12 @@ function Sidebar() {
           <span>BILETAT</span>
         </Link>
       </li>
+      <li className="nav-item active">
+        <Link className="nav-link" to="/portal/order-list">
+          <span>Orders</span>
+        </Link>
+      </li>
+
 
       <li className="nav-item active">
         <Link className="nav-link" to="/portal/shteti-list">
