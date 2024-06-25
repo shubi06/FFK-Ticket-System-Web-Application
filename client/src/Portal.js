@@ -43,6 +43,7 @@ import StadiumiView from "./Stadiumi/StadiumiView";
 
 import NdeshjaList from "./Ndeshja/NdeshjaList";
 import CreateNdeshja from "./Ndeshja/CreateNdeshja";
+import EditNdeshja from "./Ndeshja/NdeshjaEdit";
 
 import ContactList from "./Contact/ContactList";
 import ContactView from "./Contact/ContactView";
@@ -79,6 +80,7 @@ import KontabilitetiCreate from "./Kontabiliteti/KontabilitetiCreate";
 import KontabilitetiEdit from "./Kontabiliteti/KontabilitetiEdit";
 import KontabilitetiView from "./Kontabiliteti/KontabilitetiView";
 
+import OrderList from "./Order/OrderList";
 
 function Portal() {
   return (
@@ -139,6 +141,7 @@ function Portal() {
 
               <Route path="ndeshja-list" element={<NdeshjaList />} />
               <Route path="create-ndeshja" element={<CreateNdeshja />} />
+              <Route path="edit-ndeshja/:id" element={<EditNdeshja />} />
 
               <Route path="stadiumi-list" element={<StadiumiList />} />
               <Route path="stadiumi-create" element={<StadiumiCreate />} />
@@ -189,6 +192,8 @@ function Portal() {
               <Route path="rezultati/delete/:id" element={<RezultatiDelete />} /> 
            
               <Route path="bileta-list" element={<BiletatList />} />
+
+              <Route path="order-list" element={<OrderList />} />
 
               <Route
                 path="kontabiliteti-list"
