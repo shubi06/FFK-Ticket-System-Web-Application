@@ -21,10 +21,7 @@ namespace FederataFutbollit.Controllers
         [HttpGet("top-players")]
         public async Task<ActionResult<IEnumerable<object>>> GetTopPlayers()
         {
-            var players = await _context.LojtaretSuperlige
-                .OrderByDescending(p => p.Gola)
-                .ThenByDescending(p => p.Asiste)
-                .Take(3)
+            var players = await _context.Lojtaret
                 .Select(p => new
                 {
                     p.Emri,
@@ -33,6 +30,17 @@ namespace FederataFutbollit.Controllers
                     p.Asiste,
                     p.Mosha
                 })
+                .Union(_context.LojtaretSuperlige.Select(p => new
+                {
+                    p.Emri,
+                    p.Mbiemri,
+                    p.Gola,
+                    p.Asiste,
+                    p.Mosha
+                }))
+                .OrderByDescending(p => p.Gola)
+                .ThenByDescending(p => p.Asiste)
+                .Take(3)
                 .ToListAsync();
 
             return Ok(players);
@@ -41,8 +49,27 @@ namespace FederataFutbollit.Controllers
         [HttpGet("best-players")]
         public async Task<ActionResult<object>> GetBestPlayers()
         {
-            var topGoalScorer = await _context.LojtaretSuperlige
+            var topGoalScorer = await _context.Lojtaret
+                .Select(p => new
+                {
+                    p.Emri,
+                    p.Mbiemri,
+                    p.Gola,
+                    p.Asiste,
+                    p.Mosha
+                })
+                .Union(_context.LojtaretSuperlige.Select(p => new
+                {
+                    p.Emri,
+                    p.Mbiemri,
+                    p.Gola,
+                    p.Asiste,
+                    p.Mosha
+                }))
                 .OrderByDescending(p => p.Gola)
+                .FirstOrDefaultAsync();
+
+            var topAssistProvider = await _context.Lojtaret
                 .Select(p => new
                 {
                     p.Emri,
@@ -51,22 +78,18 @@ namespace FederataFutbollit.Controllers
                     p.Asiste,
                     p.Mosha
                 })
-                .FirstOrDefaultAsync();
-
-            var topAssistProvider = await _context.LojtaretSuperlige
+                .Union(_context.LojtaretSuperlige.Select(p => new
+                {
+                    p.Emri,
+                    p.Mbiemri,
+                    p.Gola,
+                    p.Asiste,
+                    p.Mosha
+                }))
                 .OrderByDescending(p => p.Asiste)
-                .Select(p => new
-                {
-                    p.Emri,
-                    p.Mbiemri,
-                    p.Gola,
-                    p.Asiste,
-                    p.Mosha
-                })
                 .FirstOrDefaultAsync();
 
-            var oldestPlayer = await _context.LojtaretSuperlige
-                .OrderByDescending(p => p.Mosha) // Order by descending to get the oldest player
+            var oldestPlayer = await _context.Lojtaret
                 .Select(p => new
                 {
                     p.Emri,
@@ -75,6 +98,15 @@ namespace FederataFutbollit.Controllers
                     p.Asiste,
                     p.Mosha
                 })
+                .Union(_context.LojtaretSuperlige.Select(p => new
+                {
+                    p.Emri,
+                    p.Mbiemri,
+                    p.Gola,
+                    p.Asiste,
+                    p.Mosha
+                }))
+                .OrderByDescending(p => p.Mosha) // Order by descending to get the oldest player
                 .FirstOrDefaultAsync();
 
             return Ok(new { topGoalScorer, topAssistProvider, oldestPlayer });
