@@ -38,7 +38,7 @@ const Home = () => {
       </div>
       <div className="content-container">
         <section className="matches-section">
-          <h2>Upcoming Matches</h2>
+          <h2>Ndeshjet e Rradhës</h2>
           <div className="matches-content">
             {upcomingMatches.length > 0 ? (
               upcomingMatches.map((match) => (
@@ -46,11 +46,12 @@ const Home = () => {
                   <h3>
                     {match.kombetarjaEmri} vs {match.ekipiKundershtar}
                   </h3>
-                  <p>Date: {new Date(match.data).toLocaleDateString()}</p>
-                  <p>Time: {new Date(match.data).toLocaleTimeString()}</p>
-                  <p>Location: {match.stadiumiEmri}</p>
+                  <p>Data: {new Date(match.data).toLocaleDateString()}</p>
+                  <p>Ora: {new Date(match.data).toLocaleTimeString()}</p>
+                  <p>Stadiumi: {match.stadiumiEmri}</p>
+                  <p>Kompeticioni: {match.kompeticioniEmri}</p>
                   <Link to={`/stadium/${match.id}`}>
-                    <button className="buy-ticket-button">Buy Ticket</button>
+                    <button className="buy-ticket-button">BLEJ BILETËN</button>
                   </Link>
                 </div>
               ))
@@ -60,14 +61,15 @@ const Home = () => {
           </div>
         </section>
         <section className="results-section">
-          <h2>Recent Results</h2>
+          <h2>Rezultatet e Kombëtares</h2>
           <div className="results-content">
             {playedMatches.length > 0 ? (
               playedMatches.map((match) => (
                 <div key={match.id} className="result-item">
                   <h3>{match.kombetarjaEmri} {match.golaEkipiJone} - {match.golaEkipiKundershtar} {match.ekipiKundershtar}</h3>
-                  <p>Date: {new Date(match.data).toLocaleDateString()}</p>
-                  <p>Location: {match.stadiumiEmri}</p>
+                  <p>Data: {new Date(match.data).toLocaleDateString()}</p>
+                  <p>Stadiumi: {match.stadiumiEmri}</p>
+                  <p>Kompeticioni: {match.kompeticioniEmri}</p>
                 </div>
               ))
             ) : (

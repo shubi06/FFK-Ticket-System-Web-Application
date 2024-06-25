@@ -39,10 +39,10 @@ const Header = () => {
               <Nav.Link>Ndeshjet</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/about">
-              <Nav.Link>About</Nav.Link>
+              <Nav.Link>Rreth Nesh</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/contact">
-              <Nav.Link>Contact</Nav.Link>
+              <Nav.Link>Kontakti</Nav.Link>
             </LinkContainer>
 
             {authData && authData.role === 'Admin' && (
@@ -56,15 +56,15 @@ const Header = () => {
             {authData ? (
               <>
                
-                <Nav.Link onClick={logout}>Logout</Nav.Link>
+                <Nav.Link onClick={logout}>Dil</Nav.Link>
               </>
             ) : (
               <>
                 <LinkContainer to="/login">
-                  <Nav.Link>Login</Nav.Link>
+                  <Nav.Link>Kyçu</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/register">
-                  <Nav.Link>Register</Nav.Link>
+                  <Nav.Link>Regjistrohu</Nav.Link>
                 </LinkContainer>
               </>
             )}
