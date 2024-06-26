@@ -81,6 +81,9 @@ const AppContent = () => {
     "/termsofservice",
     "/matchesandresults",
     "/about",
+    "/stadium",
+    "/seats",
+    "/cart",
   ];
 
   const shouldShowHeader = !hideHeaderPaths.some((path) =>
