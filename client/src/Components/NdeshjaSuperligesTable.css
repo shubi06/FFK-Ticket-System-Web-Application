@@ -42,6 +42,9 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
+  justify-content: center; /* Shto këtë rresht për të qendruar elementet brenda kartelës */
+  margin-left: auto; /* Shto këtë rresht për të qendruar kartelën në qendër */
+  margin-right: auto; /* Shto këtë rresht për të qendruar kartelën në qendër */
 }
 
 .match-info {

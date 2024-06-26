@@ -78,14 +78,14 @@ const NdeshjaSuperligesTable = () => {
                 {new Date(match.dataENdeshjes).toLocaleDateString()} - {new Date(match.dataENdeshjes).toLocaleTimeString()}
               </div>
               <div className="teams">
-                <span className="team">{teams[match.ekipa1] || "N/A"}</span>
+                <span className="team">{teams[match.ekipa1] || ""}</span>
                 <span className="score">
                   {match.statusiId === 1 ? match.golaEkipa1 : '0'} : {match.statusiId === 1 ? match.golaEkipa2 : '0'}
                 </span>
-                <span className="team">{teams[match.ekipa2] || "N/A"}</span>
+                <span className="team">{teams[match.ekipa2] || ""}</span>
               </div>
               <div className="superliga-info">
-                {match.superliga?.emri || "N/A"}
+                {match.superliga?.emri || ""}
               </div>
             </div>
             <div className="team-logo">
