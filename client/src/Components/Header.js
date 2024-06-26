@@ -32,10 +32,10 @@ const Header = () => {
             <LinkContainer to="/player">
               <Nav.Link>Lojtaret</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/superliga">
+            {/* <LinkContainer to="/superliga">
               <Nav.Link>Tabela</Nav.Link>
-            </LinkContainer>
-          
+            </LinkContainer> */}
+
             <LinkContainer to="/ndeshjet">
               <Nav.Link>Ndeshjet</Nav.Link>
             </LinkContainer>
@@ -46,7 +46,7 @@ const Header = () => {
               <Nav.Link>Kontakti</Nav.Link>
             </LinkContainer>
 
-            {authData && authData.role === 'Admin' && (
+            {authData && authData.role === "Admin" && (
               <LinkContainer to="portal/dashboard">
                 <Nav.Link>Dashboard</Nav.Link>
               </LinkContainer>
@@ -56,7 +56,6 @@ const Header = () => {
           <Nav className="ml-auto right-nav">
             {authData ? (
               <>
-               
                 <Nav.Link onClick={logout}>Dil</Nav.Link>
               </>
             ) : (

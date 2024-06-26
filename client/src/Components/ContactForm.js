@@ -61,7 +61,7 @@ const ContactForm = ({ contact, onSave }) => {
       ) : (
         <>
           <h2 id="contact-form-title">
-            {contact ? "Edit Contact" : "Create Contact"}
+            {contact ? "Edit Contact" : "Na Kontaktoni"}
           </h2>
           <form id="unique-contact-form" onSubmit={handleSubmit}>
             <div className="form-group">
