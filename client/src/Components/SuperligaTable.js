@@ -3,36 +3,13 @@ import axios from "axios";
 import "./SuperligaTable.css"; // Import the CSS file for styling
 
 const SuperligaTable = () => {
-  const [teams, setTeams] = useState([
-    {
-      Ekipi: "FC-Llapi",
-      NdeshjeTeLuajtura: 0,
-      Fitore: 0,
-      Barazime: 0,
-      Humbje: 0,
-      GolaveTeShenuara: 0,
-      GolaveTePesuara: 0,
-      DiferencaGolave: 0,
-      Piket: 0
-    },
-    {
-      Ekipi: "FC-Feronikeli",
-      NdeshjeTeLuajtura: 0,
-      Fitore: 0,
-      Barazime: 0,
-      Humbje: 0,
-      GolaveTeShenuara: 0,
-      GolaveTePesuara: 0,
-      DiferencaGolave: 0,
-      Piket: 0
-    }
-  ]);
+  const [teams, setTeams] = useState([]);
 
   useEffect(() => {
     const fetchTeams = async () => {
       try {
         const response = await axios.get("/api/superliga/tabela");
-        setTeams(prevTeams => [...prevTeams, ...response.data]);
+        setTeams(response.data);
       } catch (error) {
         console.error("Gabim gjatë marrjes së të dhënave:", error);
       }
@@ -64,13 +41,6 @@ const SuperligaTable = () => {
     );
   };
 
-  const handleDraw = () => {
-    const team1 = document.getElementById('team1').value;
-    const team2 = document.getElementById('team2').value;
-    updatePoints(team1, true);
-    updatePoints(team2, true);
-  };
-
   return (
     <div>
       <h2 id="table-title">Tabela e Superligës së Kosovës</h2>
@@ -87,7 +57,6 @@ const SuperligaTable = () => {
             <th>Gola të pësuara</th>
             <th>Diferenca e golave</th>
             <th>Pikët</th>
-            <th>Shto Gol</th>
           </tr>
         </thead>
         <tbody>
@@ -103,29 +72,10 @@ const SuperligaTable = () => {
               <td className="goals-conceded">{team.GolaveTePesuara}</td>
               <td className="goal-difference">{team.DiferencaGolave}</td>
               <td className="points">{team.Piket}</td>
-              <td>
-                <button onClick={() => updatePoints(team.Ekipi, false, 1)}>Shto Gol</button>
-              </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <h3>Barazim</h3>
-        <select id="team1">
-          {teams.map((team, index) => (
-            <option key={index} value={team.Ekipi}>{team.Ekipi}</option>
-          ))}
-        </select>
-        <select id="team2">
-          {teams.map((team, index) => (
-            <option key={index} value={team.Ekipi}>{team.Ekipi}</option>
-          ))}
-        </select>
-        <button onClick={handleDraw}>
-          Barazim
-        </button>
-      </div>
     </div>
   );
 };
